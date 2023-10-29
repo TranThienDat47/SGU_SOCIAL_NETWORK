@@ -1,6 +1,6 @@
 class CommentWrite {
 	constructor(data = { parentID: -1, modeReply: 0 }) {
-		this.commentText = valueCommentGlobal;
+		this.commentText = "";
 		this.data = data;
 		this.handleSubmitComment = async () => { };
 		this.handleCancle = async () => { };
@@ -75,7 +75,7 @@ class CommentWrite {
 		}, 9)
 
 		return `
-		        <div id="CommentWrite_${this.data.parentID}" class="comment_wrapper">
+		        <div id="CommentWrite_${this.data.parentID}" class="comment_wrapper ${parseInt(this.data.modeReply) === 0 ? `comment_gloabal_comment_write` : ""}" >
 					<div class="inner-top">
 						<div class="comment-left">
 							<div class="avata">

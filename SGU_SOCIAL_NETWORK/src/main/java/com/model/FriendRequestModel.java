@@ -1,10 +1,10 @@
-package com.sgu_social_network.model;
+package com.model;
 
-public class FriendRequest {
+public class FriendRequestModel {
 	private int userID;
 	private int requestID;
 
-	public FriendRequest(int userID, int requestID) {
+	public FriendRequestModel(int userID, int requestID) {
 		super();
 		this.userID = userID;
 		this.requestID = requestID;

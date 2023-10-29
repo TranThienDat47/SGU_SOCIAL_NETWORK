@@ -1,4 +1,4 @@
-package com.sgu_social_network.service;
+package com.service;
 
 import java.util.Collections;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package com.sgu_social_network.service;
+package com.service;
 
 public class SaveImageCreatePost {
 	

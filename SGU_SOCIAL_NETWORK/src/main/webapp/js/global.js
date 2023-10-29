@@ -1,6 +1,9 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
+var tempPostDetail = null;
+
+
 const preventScroll = (e) => {
 	e.preventDefault();
 	e.stopPropagation();

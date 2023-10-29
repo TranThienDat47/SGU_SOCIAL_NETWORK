@@ -1,4 +1,4 @@
-package com.sgu_social_network.model;
+package com.model;
 
 public class CommentModel {
 	private int id;

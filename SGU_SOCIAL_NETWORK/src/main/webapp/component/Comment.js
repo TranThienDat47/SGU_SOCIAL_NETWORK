@@ -5,7 +5,7 @@ class Comment {
 	}
 
 	async fetchComment() {
-		const url = "/ChatApp/api/comment";
+		const url = "/SGU_SOCIAL_NETWORK/api/comment";
 		const send_data = { parentID: this.data.parentID };
 
 		return new Promise((resolve, reject) => {
@@ -72,7 +72,7 @@ class Comment {
 			if (!commentWrite.getText().trim()) {
 				return;
 			} else {
-				const url = "/ChatApp/api/comment"
+				const url = "/SGU_SOCIAL_NETWORK/api/comment"
 				const send_data = { parentID: that.data.parentID, userID: "1", content: commentWrite.getText().trim() };
 
 				const xhr = new XMLHttpRequest();
@@ -110,7 +110,7 @@ class Comment {
 		} else {
 			wsUrl = 'wss://';
 		}
-		var ws = new WebSocket(wsUrl + window.location.host + "/ChatApp/chat");
+		var ws = new WebSocket(wsUrl + window.location.host + "/SGU_SOCIAL_NETWORK/chat");
 
 		ws.onmessage = async function(event) {
 

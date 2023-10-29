@@ -1,0 +1,215 @@
+@charset "UTF-8";
+
+:root {
+	--border-color-with-background-grey: rgba(22, 24, 35, 0.33);
+}
+
+.comment_container {
+	position: relative;
+}
+
+.comment_wrapper {
+	color: var(--black);
+	margin-bottom: 19px;
+}
+
+
+.comment-top {}
+
+.comment_wrapper .inner-top {
+	display: flex;
+	white-space: nowrap;
+}
+
+.comment_wrapper .inner-bottom {
+	padding-left: 40px;
+	margin-top: 6px;
+}
+
+.wrapper-list__reply {
+	padding-left: 40px;
+}
+
+.comment_wrapper.modeReply .avt {
+	width: 29px;
+	height: 29px;
+}
+
+.inner-top .comment-left {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.inner-top .comment-right {
+	display: inline-block;
+	vertical-align: top;
+	margin-left: 6px;
+	border-radius: 9px;
+	padding: 6px 9px;
+	background-color: var(--aria-color);
+}
+
+.inner-top .comment-right.write-comment {
+	width: 100%;
+	padding-top: 16px;
+	padding-bottom: 11px;
+}
+
+.comment-right .content {
+	white-space: normal;
+}
+
+.comment-right .comment-content {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	outline: none;
+	border-bottom: 2px solid var(--border-color-with-background-grey);
+	padding: 3px 0px;
+	outline: none;
+}
+
+
+
+.comment-content:empty:before {
+	content: 'Viết bình luận...';
+	color: var(--text-bland);
+	cursor: text;
+	outline: none;
+}
+
+.write-comment--controls {
+	margin-top: 6px;
+}
+
+.write-comment--controls .control-left {
+	float: left;
+}
+
+.write-comment--controls .control-right {
+	float: right;
+	white-space: nowrap;
+}
+
+.write-comment--controls .control-right>button {
+	display: inline-block;
+}
+
+.write-comment--controls .control-right button {
+	font-size: 1.36rem;
+	font-weight: 550;
+	padding: 9px 16px !important;
+	margin-left: 6px;
+}
+
+.control-left {
+	float: left;
+}
+
+.control-right {
+	float: right;
+	white-space: nowrap;
+}
+
+.control-right>div {
+	display: inline-block;
+}
+
+.control-right button {
+	font-size: 1.36rem;
+	font-weight: 550;
+	padding: 16px 16px !important;
+	margin-left: 6px;
+}
+
+.info {}
+
+.controls {
+	margin-left: 9px;
+	white-space: nowrap;
+}
+
+.controls>div {
+	display: inline-block;
+	vertical-align: middle;
+	white-space: nowrap;
+}
+
+
+.controls>div>span {
+	vertical-align: super;
+	display: inline-block;
+	margin-left: 3px;
+	font-size: 1.3rem;
+	font-weight: 550;
+	color: var(--text-bland);
+}
+
+.controls>.reply {
+	display: inline-block;
+	padding: 6px 9px;
+	margin-left: 9px;
+	font-size: 1.3rem;
+	font-weight: 550;
+	line-height: 1.3rem;
+}
+
+.controls .like {
+	font-size: 1.9rem;
+	cursor: pointer;
+}
+
+.controls .reply {}
+
+.reply-header {
+	margin-left: -6px;
+	margin-bottom: 9px;
+}
+
+.show-reply {
+	padding: 9px 13px;
+	font-weight: 600;
+}
+
+.replies {
+	margin-left: 9px;
+}
+
+img.avt {
+	object-fit: cover;
+	width: 40px;
+	height: 40px;
+	border-radius: 9999px;
+}
+
+img.avt.reply {
+	object-fit: cover;
+	width: 33px;
+	height: 33px;
+	border-radius: 9999px;
+}
+
+
+.wrapper-comment__write {
+	margin-top: 9px;
+}
+
+.wrapper-comment__write>div {
+	margin-bottom: 9px;
+}
+
+.wrapper-comment__write>div .comment-right {
+	padding-top: 9px !important;
+}
+
+.comment_gloabal_comment_write {
+	position: fixed;
+	bottom: -3px;
+	background-color: #fff;
+	width: 589px;
+	margin-left: -26px;
+	border-bottom-left-radius: 16px;
+	border-bottom-right-radius: 16px;
+	height: 116px;
+	padding: 3px 16px;
+	border-top: 1px solid var(--border-color);
+}

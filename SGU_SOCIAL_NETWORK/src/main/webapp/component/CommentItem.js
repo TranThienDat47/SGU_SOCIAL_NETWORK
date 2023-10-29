@@ -18,7 +18,7 @@ class CommentItem {
 
 	async fetchComment() {
 		const that = this;
-		const url = "/ChatApp/api/comment";
+		const url = "/SGU_SOCIAL_NETWORK/api/comment";
 		const send_data = { parentID: this.data.id };
 
 		return new Promise((resolve, reject) => {
@@ -89,7 +89,7 @@ class CommentItem {
 		} else {
 			wsUrl = 'wss://';
 		}
-		var ws = new WebSocket(wsUrl + window.location.host + "/ChatApp/chat");
+		var ws = new WebSocket(wsUrl + window.location.host + "/SGU_SOCIAL_NETWORK/chat");
 
 		ws.onmessage = async function(event) {
 
@@ -154,7 +154,7 @@ class CommentItem {
 			if (!commentWrite.getText().trim()) {
 				return;
 			} else {
-				const url = "/ChatApp/api/comment"
+				const url = "/SGU_SOCIAL_NETWORK/api/comment"
 
 				var senParentID;
 
