@@ -1,0 +1,145 @@
+@charset "UTF-8";
+
+p {
+	margin: 0;
+}
+
+.global_post {
+	margin: 0px auto;
+	border-radius: 16px;
+	border: 1px solid var(--border-color);
+	background: #fff;
+}
+
+.global_post-header_post {
+	height: 62.5px;
+	padding: 0px 16px;
+	border-bottom: 1px solid var(--border-color);
+	margin: 0;
+	display: flex;
+	align-items: center;
+}
+
+.global_post-header_post>div {
+	padding: 0;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.global_post-header_post img {
+	width: 40px;
+	height: 40px;
+	border-radius: 999px;
+}
+
+.global_post-header_content {
+	margin-left: 16px;
+}
+
+.global_post-header_content p,
+.global_post-header_content span {
+	margin: 0;
+}
+
+.global_post-name_profile {
+	font-size: 14px;
+	font-weight: bolder;
+	color: #050505;
+}
+
+.global_post-time_post,
+.global_post-status {
+	font-size: 12px;
+	font-weight: 400;
+	color: #65676b;
+}
+
+.global_post-header_icon {
+	flex-direction: row !important;
+	flex: 1 !important;
+	display: flex !important;
+	justify-content: end !important;
+	align-items: center !important;
+}
+
+/* content-post */
+.global_post-content_post {
+	padding: 59px 39px;
+	display: flex;
+	align-items: center;
+}
+
+.global_post-content_post p {
+	margin: 0;
+	font-size: 19px;
+	font-weight: 400;
+	text-align: center;
+}
+
+.global_post-post_footer {
+	padding: 0 16px;
+	display: flex;
+	flex-direction: column;
+}
+
+.global_post-footer_info {
+	border-bottom: 1px solid var(--border-color);
+	border-top: 1px solid var(--border-color);
+	height: 41px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.global_post-info_icon {
+	display: flex;
+	justify-content: start;
+	align-items: center;
+}
+
+.global_post-total_love {
+	margin-left: 5px;
+}
+
+.global_post-info_global_post-interact {
+	display: flex;
+	align-items: center;
+	justify-content: end;
+}
+
+.global_post-info_global_post-interact p {
+	font-size: 13px;
+	font-weight: 400;
+	color: #65676b;
+}
+
+.global_post-total_comment {
+	margin-right: 12px;
+}
+
+.global_post-interact {
+	height: 40px;
+
+	border-bottom: 1px solid var(--border-color);
+}
+
+.global_post-interact,
+.global_post-interact_child {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.global_post-interact_child {
+	cursor: pointer;
+}
+
+.global_post-interact_child p {
+	margin-left: 8px;
+	color: #65676b;
+	font-size: 14px;
+	font-weight: 400;
+}
+
+.global_post-view_post {}

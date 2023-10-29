@@ -1,0 +1,192 @@
+@charset "UTF-8";
+
+/* create post */
+.sidebar_left-user-profile {
+	display: flex;
+	border-radius: 9px;
+	align-items: center;
+}
+
+.sidebar_left-profile-image img {
+	display: flex;
+	align-items: center;
+	border-radius: 50%;
+	width: 33px;
+	height: 33px;
+}
+
+.create_post-content-wrapper {
+	display: flex;
+	justify-content: center;
+}
+
+#create_post-content {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	outline: none;
+	border-bottom: 2px solid #ddd;
+	padding: 3px 0px;
+	outline: none;
+}
+
+#create_post-content:empty:before {
+	content: "Bạn muốn chia sẽ điều gì?";
+	color: #ddd;
+	cursor: text;
+	outline: none;
+}
+
+.create_post-content-wrapper-title {
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	width: 100%;
+	padding: 16px;
+}
+
+.create_post-content-wrapper-title .sidebar_left-user-profile:hover {
+	background-color: #fff;
+	cursor: auto;
+}
+
+.create_post-content-wrapper-title .create_post-profile-name {
+	margin: 0px 9px 6px 9px;
+}
+
+.create_post-content-wrapper-title .create_post-profile-select {
+	cursor: pointer;
+	margin-left: 16px;
+	margin-top: -3px;
+	padding: 3px 9px;
+	background-color: #ddd;
+	border-radius: 999px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.create_post-content-wrapper-title .create_post-profile-select select {
+	font-size: 13px;
+	background-color: #ddd;
+	border: 1px solid #ddd;
+	border-radius: 20px;
+	font-weight: bold;
+	outline: none;
+	cursor: pointer;
+}
+
+.create_post-content-wrapper .create_post-content-wrapper-text {
+	margin: 0 6px;
+	margin-top: 13px;
+}
+
+.create_post-content-wrapper .create_post-content-wrapper-text textarea {
+	width: 100%;
+	height: 100px;
+	border: none;
+}
+
+.create_post-content-wrapper .create_post-post-editor {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 13px;
+}
+
+.create_post-content-wrapper .create_post-editor-icons {
+	border: 1px solid #ccc;
+	border-radius: 20px;
+	padding: 6px 16px;
+}
+
+.create_post-content-wrapper .create_post-editor-icons .create_post-icon-group {
+	display: flex;
+}
+
+.create_post-icon-group>div {
+	font-size: 19px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+
+.create_post-icon-group>div:not(:first-child) {
+	margin-left: 9px;
+}
+
+.create_post-editor-icons .create_post-icon-group p {
+	font-size: 14px;
+	margin: 3px;
+}
+
+.create_post-editor-icons .create_post-icon-group i {
+	font-size: 20px;
+	padding: 4px;
+}
+
+.create_post-post-editor .create_post-submit-button {}
+
+.create_post-post-editor .create_post-submit-button .create_post-submit-btn {
+	color: #fff;
+	background-color: #1427db;
+	border: 1px solid #1427db;
+}
+
+.create_post-list_image {
+	margin-top: 13px;
+	border-bottom: 2px solid var(--border-color);
+	padding-bottom: 13px;
+	display: none;
+}
+
+#create_post-add_image {
+	cursor: pointer;
+	user-select: none;
+}
+
+.create_post-delete_image {
+	position: absolute;
+	top: 6px;
+	width: 20px;
+	height: 20px;
+	background-color: rgba(255, 255, 255, 0.6);
+	border-radius: 999px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	right: 6px;
+}
+
+.create_post-list_image.create_post-list_image_show {
+	display: flex;
+}
+
+.create_post-add_image {
+	position: relative;
+	overflow: hidden;
+	width: 69px;
+	height: 96px;
+	border: 1px solid var(--border-color);
+	border-radius: 16px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.3rem;
+	font-weight: 600;
+}
+
+.create_post-add_image:not(:first-child) {
+	margin-left: 9px;
+}
+
+.create_post-add_image>img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+#create_post-list_image_inner {
+	display: flex;
+}

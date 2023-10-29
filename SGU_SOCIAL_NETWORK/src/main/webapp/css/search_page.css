@@ -1,0 +1,142 @@
+@charset "UTF-8";
+
+.search_page-content-wrapper-friend {
+	border: 1px solid #ccc;
+	border-radius: 20px;
+}
+
+.search_page-friend-avatar {
+	cursor: pointer;
+}
+
+.search_page-content-wrapper-friend .search_page-section-title {
+	padding: 5px 10px;
+}
+
+.search_page-content-wrapper-friend .search_page-section-title p {
+	font-size: 16px;
+	padding: 10px;
+	font-weight: 600;
+}
+
+.search_page-content-wrapper-friend .search_page-friend-list {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 0px 20px 10px 20px;
+}
+
+.search_page-content-wrapper-friend .search_page-friend-item {
+	display: flex;
+}
+
+.search_page-content-wrapper-friend .search_page-friend-item img {
+	width: 53px;
+	height: 53px;
+	border-radius: 50%;
+}
+
+.search_page-friend-details {
+	padding-left: 15px;
+}
+
+.search_page-friend-details p {
+	font-size: 16px;
+	margin-bottom: 2px;
+	margin-top: 6px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.search_page-friend-details span {
+	font-size: 14px;
+	color: var(--text-bland);
+}
+
+.search_page-content-wrapper-friend .search_page-add-friend {
+	border: 1px solid #fff;
+	border-radius: 20px;
+	padding: 5px 8px;
+	background-color: #1427db;
+}
+
+.search_page-content-wrapper-friend .search_page-add-friend a {
+	font-size: 16px;
+	color: #f5f5f5;
+	text-decoration: none;
+}
+
+.search_page-btn_view_all_with_friend {
+	width: calc(100% - 32px);
+	margin: 16px 16px;
+	margin-bottom: 13px;
+	background-color: var(--hover-color);
+	display: flex;
+	justify-content: center;
+}
+
+.search_page-btn_view_all_with_friend:hover {
+	background-color: var(--active-item-color);
+}
+
+.search_page-addnew,
+.search_page-cancle_add_friend,
+.search_page-is_friend {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 6px 16px;
+	border: 1px solid #cccccc;
+	border-radius: 999px;
+	cursor: pointer;
+}
+
+.search_page-addnew:hover,
+.search_page-cancle_add_friend:hover,
+.search_page-is_friend:hover {
+	background-color: var(--hover-color);
+}
+
+.search_page-addnew>p,
+.search_page-cancle_add_friend>p,
+.search_page-is_friend>p {
+	font-size: 16px;
+	font-weight: 400;
+	color: #000;
+	margin-left: 3px;
+}
+
+.search_page-is_friend {
+	position: relative;
+}
+
+.search_page-is_friend.search_page-is_friend-show>.search_page-unfriend {
+	display: block;
+}
+
+.search_page-unfriend {
+	position: absolute;
+	bottom: -32px;
+	background-color: #fff;
+	border: 1px solid var(--border-color);
+	border-radius: 6px;
+	padding: 6px 13px;
+	white-space: nowrap;
+	left: -13px;
+	cursor: pointer;
+	display: none;
+}
+
+.search_page-unfriend::after {
+	top: -3px;
+	content: "";
+	position: absolute;
+	background-color: transparent;
+	width: 101%;
+	height: 12px;
+	left: 0;
+}
+
+.search_page-unfriend:hover {
+	background-color: var(--hover-color);
+}

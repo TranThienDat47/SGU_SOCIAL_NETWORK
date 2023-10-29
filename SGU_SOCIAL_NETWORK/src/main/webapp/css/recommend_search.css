@@ -1,0 +1,90 @@
+@charset "UTF-8";
+
+.recommend_friend {
+	width: 100%;
+	height: 100%;
+	border-radius: 16px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	background: #fff;
+}
+
+.recommend_friend-recommnend_header {
+	height: 48px;
+	padding: 0 16px;
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+	color: rgba(0, 0, 0, 0.6);
+	font-weight: 700;
+}
+
+.recommend_friend-recommend_member {
+	padding: 0px 16px;
+	margin-bottom: 6px;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.recommend_friend-info_friend {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 50%;
+	/* Chia thành 2 cột */
+	box-sizing: border-box;
+	padding: 6px 9px;
+	/* Thêm khoảng cách giữa các phần tử */
+}
+
+.recommend_friend-name_friend {
+	flex: 1;
+	margin-left: 13px;
+}
+
+.recommend_friend-img_friend {}
+
+.recommend_friend-img_friend img {
+	border-radius: 999px;
+	width: 43px;
+	height: 43px;
+}
+
+.recommend_friend-child_name {
+	font-size: 15px;
+	font-weight: 700;
+	color: #000;
+	margin-top: -3px;
+}
+
+.recommend_friend-child_friend {
+	font-size: 11px;
+	font-weight: 400;
+	color: rgba(0, 0, 0, 0.6);
+	margin-top: 3px;
+}
+
+.recommend_friend-addnew {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 6px 9px;
+	border: 1px solid #cccccc;
+	border-radius: 999px;
+	cursor: pointer;
+}
+
+.recommend_friend-addnew:hover {
+	background-color: var(--hover-color);
+}
+
+.recommend_friend-addnew p {
+	font-size: 10px;
+	font-weight: 400;
+	color: #000;
+	margin-left: 3px;
+}
+
+.recommend_friend-addnew>svg {
+	width: 13px;
+	height: 13px;
+}
