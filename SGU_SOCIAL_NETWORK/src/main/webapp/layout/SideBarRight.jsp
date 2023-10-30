@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <div id="sidebar-right"
-	style="width: 356px; position: fixed; margin-top: var(--height-default-header); right: 0px; top: 0; padding-right: 10px;">
+	style="width: 356px;position: fixed;margin-top: var(--height-default-header);right: 0px;top: 0;padding-right: 10px;height: 100vh;background-color: #fff;">
 	<div class="sidebar_right-top" style="margin-top: 16px;">
 		<div class="sidebar_left-follow-section">
 			<p class="sidebar_left-follow-heading">Gợi ý theo dõi</p>

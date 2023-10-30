@@ -13,22 +13,7 @@ public class UserModel {
 	private String createAt;
 	private String address;
 	private String biography;
-
-	public UserModel(int id, String email, String password, String image, Long phoneNumber, String firstName,
-			String lastName, boolean isVerify, String dateOfBirh, String createAt, String address, String biography) {
-		this.id = id;
-		this.email = email;
-		this.password = password;
-		this.image = image;
-		this.phoneNumber = phoneNumber;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.isVerify = isVerify;
-		this.dateOfBirh = dateOfBirh;
-		this.createAt = createAt;
-		this.address = address;
-		this.biography = biography;
-	}
+	private String background;
 
 	public int getId() {
 		return id;
@@ -124,6 +109,43 @@ public class UserModel {
 
 	public void setBiography(String biography) {
 		this.biography = biography;
+	}
+
+	public String getBackground() {
+		return background;
+	}
+
+	public void setBackground(String background) {
+		this.background = background;
+	}
+
+	public UserModel(int id, String email, String password, String image, Long phoneNumber, String firstName,
+			String lastName, boolean isVerify, String dateOfBirh, String createAt, String address, String biography,
+			String background) {
+		this.id = id;
+		this.email = email;
+		this.password = password;
+		this.image = image;
+		this.phoneNumber = phoneNumber;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.isVerify = isVerify;
+		this.dateOfBirh = dateOfBirh;
+		this.createAt = createAt;
+		this.address = address;
+		this.biography = biography;
+		this.background = background;
+	}
+
+	public UserModel() {
+	}
+
+	@Override
+	public String toString() {
+		return "UserModel [id=" + id + ", email=" + email + ", password=" + password + ", image=" + image
+				+ ", phoneNumber=" + phoneNumber + ", firstName=" + firstName + ", lastName=" + lastName + ", isVerify="
+				+ isVerify + ", dateOfBirh=" + dateOfBirh + ", createAt=" + createAt + ", address=" + address
+				+ ", biography=" + biography + ", background=" + background + "]";
 	}
 
 }

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <div id="sidebar-left"
-	style="width: 356px; position: fixed; margin-top: var(--height-default-header); top: 0;">
+	style="width: 356px;position: fixed;margin-top: var(--height-default-header);top: 0;height: 100vh;background-color: #fff;">
 	<div class="sidebar_left-wrapper">
 		<div class="sidebar_left-top">
 			<ul class="sidebar_left-menu">

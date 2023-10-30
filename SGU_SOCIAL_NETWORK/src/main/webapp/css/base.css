@@ -220,6 +220,7 @@ li {
 	width: 746px;
 	max-width: 1456px;
 	padding: 3px 76px;
+	z-index: 9	;
 }
 
 /*header start*/

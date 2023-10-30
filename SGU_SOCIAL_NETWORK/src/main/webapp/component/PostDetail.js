@@ -1,22 +1,22 @@
 class PostDetail {
-	constructor(data = { id: -1 }) {
+	constructor(data = { postID: -1 }) {
 		this.data = data;
 	}
 
 
 	async render() {
-
-		const comment = new Comment({ parentID: this.data.id })
+		const that = this;
 
 
 		setTimeout(async () => {
+			const comment = new Comment({ parentID: this.data.postID })
 			await comment.render().then(data => {
-				$(".test").innerHTML = data
+				$(".render_list_commnet_post").innerHTML = data
 			})
 
 			const btnClosePost = $('#globalPostClose')
 			btnClosePost.onclick = () => {
-				$("#showPostGloabal").innerHTML = "";
+				$("#showPostDetailGloabal").innerHTML = "";
 			}
 
 		}, 0)
@@ -37,7 +37,7 @@ class PostDetail {
 								</div>
 								<div>
 									<p class="global_post-time_post">
-										11h - <span class="global_post-status">Tất cả mọi người</span>
+										<span>${that.data.createAt + "<span> </span> -"}</span><span class="global_post-status">Tất cả mọi người</span>
 									</p>
 								</div>
 							</div>
@@ -60,8 +60,21 @@ class PostDetail {
 						</div>
 						<div style="height: 689px;overflow: auto;padding-bottom: 93px;">
 							<div class="global_post-content_post">
-							<p>Tình yêu của anh với em như một công cuộc vậy. Anh thì bỏ
-								công, em thì bỏ cuộc :))</p>
+								<p>${that.data.content}</p>
+								<div class="global_post-list_render_img">
+									${that.data.image1.trim().length > 0 ? `<div class="global_post-list_render_img_item">
+																	<img alt="" src="${that.data.image1}"/>
+																</div>` : ""}
+									${that.data.image2.trim().length > 0 ? `<div class="global_post-list_render_img_item">
+																	<img alt="" src="${that.data.image2}"/>
+																</div>` : ""}
+									${that.data.image3.trim().length > 0 ? `<div class="global_post-list_render_img_item">
+																	<img alt="" src="${that.data.image3}"/>
+																</div>` : ""}
+									${that.data.image4.trim().length > 0 ? `<div class="global_post-list_render_img_item">
+																	<img alt="" src="${that.data.image4}"/>
+																</div>` : ""}
+								</div>
 							</div>
 							<div class="global_post-post_footer">
 								<div class="global_post-footer_info">
@@ -107,11 +120,11 @@ class PostDetail {
 									</div>
 									<div class="global_post-info_global_post-interact">
 										<p class="global_post-total_comment">
-											1 <span>Bình luận</span>
+											${that.data.replies} <span>Bình luận</span>
 										</p>
-										<p class="global_post-total_share">
+										<!--<p class="global_post-total_share">
 											1 <span>Lượt chia sẻ</span>
-										</p>
+										</p>-->
 									</div>
 								</div>
 								<div class="global_post-interact">
@@ -140,25 +153,25 @@ class PostDetail {
 							        </svg>
 										<p>Bình luận</p>
 									</div>
-									<div class="global_post-interact_child">
+									<!--<div class="global_post-interact_child">
 										<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
 											viewBox="0 0 18 18" fill="none">
-							            <g clip-path="url(#clip0_33_4074)">
-							              <path
-												d="M12.5 8.97891V8.4375V7.3125C12.5 7.00313 12.275 6.75 12 6.75H11H10.5H9.04688C7.45625 6.75 6.1125 7.92773 5.6625 9.54844C5.55937 9.21797 5.5 8.85234 5.5 8.4375C5.5 6.26133 7.06563 4.5 9 4.5H10.5H11H12C12.275 4.5 12.5 4.24687 12.5 3.9375V2.8125V2.27109L15.8125 5.625L12.5 8.97891ZM10.5 8.4375H11V10.125C11 10.7473 11.4469 11.25 12 11.25H12.1156C12.3625 11.25 12.6 11.148 12.7844 10.9617L17.1281 6.56367C17.3656 6.32461 17.5 5.98359 17.5 5.625C17.5 5.26641 17.3656 4.92539 17.1281 4.68633L12.8094 0.312891C12.6094 0.1125 12.3531 0 12.0844 0C11.4844 0 11 0.544922 11 1.21992V2.8125H10.5H9.5H9C6.2375 2.8125 4 5.32969 4 8.4375C4 10.5609 5.08125 11.9215 5.99687 12.6879C6.18125 12.8426 6.35625 12.9727 6.51875 13.0816C6.65625 13.1766 6.78438 13.2539 6.89062 13.3137C6.99687 13.3734 7.08437 13.4191 7.14687 13.4508C7.21562 13.4859 7.29063 13.5 7.36875 13.5H7.44688C7.75313 13.5 8.00313 13.2188 8.00313 12.8742C8.00313 12.6 7.8375 12.3574 7.64062 12.1887C7.62813 12.1781 7.61875 12.1711 7.60625 12.1605C7.55312 12.1219 7.5 12.0727 7.45 12.0164C7.425 11.9883 7.39687 11.9602 7.37187 11.925C7.34687 11.8898 7.32188 11.8582 7.29688 11.823C7.24062 11.7352 7.1875 11.6367 7.14062 11.5242C7.05937 11.3133 7.00625 11.0566 7.00625 10.7367C7.00625 9.46758 7.92188 8.43398 9.05313 8.43398H9.5H10.5V8.4375ZM2.25 1.125C1.00625 1.125 0 2.25703 0 3.65625V15.4688C0 16.868 1.00625 18 2.25 18H12.75C13.9937 18 15 16.868 15 15.4688V13.2188C15 12.7512 14.6656 12.375 14.25 12.375C13.8344 12.375 13.5 12.7512 13.5 13.2188V15.4688C13.5 15.9363 13.1656 16.3125 12.75 16.3125H2.25C1.83438 16.3125 1.5 15.9363 1.5 15.4688V3.65625C1.5 3.18867 1.83438 2.8125 2.25 2.8125H4.25C4.66563 2.8125 5 2.43633 5 1.96875C5 1.50117 4.66563 1.125 4.25 1.125H2.25Z"
-												fill="black" />
-							            </g>
-							            <defs>
-							              <clipPath id="clip0_33_4074">
-							                <rect width="18" height="18" fill="white" />
-							              </clipPath>
-							            </defs>
-							        </svg>
+								            <g clip-path="url(#clip0_33_4074)">
+								              <path
+													d="M12.5 8.97891V8.4375V7.3125C12.5 7.00313 12.275 6.75 12 6.75H11H10.5H9.04688C7.45625 6.75 6.1125 7.92773 5.6625 9.54844C5.55937 9.21797 5.5 8.85234 5.5 8.4375C5.5 6.26133 7.06563 4.5 9 4.5H10.5H11H12C12.275 4.5 12.5 4.24687 12.5 3.9375V2.8125V2.27109L15.8125 5.625L12.5 8.97891ZM10.5 8.4375H11V10.125C11 10.7473 11.4469 11.25 12 11.25H12.1156C12.3625 11.25 12.6 11.148 12.7844 10.9617L17.1281 6.56367C17.3656 6.32461 17.5 5.98359 17.5 5.625C17.5 5.26641 17.3656 4.92539 17.1281 4.68633L12.8094 0.312891C12.6094 0.1125 12.3531 0 12.0844 0C11.4844 0 11 0.544922 11 1.21992V2.8125H10.5H9.5H9C6.2375 2.8125 4 5.32969 4 8.4375C4 10.5609 5.08125 11.9215 5.99687 12.6879C6.18125 12.8426 6.35625 12.9727 6.51875 13.0816C6.65625 13.1766 6.78438 13.2539 6.89062 13.3137C6.99687 13.3734 7.08437 13.4191 7.14687 13.4508C7.21562 13.4859 7.29063 13.5 7.36875 13.5H7.44688C7.75313 13.5 8.00313 13.2188 8.00313 12.8742C8.00313 12.6 7.8375 12.3574 7.64062 12.1887C7.62813 12.1781 7.61875 12.1711 7.60625 12.1605C7.55312 12.1219 7.5 12.0727 7.45 12.0164C7.425 11.9883 7.39687 11.9602 7.37187 11.925C7.34687 11.8898 7.32188 11.8582 7.29688 11.823C7.24062 11.7352 7.1875 11.6367 7.14062 11.5242C7.05937 11.3133 7.00625 11.0566 7.00625 10.7367C7.00625 9.46758 7.92188 8.43398 9.05313 8.43398H9.5H10.5V8.4375ZM2.25 1.125C1.00625 1.125 0 2.25703 0 3.65625V15.4688C0 16.868 1.00625 18 2.25 18H12.75C13.9937 18 15 16.868 15 15.4688V13.2188C15 12.7512 14.6656 12.375 14.25 12.375C13.8344 12.375 13.5 12.7512 13.5 13.2188V15.4688C13.5 15.9363 13.1656 16.3125 12.75 16.3125H2.25C1.83438 16.3125 1.5 15.9363 1.5 15.4688V3.65625C1.5 3.18867 1.83438 2.8125 2.25 2.8125H4.25C4.66563 2.8125 5 2.43633 5 1.96875C5 1.50117 4.66563 1.125 4.25 1.125H2.25Z"
+													fill="black" />
+								            </g>
+								            <defs>
+								              <clipPath id="clip0_33_4074">
+								                <rect width="18" height="18" fill="white" />
+								              </clipPath>
+								            </defs>
+								        </svg>
 										<p>Chia sẻ</p>
-									</div>
+									</div>-->
 								</div>
 								<div class="global_post-view_post">
-									<div class="test"></div>
+									<div class="render_list_commnet_post"></div>
 								</div>
 							</div>
 						</div>

@@ -20,16 +20,21 @@
 	justify-content: center;
 }
 
-#create_post-content {
+.create_post-content-wrapper_after {
+	width: 636px;
+}
+
+.create_post-content {
 	white-space: pre-wrap;
 	overflow-wrap: anywhere;
 	outline: none;
 	border-bottom: 2px solid #ddd;
 	padding: 3px 0px;
 	outline: none;
+	overflow-y: auto;
 }
 
-#create_post-content:empty:before {
+.create_post-content:empty:before {
 	content: "Bạn muốn chia sẽ điều gì?";
 	color: #ddd;
 	cursor: text;
@@ -41,6 +46,7 @@
 	border-radius: 10px;
 	width: 100%;
 	padding: 16px;
+	background-color: #fff;
 }
 
 .create_post-content-wrapper-title .sidebar_left-user-profile:hover {
@@ -189,4 +195,24 @@
 
 #create_post-list_image_inner {
 	display: flex;
+}
+
+.showCreatePostGloabal-inner {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.3);
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	z-index: 20;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
+#create_post-content_text {
+	max-height: 369px;
 }

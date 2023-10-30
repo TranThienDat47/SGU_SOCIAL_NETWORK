@@ -80,9 +80,31 @@ class MainOfWeb {
 			}
 
 		};
-		
-		
-		
+
+
+		//render create post
+
+		const wrapperCreatePostRender = $("#showCreatePostGloabal")
+
+
+		const create_post = new CreatePost();
+
+		const handleShowCreatePostDetail = () => {
+			wrapperCreatePostRender.innerHTML = create_post.render();
+			create_post.renderListImage();
+
+			$("#create_post-content_text").focus();
+
+		}
+
+		$("#create_post-content_before").onclick = () => {
+			handleShowCreatePostDetail();
+		}
+
+		$("#create_post-profile-select_before").onclick = () => {
+			handleShowCreatePostDetail();
+		}
+
 
 	}
 }

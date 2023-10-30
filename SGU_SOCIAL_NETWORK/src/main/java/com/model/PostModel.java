@@ -5,6 +5,7 @@ import java.sql.Date;
 public class PostModel {
 	private int id;
 	private int authorID;
+	private int privacySettingID;
 	private String title;
 	private String content;
 	private String image1;
@@ -16,10 +17,14 @@ public class PostModel {
 	private String createAt;
 	private String updateAt;
 
-	public PostModel(int id, int authorID, String title, String content, String image1, String image2, String image3,
-			String image4, int likes, int replies, String createAt, String updateAt) {
+	public PostModel() {
+	}
+
+	public PostModel(int id, int authorID, int privacySettingID, String title, String content, String image1,
+			String image2, String image3, String image4, int likes, int replies, String createAt, String updateAt) {
 		this.id = id;
 		this.authorID = authorID;
+		this.privacySettingID = privacySettingID;
 		this.title = title;
 		this.content = content;
 		this.image1 = image1;
@@ -46,6 +51,14 @@ public class PostModel {
 
 	public void setAuthorID(int authorID) {
 		this.authorID = authorID;
+	}
+
+	public int getPrivacySettingID() {
+		return privacySettingID;
+	}
+
+	public void setPrivacySettingID(int privacySettingID) {
+		this.privacySettingID = privacySettingID;
 	}
 
 	public String getTitle() {
@@ -126,6 +139,14 @@ public class PostModel {
 
 	public void setUpdateAt(String updateAt) {
 		this.updateAt = updateAt;
+	}
+
+	@Override
+	public String toString() {
+		return "PostModel [id=" + id + ", authorID=" + authorID + ", privacySettingID=" + privacySettingID + ", title="
+				+ title + ", content=" + content + ", image1=" + image1 + ", image2=" + image2 + ", image3=" + image3
+				+ ", image4=" + image4 + ", likes=" + likes + ", replies=" + replies + ", createAt=" + createAt
+				+ ", updateAt=" + updateAt + "]";
 	}
 
 }

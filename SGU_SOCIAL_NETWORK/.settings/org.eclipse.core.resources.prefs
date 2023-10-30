@@ -1,6 +1,8 @@
 eclipse.preferences.version=1
 encoding//src/main/java/com/controller/CommentController.java=UTF-8
 encoding//src/main/java/com/dao/CommentDAO.java=UTF-8
+encoding//src/main/java/com/dao/PostDAO.java=UTF-8
 encoding//src/main/webapp/css/comment.css=UTF-8
 encoding//src/main/webapp/css/create_post.css=UTF-8
+encoding//src/main/webapp/css/post.css=UTF-8
 encoding//src/main/webapp/css/recommend_search.css=UTF-8

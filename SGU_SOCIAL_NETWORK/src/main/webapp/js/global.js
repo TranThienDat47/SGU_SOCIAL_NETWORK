@@ -24,5 +24,23 @@ const scroll = (e) => {
 	return true;
 };
 
+function handleScrollWindow(handle = () => {}) {
+  const isScrollAtBottom = window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight;
+
+  if (isScrollAtBottom) {
+    handle();
+  }
+}
+
+
+function handleScroll(parentNode, handle = () => { }) {
+	if (
+		parentNode &&
+		Math.floor(parentNode.offsetHeight + parentNode.scrollTop) >=
+		parentNode.scrollHeight - 3
+	) {
+		handle();
+	}
+}
 // document.body.addEventListener('wheel', preventScroll, { passive: false });
 // $('.cart-view-scroll').removeEventListener('wheel', scroll, { passive: true });
