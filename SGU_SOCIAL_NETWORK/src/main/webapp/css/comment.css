@@ -66,6 +66,8 @@
 	border-bottom: 2px solid var(--border-color-with-background-grey);
 	padding: 3px 0px;
 	outline: none;
+	max-height: 39px;
+	overflow-y: auto;
 }
 
 
@@ -203,7 +205,7 @@ img.avt.reply {
 
 .comment_gloabal_comment_write {
 	position: fixed;
-	bottom: -3px;
+	bottom: -6px;
 	background-color: #fff;
 	width: 589px;
 	margin-left: -26px;

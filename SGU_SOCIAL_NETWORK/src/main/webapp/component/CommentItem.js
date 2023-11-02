@@ -18,7 +18,7 @@ class CommentItem {
 
 	async fetchComment() {
 		const that = this;
-		const url = "/SGU_SOCIAL_NETWORK/api/comment";
+		const url = "/SGU_SOCIAL_NETWORK/api/comment/get_comment";
 		const send_data = { parentID: this.data.id };
 
 		return new Promise((resolve, reject) => {
@@ -58,8 +58,8 @@ class CommentItem {
 		const renderListComment = await Promise.all(that.listComment.map(async (element) => {
 
 			const commentData = {
-				image: "https://hhtq.vip/wp-content/uploads/2021/09/thieu-nien-ca-hanh-phan-2-1-1.jpg",
-				name: "haha",
+				image: element.image,
+				name: element.firstName + " " + element.lastName,
 				createAt: element.createAt,
 				content: element.content,
 				likes: element.likes,
@@ -95,6 +95,8 @@ class CommentItem {
 
 			const dataTemp = JSON.parse(event.data);
 
+			console.log(dataTemp)
+
 			if (parseInt(commentWrite.data.modeReply) === 1) {
 
 				if (dataTemp.parentID === that.data.id && that.data.id === dataTemp.writeCommentID) {
@@ -102,8 +104,8 @@ class CommentItem {
 						$(`#CommentItem_${that.data.id} #btnShowReply`).click();
 					}
 					const commentData = {
-						image: "https://hhtq.vip/wp-content/uploads/2021/09/thieu-nien-ca-hanh-phan-2-1-1.jpg",
-						name: "haha",
+						image: dataTemp.image,
+						name: dataTemp.firstName + " " + dataTemp.lastName,
 						createAt: dataTemp.createAt,
 						content: dataTemp.content,
 						likes: dataTemp.likes,
@@ -116,7 +118,6 @@ class CommentItem {
 					const commentItem = new CommentItem(commentData);
 
 					await commentItem.render().then((resultData) => {
-						console.log("result", resultData)
 						const wrapperListReplies = $(`#CommentItem_${that.data.parentID} .wrapper-list__reply`);
 						$(`#CommentItem_${that.data.id} .wrapper-list__reply`).insertAdjacentHTML('afterbegin', resultData);
 					})
@@ -124,8 +125,8 @@ class CommentItem {
 			} else {
 				if (dataTemp.parentID === that.data.parentID && dataTemp.commentID === that.data.id) {
 					const commentData = {
-						image: "https://hhtq.vip/wp-content/uploads/2021/09/thieu-nien-ca-hanh-phan-2-1-1.jpg",
-						name: "haha",
+						image: dataTemp.image,
+						name: dataTemp.firstName + " " + element.lastName,
 						createAt: dataTemp.createAt,
 						content: dataTemp.content,
 						likes: dataTemp.likes,
@@ -154,7 +155,7 @@ class CommentItem {
 			if (!commentWrite.getText().trim()) {
 				return;
 			} else {
-				const url = "/SGU_SOCIAL_NETWORK/api/comment"
+				const url = "/SGU_SOCIAL_NETWORK/api/comment/create_parent_is_comment"
 
 				var senParentID;
 
@@ -164,10 +165,10 @@ class CommentItem {
 					senParentID = that.data.id;
 				}
 
-				const send_data = { parentID: senParentID, userID: "1", content: commentWrite.getText().trim() };
+				const send_data = { parentID: senParentID, userID: getCookieGlobal("id"), content: commentWrite.getText().trim() };
 
 				const xhr = new XMLHttpRequest();
-				xhr.open("PUT", url, true);
+				xhr.open("POST", url, true);
 				xhr.setRequestHeader("Content-Type", "application/json");
 
 				xhr.onreadystatechange = function() {

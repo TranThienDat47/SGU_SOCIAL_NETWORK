@@ -5,7 +5,7 @@ class Comment {
 	}
 
 	async fetchComment() {
-		const url = "/SGU_SOCIAL_NETWORK/api/comment";
+		const url = "/SGU_SOCIAL_NETWORK/api/comment/get_comment";
 		const send_data = { parentID: this.data.parentID };
 
 		return new Promise((resolve, reject) => {
@@ -21,7 +21,7 @@ class Comment {
 						try {
 							const data = JSON.parse(xhr.responseText);
 							this.listComment = data;
-
+							console.log(data)
 							resolve(data);
 						} catch (error) {
 							console.log("JSON parsing error:", error);
@@ -41,8 +41,8 @@ class Comment {
 	async renderComments() {
 		const renderListComment = await Promise.all(this.listComment.map(async (element) => {
 			const commentData = {
-				image: "https://hhtq.vip/wp-content/uploads/2021/09/thieu-nien-ca-hanh-phan-2-1-1.jpg",
-				name: "haha",
+				image: element.image,
+				name: element.firstName + " " + element.lastName,
 				createAt: element.createAt,
 				content: element.content,
 				likes: element.likes,
@@ -72,11 +72,11 @@ class Comment {
 			if (!commentWrite.getText().trim()) {
 				return;
 			} else {
-				const url = "/SGU_SOCIAL_NETWORK/api/comment"
-				const send_data = { parentID: that.data.parentID, userID: "1", content: commentWrite.getText().trim() };
+				const url = "/SGU_SOCIAL_NETWORK/api/comment/create_parent_is_post"
+				const send_data = { parentID: that.data.parentID, userID: getCookieGlobal("id"), content: commentWrite.getText().trim() };
 
 				const xhr = new XMLHttpRequest();
-				xhr.open("PUT", url, true);
+				xhr.open("POST", url, true);
 				xhr.setRequestHeader("Content-Type", "application/json");
 
 				xhr.onreadystatechange = function() {
@@ -91,7 +91,6 @@ class Comment {
 							}
 						} else {
 							console.log("Request failed with status:", xhr.status);
-							reject(new Error(`Error: ${xhr.statusText}`));
 						}
 					}
 				}
@@ -118,8 +117,8 @@ class Comment {
 
 			if (dataTemp.parentID === that.data.parentID) {
 				const commentData = {
-					image: "https://hhtq.vip/wp-content/uploads/2021/09/thieu-nien-ca-hanh-phan-2-1-1.jpg",
-					name: "haha",
+					image: dataTemp.image,
+					name: dataTemp.firstName + " " + dataTemp.lastName,
 					createAt: dataTemp.createAt,
 					content: dataTemp.content,
 					likes: dataTemp.likes,
@@ -134,7 +133,6 @@ class Comment {
 				await commentItem.render().then((resultData) => {
 
 					$(`.comment-top.val-${that.data.parentID}`).insertAdjacentHTML('afterbegin', resultData);
-					//					$(`.comment-top.val-${that.data.parentID}`).innerHTML = resultData + $(`.comment-top.val-${that.data.parentID}`).innerHTML;
 				})
 			}
 		};

@@ -1,5 +1,6 @@
 package com.dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -13,6 +14,35 @@ public class PostDAO {
 	public PostDAO() {
 	}
 
+	public boolean createPost(PostModel post) {
+		DatabaseGlobal conn = new DatabaseGlobal();
+		conn.getConnection();
+
+		String newSQL = "INSERT INTO POSTS (authorID, privacySettingID, content, image1, image2, image3, image4) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+		try {
+			PreparedStatement pstmt = conn.getConn().prepareStatement(newSQL);
+			pstmt.setInt(1, post.getAuthorID());
+			pstmt.setInt(2, post.getPrivacySettingID());
+			pstmt.setString(3, post.getContent());
+			pstmt.setString(4, post.getImage1());
+			pstmt.setString(5, post.getImage2());
+			pstmt.setString(6, post.getImage3());
+			pstmt.setString(7, post.getImage4());
+
+			int rowsAffected = pstmt.executeUpdate();
+			pstmt.close();
+
+			return rowsAffected > 0;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		} finally {
+			conn.closeDB();
+		}
+	}
+
 	public List<PostModel> searchPost(int offset, int limit, String keySearch) {
 		DatabaseGlobal conn = new DatabaseGlobal();
 		conn.getConnection();
@@ -20,14 +50,18 @@ public class PostDAO {
 		String newSQL = "";
 
 		if (offset != -1 && limit != -1 && !keySearch.trim().equals("")) {
-			newSQL = "SELECT * FROM POSTS where content LIKE '%" + keySearch + "%' LIMIT " + limit + " OFFSET "
-					+ offset;
+			newSQL = "SELECT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
+					+ "INNER JOIN USERS u ON p.authorID = u.id " + "WHERE p.content LIKE '%" + keySearch + "%' LIMIT "
+					+ limit + " OFFSET " + offset;
 		} else if (offset != -1 && limit != -1 && keySearch.trim().equals("")) {
-			newSQL = "SELECT * FROM POSTS LIMIT " + limit + " OFFSET " + offset;
+			newSQL = "SELECT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
+					+ "INNER JOIN USERS u ON p.authorID = u.id " + "LIMIT " + limit + " OFFSET " + offset;
 		} else if (offset == -1 && limit == -1 && !keySearch.trim().equals("")) {
-			newSQL = "SELECT * FROM POSTS where content LIKE '%" + keySearch + "%'";
+			newSQL = "SELECT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
+					+ "INNER JOIN USERS u ON p.authorID = u.id " + "WHERE p.content LIKE '%" + keySearch + "%'";
 		} else {
-			newSQL = "SELECT * FROM POSTS";
+			newSQL = "SELECT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
+					+ "INNER JOIN USERS u ON p.authorID = u.id";
 		}
 
 		List<PostModel> listPost = new ArrayList<PostModel>();
@@ -40,6 +74,11 @@ public class PostDAO {
 						rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"), rs.getInt("replies"),
 						rs.getString("createAt"), rs.getString("updateAt"));
 
+				// Lấy thông tin từ bảng Users thông qua INNER JOIN và thêm vào PostModel
+				post.setImage(rs.getString("image"));
+				post.setFirstName(rs.getString("firstName"));
+				post.setLastName(rs.getString("lastName"));
+
 				listPost.add(post);
 			}
 			rs.close();
@@ -51,7 +90,6 @@ public class PostDAO {
 			conn.closeDB();
 			return null;
 		}
-
 	}
 
 	public PostModel getOnePost(int id) {
@@ -72,13 +110,12 @@ public class PostDAO {
 						rs.getString("createAt"), rs.getString("updateAt"));
 			}
 			rs.close();
-
-			conn.closeDB();
 			return post;
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			conn.closeDB();
 			return post;
+		} finally {
+			conn.closeDB();
 		}
 
 	}

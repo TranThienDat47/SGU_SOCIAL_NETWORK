@@ -5,15 +5,16 @@ public class UserModel {
 	private String email;
 	private String password;
 	private String image;
-	private Long phoneNumber;
+	private String phoneNumber;
 	private String firstName;
 	private String lastName;
 	private boolean isVerify;
-	private String dateOfBirh;
+	private String dateOfBirth;
 	private String createAt;
 	private String address;
 	private String biography;
 	private String background;
+	private boolean gender;
 
 	public int getId() {
 		return id;
@@ -47,11 +48,11 @@ public class UserModel {
 		this.image = image;
 	}
 
-	public Long getPhoneNumber() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(Long phoneNumber) {
+	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 
@@ -79,12 +80,12 @@ public class UserModel {
 		this.isVerify = isVerify;
 	}
 
-	public String getDateOfBirh() {
-		return dateOfBirh;
+	public String getDateOfBirth() {
+		return dateOfBirth;
 	}
 
-	public void setDateOfBirh(String dateOfBirh) {
-		this.dateOfBirh = dateOfBirh;
+	public void setDateOfBirth(String dateOfBirh) {
+		this.dateOfBirth = dateOfBirh;
 	}
 
 	public String getCreateAt() {
@@ -119,9 +120,18 @@ public class UserModel {
 		this.background = background;
 	}
 
-	public UserModel(int id, String email, String password, String image, Long phoneNumber, String firstName,
+	public boolean isGender() {
+		return gender;
+	}
+
+	public void setGender(boolean gender) {
+		this.gender = gender;
+	}
+
+	public UserModel(int id, String email, String password, String image, String phoneNumber, String firstName,
 			String lastName, boolean isVerify, String dateOfBirh, String createAt, String address, String biography,
-			String background) {
+			String background, boolean gender) {
+		super();
 		this.id = id;
 		this.email = email;
 		this.password = password;
@@ -130,22 +140,25 @@ public class UserModel {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.isVerify = isVerify;
-		this.dateOfBirh = dateOfBirh;
+		this.dateOfBirth = dateOfBirh;
 		this.createAt = createAt;
 		this.address = address;
 		this.biography = biography;
 		this.background = background;
+		this.gender = gender;
 	}
 
 	public UserModel() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String toString() {
 		return "UserModel [id=" + id + ", email=" + email + ", password=" + password + ", image=" + image
 				+ ", phoneNumber=" + phoneNumber + ", firstName=" + firstName + ", lastName=" + lastName + ", isVerify="
-				+ isVerify + ", dateOfBirh=" + dateOfBirh + ", createAt=" + createAt + ", address=" + address
-				+ ", biography=" + biography + ", background=" + background + "]";
+				+ isVerify + ", dateOfBirh=" + dateOfBirth + ", createAt=" + createAt + ", address=" + address
+				+ ", biography=" + biography + ", background=" + background + ", gender=" + gender + "]";
 	}
 
 }

@@ -1,5 +1,22 @@
 class PostDetail {
-	constructor(data = { postID: -1 }) {
+	constructor(data = {
+		postID: "",
+		authorID: "",
+		privacySettingID: element.privacySettingID,
+		content: "",
+		createAt: "",
+		image1: "",
+		image2: "",
+		image3: "",
+		image4: "",
+		likes: "",
+		replies: "",
+		title: "",
+		updateAt: "",
+		firstName: "",
+		lastName: "",
+		image: "",
+	}) {
 		this.data = data;
 	}
 
@@ -9,7 +26,7 @@ class PostDetail {
 
 
 		setTimeout(async () => {
-			const comment = new Comment({ parentID: this.data.postID })
+			const comment = new Comment({ parentID: that.data.postID, postOfUser: { firstName: that.data.firstName, lastName: that.data.lastName, image: that.data.image } })
 			await comment.render().then(data => {
 				$(".render_list_commnet_post").innerHTML = data
 			})
@@ -28,12 +45,12 @@ class PostDetail {
 						<div class="global_post-header_post">
 							<div class="global_post-logo_profile">
 								<img
-									src="https://www.kkday.com/vi/blog/wp-content/uploads/chup-anh-dep-bang-dien-thoai-25.jpg"
+									src="${that.data.image}"
 									alt="" />
 							</div>
 							<div class="global_post-header_content">
 								<div>
-									<p class="global_post-name_profile">Những câu chuyện thú vị</p>
+									<p class="global_post-name_profile">${that.data.firstName + " " + that.data.lastName}</p>
 								</div>
 								<div>
 									<p class="global_post-time_post">

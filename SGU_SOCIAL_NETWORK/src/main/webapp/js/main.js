@@ -52,6 +52,21 @@ class MainOfWeb {
 			});
 		}
 
+		const wrapperSetting = $(".header_item-action-setting");
+		const btnSetting = $("#btnHeaderShowSetting");
+
+		const setting = $(".user_setting-box_setting");
+
+		btnSetting.onclick = () => {
+			if (setting.classList.contains("user_setting-box_setting-show")) {
+				setting.classList.remove("user_setting-box_setting-show");
+				document.body.removeEventListener('wheel', preventScroll, { passive: false });
+			} else {
+				setting.classList.add("user_setting-box_setting-show");
+				document.body.addEventListener('wheel', preventScroll, { passive: false });
+			}
+		}
+
 
 		const wrapperNotify = $(".header_item-action_notify");
 		const btnNotify = $("#btnShowNotify");
@@ -79,32 +94,14 @@ class MainOfWeb {
 				}
 			}
 
+			if (setting.classList.contains("user_setting-box_setting-show")) {
+				if (!checkNode(wrapperSetting, e.target)) {
+					setting.classList.remove("user_setting-box_setting-show");
+					document.body.removeEventListener('wheel', preventScroll, { passive: false });
+				}
+			}
+
 		};
-
-
-		//render create post
-
-		const wrapperCreatePostRender = $("#showCreatePostGloabal")
-
-
-		const create_post = new CreatePost();
-
-		const handleShowCreatePostDetail = () => {
-			wrapperCreatePostRender.innerHTML = create_post.render();
-			create_post.renderListImage();
-
-			$("#create_post-content_text").focus();
-
-		}
-
-		$("#create_post-content_before").onclick = () => {
-			handleShowCreatePostDetail();
-		}
-
-		$("#create_post-profile-select_before").onclick = () => {
-			handleShowCreatePostDetail();
-		}
-
 
 	}
 }

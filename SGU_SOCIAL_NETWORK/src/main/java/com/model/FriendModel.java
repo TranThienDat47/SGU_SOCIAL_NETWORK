@@ -9,6 +9,9 @@ public class FriendModel {
 		this.userID = userID;
 		this.friendID = friendID;
 	}
+	
+	public FriendModel() {
+	}
 
 	public int getUserID() {
 		return userID;

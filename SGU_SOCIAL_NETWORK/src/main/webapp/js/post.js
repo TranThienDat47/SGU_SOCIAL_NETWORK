@@ -10,9 +10,8 @@ class GloabPost {
 
 		const that = this;
 
-		const url = "/SGU_SOCIAL_NETWORK/api/post";
+		const url = "/SGU_SOCIAL_NETWORK/api/post/search_post";
 		const send_data = {
-			action: "searchPost",
 			limitValue,
 			offsetValue,
 			searchValue,
@@ -30,7 +29,6 @@ class GloabPost {
 							const data = JSON.parse(xhr.responseText);
 
 							that.listPostHome = [...that.listPostHome, ...data];
-							console.log(data)
 							resolve(data);
 						} catch (error) {
 							console.log("JSON parsing error:", error);
@@ -63,6 +61,9 @@ class GloabPost {
 				replies: element.replies,
 				title: element.title,
 				updateAt: element.updateAt,
+				firstName: element.firstName,
+				lastName: element.lastName,
+				image: element.image,
 			};
 
 

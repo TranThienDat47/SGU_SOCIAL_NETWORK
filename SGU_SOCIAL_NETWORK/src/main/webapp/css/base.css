@@ -220,7 +220,7 @@ li {
 	width: 746px;
 	max-width: 1456px;
 	padding: 3px 76px;
-	z-index: 9	;
+	z-index: 9;
 }
 
 /*header start*/
@@ -228,6 +228,25 @@ li {
 	width: 40px;
 	height: 40px;
 	cursor: pointer;
+}
+
+#btnHeaderShowSetting {
+	position: relative;
+}
+
+#btnHeaderShowSetting::after {
+	content: "";
+	position: absolute;
+	width: 13px;
+	height: 13px;
+	background-image: url(https://static.thenounproject.com/png/1132025-200.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+	bottom: 0;
+	right: 0;
+	background-color: rgba(255, 255, 255, 0.6);
+	border-radius: 999px;
+	border: 1px solid var(--border-color);
 }
 
 .header_btn_clear {
@@ -688,3 +707,122 @@ li {
 }
 
 /*sidebar right end*/
+
+
+.toolkit_message-wrapper {
+	z-index: 100;
+	bottom: 0;
+	left: 0;
+	margin-left: 16px;
+	margin-bottom: 16px;
+	max-height: 203px;
+	overflow-y: auto;
+	position: fixed;
+}
+
+.toolkit_message {
+	margin-top: 9px;
+	color: #fff;
+	width: 243px;
+	height: 39px;
+	background-color: var(--tool-tip-color);
+	border-radius: 999px;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.toolkit_message-icon {
+	width: 23px;
+	height: 23px;
+	background-color: #fff;
+	border-radius: 999px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-left: 9px;
+	cursor: pointer;
+}
+
+.toolkit_message-icon>svg {}
+
+/* user setting */
+
+.header_item-action-setting {
+	position: relative;
+}
+
+.user_setting-setting_content {
+	padding-top: 9px;
+}
+
+
+.user_setting-box_setting {
+	position: absolute;
+	width: 280px;
+	border-radius: 9px;
+	background: #fff;
+	border: 1px solid #cccccc;
+	margin: 20px auto;
+	padding: 16px;
+	right: 0px;
+	top: 28px;
+	z-index: 11;
+	display: none;
+}
+
+.user_setting-box_setting.user_setting-box_setting-show {
+	display: block;
+}
+
+.user_setting-setting_header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 6px;
+}
+
+.user_setting-img_profile img {
+	width: 30px;
+	height: 30px;
+	border-radius: 999px;
+	margin-right: 8px;
+}
+
+.user_setting-setting_name p {
+	font-weight: bolder;
+}
+
+.user_setting-setting_child {
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+	font-weight: 300;
+	cursor: pointer;
+	padding: 6px 0px;
+	background-color: #fff;
+	border-radius: 16px;
+}
+
+.user_setting-setting_child:hover {
+	background-color: #ddd;
+}
+
+.user_setting-screen {
+	background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yz/r/YzcP4xG_wE-.png);
+	background-position: 1px -267px;
+}
+
+.user_setting-logout {
+	background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yz/r/YzcP4xG_wE-.png);
+	background-position: 3px -246px;
+}
+
+.user_setting-img_setting {
+	width: 22px;
+	height: 22px;
+	border-radius: 999px;
+	border: 1px solid #cccccc;
+	margin-left: 3px;
+	margin-right: 10px;
+}

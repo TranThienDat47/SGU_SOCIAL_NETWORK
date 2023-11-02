@@ -6,7 +6,6 @@ const searchItem = () => {
 }
 
 const searchResult = () => {
-	console.log("la sao nhi")
 	return `<div class="header_search_result-inner">
 				<div class="header_search_result-header">
 					<h4 style="

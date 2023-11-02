@@ -13,36 +13,19 @@ class GlobalPostItem {
 		replies: "",
 		title: "",
 		updateAt: "",
+		firstName: "",
+		lastName: "",
+		image: "",
 	}) {
 		this.data = data;
 	}
 
-	//	async addEnvent() {
-	//		let intervalID = null;
-	//		const that = this;
-	//
-	//		intervalID = setInterval(() => {
-	//			const btnComment = $(`.global_post-btn_comment-${this.data.postID}`);
-	//
-	//			if (btnComment) {
-	//
-	//				clearInterval(intervalID);
-	//			}
-	//		}, 9)
-	//	}
 
 	async render() {
 		const that = this;
-		console.log(that.data)
 
 		setTimeout(() => {
 			const btnComment = $(`.global_post-btn_comment-${this.data.postID}`);
-
-			//			const url = "/SGU_SOCIAL_NETWORK/api/post";
-			//			const send_data = {
-			//				action: "getOnePost",
-			//				postID: that.data.postID,
-			//			};
 
 			btnComment.onclick = () => {
 				const post = new PostDetail(that.data);
@@ -50,37 +33,10 @@ class GlobalPostItem {
 				post.render().then(data => {
 					$("#showPostDetailGloabal").innerHTML = data
 				})
-
-				//				const xhr = new XMLHttpRequest();
-				//				xhr.open("POST", url, true)
-				//				xhr.setRequestHeader("Content-Type", "application/json");
-				//
-				//				xhr.onreadystatechange = function() {
-				//					if (xhr.readyState === 4) {
-				//						if (xhr.status === 200) {
-				//							try {
-				//								const data = JSON.parse(xhr.responseText);
-				//								tempPostDetail = data;
-				//
-				//								const post = new PostDetail({ id: that.data.postID });
-				//
-				//								post.render().then(data => {
-				//									$("#showPostDetailGloabal").innerHTML = data
-				//								})
-				//
-				//
-				//							} catch (error) {
-				//								console.log("JSON parsing error:", error);
-				//							}
-				//						} else {
-				//							console.log("Request failed with status:", xhr.status);
-				//						}
-				//					}
-				//				}
-				//
-				//				xhr.send(JSON.stringify(send_data));
 			}
 		})
+
+
 
 		return `
 			<div class="wrapper_of_block ">
@@ -88,12 +44,12 @@ class GlobalPostItem {
 					<div class="global_post-header_post">
 						<div class="global_post-logo_profile">
 							<img
-								src="https://www.kkday.com/vi/blog/wp-content/uploads/chup-anh-dep-bang-dien-thoai-25.jpg"
+								src="${that.data.image}"
 								alt="avata" />
 						</div>
 						<div class="global_post-header_content">
 							<div>
-								<p class="global_post-name_profile">Những câu chuyện thú vị</p>
+								<p class="global_post-name_profile">${that.data.firstName + " " + that.data.lastName}</p>
 							</div>
 							<div>
 								<p class="global_post-time_post">

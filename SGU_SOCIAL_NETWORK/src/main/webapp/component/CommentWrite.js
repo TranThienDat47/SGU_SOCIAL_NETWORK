@@ -28,8 +28,9 @@ class CommentWrite {
 	}
 
 	render() {
-
 		const that = this;
+		const imgAvt = atob(getCookieGlobal("image"));
+
 
 		let intervalID = null;
 
@@ -80,7 +81,7 @@ class CommentWrite {
 						<div class="comment-left">
 							<div class="avata">
 								<img
-									src="https://hhtq.vip/wp-content/uploads/2021/09/thieu-nien-ca-hanh-phan-2-1-1.jpg"
+									src="${imgAvt}"
 									alt="" class="avt" />
 							</div>
 						</div>
