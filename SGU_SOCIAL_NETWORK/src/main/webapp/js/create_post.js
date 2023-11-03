@@ -67,16 +67,19 @@ class CreatePost {
 		const txtCreatePost = $("#create_post-content_text");
 
 
-		btnCreatePostAddImage.onclick = () => {
-			if (!wrapperCreatePostAddImage.classList.contains("create_post-list_image_show")) {
-				wrapperCreatePostAddImage.classList.add("create_post-list_image_show")
-				createPostUpload.click();
+		if (btnCreatePostAddImage) {
+			btnCreatePostAddImage.onclick = () => {
+				if (!wrapperCreatePostAddImage.classList.contains("create_post-list_image_show")) {
+					wrapperCreatePostAddImage.classList.add("create_post-list_image_show")
+					createPostUpload.click();
+				}
 			}
 		}
 
-		tabAddImage.onclick = () => {
-			createPostUpload.click();
-		}
+		if (tabAddImage)
+			tabAddImage.onclick = () => {
+				createPostUpload.click();
+			}
 
 		function preview_image_create_post(event) {
 			var reader = new FileReader();
@@ -91,9 +94,10 @@ class CreatePost {
 			reader.readAsDataURL(event.target.files[0]);
 		}
 
-		createPostUpload.onchange = (e) => {
-			preview_image_create_post(e);
-		}
+		if (createPostUpload)
+			createPostUpload.onchange = (e) => {
+				preview_image_create_post(e);
+			}
 
 		const handleShowCreatePostDetail = () => {
 			wrapperCreatePostRender.style.display = "block";
@@ -104,17 +108,20 @@ class CreatePost {
 
 		}
 
-		btnClostPost.onclick = () => {
-			wrapperCreatePostRender.style.display = "none";
-		}
+		if (btnClostPost)
+			btnClostPost.onclick = () => {
+				wrapperCreatePostRender.style.display = "none";
+			}
 
-		$("#create_post-content_before").onclick = () => {
-			handleShowCreatePostDetail();
-		}
+		if ($("#create_post-content_before"))
+			$("#create_post-content_before").onclick = () => {
+				handleShowCreatePostDetail();
+			}
 
-		$("#create_post-profile-select_before").onclick = () => {
-			handleShowCreatePostDetail();
-		}
+		if ($("#create_post-profile-select_before"))
+			$("#create_post-profile-select_before").onclick = () => {
+				handleShowCreatePostDetail();
+			}
 
 
 		const btnCreatePostInSidebarLeft = $(".sidebar_left-create-post-button");

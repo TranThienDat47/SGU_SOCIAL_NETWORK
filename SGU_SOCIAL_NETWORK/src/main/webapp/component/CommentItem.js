@@ -53,8 +53,6 @@ class CommentItem {
 	async renderCommentReply() {
 		const that = this;
 
-		console.log(that.listComment)
-
 		const renderListComment = await Promise.all(that.listComment.map(async (element) => {
 
 			const commentData = {
@@ -95,56 +93,87 @@ class CommentItem {
 
 			const dataTemp = JSON.parse(event.data);
 
-			console.log(dataTemp)
 
 			if (parseInt(commentWrite.data.modeReply) === 1) {
 
 				if (dataTemp.parentID === that.data.id && that.data.id === dataTemp.writeCommentID) {
-					if (!that.showReplies) {
-						$(`#CommentItem_${that.data.id} #btnShowReply`).click();
+					setTimeout(async () => {
+
+						if (!that.showReplies) {
+							$(`#CommentItem_${that.data.id} #btnShowReply`).click();
+						}
+						const commentData = {
+							image: dataTemp.image,
+							name: dataTemp.firstName + " " + dataTemp.lastName,
+							createAt: dataTemp.createAt,
+							content: dataTemp.content,
+							likes: dataTemp.likes,
+							replies: dataTemp.replies,
+							id: dataTemp.id,
+							parentID: dataTemp.parentID,
+							modeReply: true,
+						};
+
+						const commentItem = new CommentItem(commentData);
+
+						await commentItem.render().then((resultData) => {
+							const wrapperListReplies = $(`#CommentItem_${that.data.parentID} .wrapper-list__reply`);
+							$(`#CommentItem_${that.data.id} .wrapper-list__reply`).insertAdjacentHTML('afterbegin', resultData);
+						})
+					});
+
+
+					if (that.data.replies <= 0) {
+						that.data.replies = parseInt(that.data.replies) + 1;
+						const wrapperRenderListComment = $(`#comment_item-render_list_comment-${that.data.id}`)
+
+						wrapperRenderListComment.innerHTML = `
+								                <div class="replies">
+								                	<div class="reply-header">
+								                		<button id="btnShowReply" class="btn transparent show-reply">
+								                			<div class="icon">
+								                				<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+								                			</div> <span id="comment_item-count_reply-${that.data.id}">${that.data.replies} </span> <span> phản hồi</span></button>
+								                	</div>
+								                </div>`
+					} else {
+						that.data.replies = parseInt(that.data.replies) + 1;
+						const countReplyComment = $(`#comment_item-count_reply-${that.data.id}`)
+
+						countReplyComment.innerHTML = parseInt(countReplyComment.innerHTML.trim()) + 1 + " ";
 					}
-					const commentData = {
-						image: dataTemp.image,
-						name: dataTemp.firstName + " " + dataTemp.lastName,
-						createAt: dataTemp.createAt,
-						content: dataTemp.content,
-						likes: dataTemp.likes,
-						replies: dataTemp.replies,
-						id: dataTemp.id,
-						parentID: dataTemp.parentID,
-						modeReply: true,
-					};
 
-					const commentItem = new CommentItem(commentData);
-
-					await commentItem.render().then((resultData) => {
-						const wrapperListReplies = $(`#CommentItem_${that.data.parentID} .wrapper-list__reply`);
-						$(`#CommentItem_${that.data.id} .wrapper-list__reply`).insertAdjacentHTML('afterbegin', resultData);
-					})
 				}
 			} else {
 				if (dataTemp.parentID === that.data.parentID && dataTemp.commentID === that.data.id) {
-					const commentData = {
-						image: dataTemp.image,
-						name: dataTemp.firstName + " " + element.lastName,
-						createAt: dataTemp.createAt,
-						content: dataTemp.content,
-						likes: dataTemp.likes,
-						replies: dataTemp.replies,
-						id: dataTemp.id,
-						parentID: dataTemp.parentID,
-						modeReply: true,
-					};
+					setTimeout(async () => {
+						const commentData = {
+							image: dataTemp.image,
+							name: dataTemp.firstName + " " + dataTemp.lastName,
+							createAt: dataTemp.createAt,
+							content: dataTemp.content,
+							likes: dataTemp.likes,
+							replies: dataTemp.replies,
+							id: dataTemp.id,
+							parentID: dataTemp.parentID,
+							modeReply: true,
+						};
 
-					const commentItem = new CommentItem(commentData);
+						const commentItem = new CommentItem(commentData);
 
-					await commentItem.render().then((resultData) => {
-						console.log("result", resultData)
-						const wrapperListReplies = $(`#CommentItem_${that.data.parentID} .wrapper-list__reply`);
-						$(`#CommentItem_${that.data.parentID} .wrapper-list__reply`).insertAdjacentHTML('afterbegin', resultData);
+						await commentItem.render().then((resultData) => {
+							const wrapperListReplies = $(`#CommentItem_${that.data.parentID} .wrapper-list__reply`);
+							$(`#CommentItem_${that.data.parentID} .wrapper-list__reply`).insertAdjacentHTML('afterbegin', resultData);
+						})
 					})
+
+					that.data.replies = parseInt(that.data.replies) + 1;
+					const countReplyComment = $(`#comment_item-count_reply-${that.data.parentID}`)
+
+					countReplyComment.innerHTML = parseInt(countReplyComment.innerHTML.trim()) + 1 + " ";
 				}
 			}
+
 		};
 
 		ws.onerror = function(event) {
@@ -285,15 +314,17 @@ class CommentItem {
 	                    </div>
 	                    
 	                    <div class="wrapper-comment__write"></div>
-	                    ${parseInt(this.data.replies) > 0 ? `
-		                <div class="replies">
-		                	<div class="reply-header">
-		                		<button id="btnShowReply" class="btn transparent show-reply">
-		                			<div class="icon">
-		                				<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
-		                			</div> ${this.data.replies} phản hồi</button>
-		                	</div>
-		                </div>` : ""}
+	                    <div id="comment_item-render_list_comment-${this.data.id}">
+		                    ${parseInt(this.data.replies) > 0 ? `
+			                <div class="replies">
+			                	<div class="reply-header">
+			                		<button id="btnShowReply" class="btn transparent show-reply">
+			                			<div class="icon">
+			                				<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+			                			</div> <span id="comment_item-count_reply-${this.data.id}">${this.data.replies} </span> <span> phản hồi</span></button>
+			                	</div>
+			                </div>` : ""}
+			            </div>
 	                    <div class="wrapper-list__reply"></div>
 	                </div>	                
 	            </div>

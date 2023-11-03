@@ -133,7 +133,7 @@ class GlobalPostItem {
 							</div>
 							<div class="global_post-info_global_post-interact">
 								<p class="global_post-total_comment">
-									${that.data.replies} <span>Bình luận</span>
+									<span class="post_detail-count_replies-${that.data.postID}">${that.data.replies} </span><span>Bình luận</span>
 								</p>
 								<!--<p class="global_post-total_share">
 									1 <span>Lượt chia sẻ</span>-->

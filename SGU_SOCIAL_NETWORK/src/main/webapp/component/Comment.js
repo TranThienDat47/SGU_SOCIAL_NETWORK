@@ -130,6 +130,12 @@ class Comment {
 
 				const commentItem = new CommentItem(commentData);
 
+				const countReplies = $$(`.post_detail-count_replies-${that.data.parentID}`);
+
+				for (let temp of countReplies) {
+					temp.innerHTML = parseInt(temp.innerHTML.trim()) + 1 + " ";
+				}
+
 				await commentItem.render().then((resultData) => {
 
 					$(`.comment-top.val-${that.data.parentID}`).insertAdjacentHTML('afterbegin', resultData);

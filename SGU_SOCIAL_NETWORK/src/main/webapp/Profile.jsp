@@ -16,16 +16,19 @@
 	href="${pageContext.request.contextPath}/css/notify.css" />
 
 </head>
+
 <body>
 	<!-- 	Start Header -->
 	<jsp:include page="./layout/Header.jsp"></jsp:include>
 	<!-- 	End Header -->
 
 	<!-- Start container -->
-	<div id="global_container"></div>
+	<div id="global_container_profile">
+		<jsp:include page="./layout/ProfileIsUser.jsp"></jsp:include>
+
+	</div>
 	<!-- End container -->
 </body>
-
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/global.js"></script>
@@ -39,5 +42,9 @@
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/create_post.js"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/profile_user.js"></script>
+
 
 </html>

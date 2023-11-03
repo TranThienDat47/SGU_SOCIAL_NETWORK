@@ -223,6 +223,17 @@ li {
 	z-index: 9;
 }
 
+#global_container_profile {
+	height: 109vh;
+	margin: auto;
+	margin-top: var(--height-default-header);
+	position: relative;
+	width: 1269px;
+	max-width: 1456px;
+	padding: 3px 76px;
+	z-index: 9;
+}
+
 /*header start*/
 .header_logo {
 	width: 40px;
