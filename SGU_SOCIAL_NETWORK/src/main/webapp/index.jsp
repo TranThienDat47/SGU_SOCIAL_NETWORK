@@ -47,6 +47,9 @@ if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/comment.css" />
 
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/global.js"></script>
+
 </head>
 
 <style>
@@ -74,9 +77,19 @@ if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.
 			test="<%=currentURL.trim().equals(tab1URL.trim()) || currentURL.trim().equals(tab1_1URL.trim())%>">
 
 			<div id="render_list_post_home"></div>
+
+			<script>
+				window.onload = () => {
+					new GloabPost().renderListPostHome();
+				}
+			</script>
 		</c:if>
 		<c:if test="<%=currentURL.trim().equals(tab2URL.trim())%>">
 			<div>haha</div>
+			<script>
+				window.onload = () => {
+				}
+			</script>
 		</c:if>
 
 
@@ -94,8 +107,6 @@ if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.
 
 </body>
 
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/global.js"></script>
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/component/PostItem.js"></script>
@@ -115,9 +126,6 @@ if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/component/Search.js"></script>
-
-<!-- <script type="text/javascript" -->
-<%-- 	src="${pageContext.request.contextPath}/component/CreatePost.js"></script> --%>
 
 
 <script type="text/javascript"

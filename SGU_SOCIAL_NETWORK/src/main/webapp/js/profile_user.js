@@ -5,19 +5,22 @@ class ProfileUser {
 
 	render() {
 
-		const wrapperUpdateBox = $("#profile_user_modal_box");
-		const btnUpdateProfile = $("#profile_user-tabs-update_profile");
-		const btnCloseUpdateProfile = $("#btnCloseUpdateProfile")
+		setTimeout(() => {
+			const wrapperUpdateBox = $("#profile_user_modal_box");
+			const btnUpdateProfile = $("#profile_user-tabs-update_profile");
+			const btnCloseUpdateProfile = $("#btnCloseUpdateProfile")
 
-		btnUpdateProfile.onclick = () => {
-			wrapperUpdateBox.classList.add("profile_user_modal_box_show")
-		}
-
-		btnCloseUpdateProfile.onclick = () => {
-			if (wrapperUpdateBox.classList.contains("profile_user_modal_box_show")) {
-				wrapperUpdateBox.classList.remove("profile_user_modal_box_show")
-			}
-		}
+			if (btnUpdateProfile)
+				btnUpdateProfile.onclick = () => {
+					wrapperUpdateBox.classList.add("profile_user_modal_box_show")
+				}
+			if (btnCloseUpdateProfile)
+				btnCloseUpdateProfile.onclick = () => {
+					if (wrapperUpdateBox.classList.contains("profile_user_modal_box_show")) {
+						wrapperUpdateBox.classList.remove("profile_user_modal_box_show")
+					}
+				}
+		})
 
 		const backgroundUpload = $("#profile_user-background_file");
 		const avataUpload = $("#profile_user-avata_file");

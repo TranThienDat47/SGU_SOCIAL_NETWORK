@@ -164,19 +164,19 @@
 	border-bottom: 2px solid var(--border-color);
 }
 
-.global_post-name_profile {
+.profile_user-name_profile {
 	position: absolute;
 	left: 221px;
 	width: 200px;
 	padding: 14px 0px;
 }
 
-.global_post-name_profile h1 {
+.profile_user-name_profile h1 {
 	font-size: 26px;
 	font-weight: 700;
 }
 
-.global_post-name_profile p {
+.profile_user-name_profile p {
 	font-size: 13px;
 	font-weight: 500;
 	color: var(--text-bland);
@@ -384,4 +384,8 @@
 .profile_user-container_right {
 	flex: 1;
 
+}
+
+#render_list_post_profile .global_post-header_icon>svg:last-child {
+	display: none !important;
 }

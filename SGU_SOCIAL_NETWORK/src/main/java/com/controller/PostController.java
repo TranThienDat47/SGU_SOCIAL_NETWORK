@@ -14,19 +14,23 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet({ "/api/post/search_post", "/api/post/get_one", "/api/post/create_post" })
+@WebServlet({ "/api/post/search_post_value_search", "/api/post/get_one", "/api/post/create_post",
+		"/api/post/search_post_of_user" })
 public class PostController extends HttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String uri = req.getRequestURI();
-		if (uri.contains("search_post")) {
+		if (uri.contains("search_post_value_search")) {
 			this.doSearch(req, resp);
 		} else if (uri.contains("get_one")) {
 			this.doGetOne(req, resp);
 		} else if (uri.contains("create_post")) {
 			this.doCreate(req, resp);
+		} else if (uri.contains("search_post_of_user")) {
+			this.doSearchOfUser(req, resp);
 		}
+
 	}
 
 	protected void doSearch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -43,6 +47,25 @@ public class PostController extends HttpServlet {
 
 		String jsonResponse = objectMapper.writeValueAsString(
 				posts.searchPost(Integer.parseInt(offsetValue), Integer.parseInt(limitValue), searchValue));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
+	}
+
+	protected void doSearchOfUser(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String limitValue = jsonNode.get("limitValue").asText();
+		String offsetValue = jsonNode.get("offsetValue").asText();
+		String userID = jsonNode.get("userID").asText();
+
+		PostDAO posts = new PostDAO();
+
+		String jsonResponse = objectMapper.writeValueAsString(posts.searchPostOfUser(Integer.parseInt(offsetValue),
+				Integer.parseInt(limitValue), Integer.parseInt(userID)));
 		PrintWriter out = resp.getWriter();
 		out.println(jsonResponse);
 	}

@@ -1,0 +1,124 @@
+@charset "UTF-8";
+
+.list_friend {
+	margin: 20px auto;
+}
+
+.list_friend-list_title {
+	color: #000;
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.list_friend-list_member {
+	padding-top: 40px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+	/* Khoảng cách giữa hai cột */
+}
+
+.list_friend-list_header {
+	padding: 0 16px;
+	margin-top: -6px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.list_friend-list_header a:last-child {
+	margin-left: 13px;
+}
+
+
+.list_friend-info_member {
+	display: flex;
+	align-items: center;
+	position: relative;
+	padding: 10px 16px 10px 0;
+	margin-bottom: 10px;
+	padding: 10px;
+}
+
+.list_friend-img_member img {
+	width: 73px;
+	height: 73px;
+	border-radius: 999px;
+}
+
+.list_friend-name_child {
+	color: #000;
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.list_friend-friend_child {
+	color: rgba(0, 0, 0, 0.6);
+	font-size: 13px;
+	font-weight: 400;
+}
+
+.list_friend-name_member {
+	margin-left: 13px;
+}
+
+#list_follow-action_icon {
+	cursor: pointer
+}
+
+.list_friend-action_icon {
+	flex: 1;
+	display: flex;
+	justify-content: flex-end;
+	width: 33px;
+	height: 33px;
+	align-items: center;
+	margin-right: 16px;
+}
+
+/* box show action */
+.list_friend-box_show_action {
+	width: 140px;
+	height: 80px;
+	border-radius: 16px;
+	background: #fff;
+	position: absolute;
+	right: 16px;
+	border: 1px solid #cccccc;
+	font-size: 13px;
+	font-weight: 400;
+	bottom: -40px;
+	display: none;
+}
+
+.list_friend-box_show_action .list_friend-child {
+	display: flex;
+	height: 50%;
+	align-items: center;
+	justify-content: start;
+	padding: 0 16px;
+	user-select: none;
+	cursor: pointer;
+}
+
+.list_friend-box_show_action .list_friend-child:hover {
+	background-color: #ddd;
+}
+
+.list_friend-box_show_action .list_friend-child:first-child {
+	border-top-right-radius: 16px;
+	border-top-left-radius: 16px;
+}
+
+.list_friend-box_show_action .list_friend-child:last-child {
+	border-bottom-right-radius: 16px;
+	border-bottom-left-radius: 16px;
+}
+
+.list_friend-child:first-child {
+	border-bottom: 1px solid #cccccc;
+}
+
+.list_friend-child p {
+	margin-left: 8px;
+}

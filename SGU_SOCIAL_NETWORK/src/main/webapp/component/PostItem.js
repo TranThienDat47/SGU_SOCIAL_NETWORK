@@ -36,11 +36,12 @@ class GlobalPostItem {
 			}
 		})
 
+		console.log(that.data.firstName)
 
 
 		return `
 			<div class="wrapper_of_block ">
-				<div class="global_post global_post-${this.data.postID}">
+				<div class="global_post global_post-${that.data.postID}">
 					<div class="global_post-header_post">
 						<div class="global_post-logo_profile">
 							<img

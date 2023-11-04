@@ -1,16 +1,16 @@
 package com.model;
 
 public class FriendModel {
+	private int id;
 	private int userID;
 	private int friendID;
 
-	public FriendModel(int userID, int friendID) {
-		super();
-		this.userID = userID;
-		this.friendID = friendID;
+	public int getId() {
+		return id;
 	}
-	
-	public FriendModel() {
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getUserID() {
@@ -29,8 +29,18 @@ public class FriendModel {
 		this.friendID = friendID;
 	}
 
+	public FriendModel(int id, int userID, int friendID) {
+		this.id = id;
+		this.userID = userID;
+		this.friendID = friendID;
+	}
+
+	public FriendModel() {
+	}
+
 	@Override
 	public String toString() {
-		return "FriendModel [userID=" + userID + ", friendID=" + friendID + "]";
+		return "FriendModel [id=" + id + ", userID=" + userID + ", friendID=" + friendID + "]";
 	}
+
 }
