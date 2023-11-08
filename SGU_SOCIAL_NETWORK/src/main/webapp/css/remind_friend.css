@@ -40,6 +40,10 @@
 	padding: 10px;
 }
 
+.list_friend-info_member.list_friend-info_member_show_action .list_friend-box_show_action {
+	display: block;
+}
+
 .list_friend-img_member img {
 	width: 73px;
 	height: 73px;
@@ -79,7 +83,6 @@
 /* box show action */
 .list_friend-box_show_action {
 	width: 140px;
-	height: 80px;
 	border-radius: 16px;
 	background: #fff;
 	position: absolute;
@@ -87,7 +90,7 @@
 	border: 1px solid #cccccc;
 	font-size: 13px;
 	font-weight: 400;
-	bottom: -40px;
+	bottom: -0px;
 	display: none;
 }
 
@@ -96,7 +99,7 @@
 	height: 50%;
 	align-items: center;
 	justify-content: start;
-	padding: 0 16px;
+	padding: 6px 16px;
 	user-select: none;
 	cursor: pointer;
 }

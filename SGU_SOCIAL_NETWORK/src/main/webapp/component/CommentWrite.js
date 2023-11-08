@@ -29,7 +29,7 @@ class CommentWrite {
 
 	render() {
 		const that = this;
-		const imgAvt = atob(getCookieGlobal("image"));
+		const imgAvt = decodeURIComponent(getCookieGlobal("image"));
 
 
 		let intervalID = null;

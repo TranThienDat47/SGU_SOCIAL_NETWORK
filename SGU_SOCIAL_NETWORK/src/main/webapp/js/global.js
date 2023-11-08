@@ -83,11 +83,14 @@ function getCookieGlobal(name) {
 	for (var i = 0; i < cookies.length; i++) {
 		var cookie = cookies[i].trim();
 		if (cookie.indexOf(name + '=') === 0) {
-			return cookie.substring(name.length + 1, cookie.length);
+			var encodedValue = cookie.substring(name.length + 1, cookie.length);
+			var decodedValue = decodeURIComponent(encodedValue);
+			return decodedValue;
 		}
 	}
 	return null;
 }
+
 
 
 // document.body.addEventListener('wheel', preventScroll, { passive: false });

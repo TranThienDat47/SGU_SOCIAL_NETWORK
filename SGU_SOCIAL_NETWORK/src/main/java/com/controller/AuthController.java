@@ -98,16 +98,16 @@ public class AuthController extends HttpServlet {
 
 					byte[] decodedImg = Base64.getDecoder().decode(encodedBase64Img);
 
-					String originalData = new String(decodedImg, StandardCharsets.UTF_8);
+					String originalDataImage = new String(decodedImg, StandardCharsets.UTF_8);
 
-					System.out.println(encodedBase64Img);
+					byte[] decodedBackground = Base64.getDecoder().decode(encodedBase64Background);
 
-					System.out.println(originalData);
+					String originalDataBackground = new String(decodedBackground, StandardCharsets.UTF_8);
 
 					int hours = 30 * 24;
 					CookieUtils.add("email", email, hours, resp);
 					CookieUtils.add("id", String.valueOf(user.getId()), hours, resp);
-					CookieUtils.add("image", encodedBase64Img, hours, resp);
+					CookieUtils.add("image", originalDataImage, hours, resp);
 					CookieUtils.add("phoneNumber", user.getPhoneNumber(), hours, resp);
 					CookieUtils.add("firstName", user.getFirstName(), hours, resp);
 					CookieUtils.add("lastName", user.getLastName(), hours, resp);
@@ -115,7 +115,7 @@ public class AuthController extends HttpServlet {
 					CookieUtils.add("createAt", user.getCreateAt().replace(" ", "_=_"), hours, resp);
 					CookieUtils.add("biography", user.getBiography().trim(), hours, resp);
 					CookieUtils.add("gender", String.valueOf(user.isGender()), hours, resp);
-					CookieUtils.add("background", encodedBase64Background.trim(), hours, resp);
+					CookieUtils.add("background", originalDataBackground.trim(), hours, resp);
 					CookieUtils.add("address", user.getAddress().trim(), hours, resp);
 
 					resp.sendRedirect("index.jsp");

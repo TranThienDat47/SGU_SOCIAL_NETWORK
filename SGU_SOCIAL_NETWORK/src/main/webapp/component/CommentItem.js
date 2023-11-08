@@ -9,6 +9,7 @@ class CommentItem {
 		parentID: -1,
 		modeReply: false,
 		id: -1,
+		rootID: "",
 	}) {
 		this.data = data;
 		this.listComment = [];
@@ -65,6 +66,7 @@ class CommentItem {
 				parentID: element.parentID,
 				id: element.id,
 				modeReply: true,
+				rootID: that.data.rootID
 			};
 
 			const commentItem = new CommentItem(commentData);
@@ -112,6 +114,7 @@ class CommentItem {
 							id: dataTemp.id,
 							parentID: dataTemp.parentID,
 							modeReply: true,
+							rootID: that.data.rootID
 						};
 
 						const commentItem = new CommentItem(commentData);
@@ -142,6 +145,11 @@ class CommentItem {
 
 						countReplyComment.innerHTML = parseInt(countReplyComment.innerHTML.trim()) + 1 + " ";
 					}
+					const countReplies = $$(`.post_detail-count_replies-${that.data.parentID}`);
+
+					for (let temp of countReplies) {
+						temp.innerHTML = parseInt(temp.innerHTML.trim()) + 1 + " ";
+					}
 
 				}
 			} else {
@@ -157,12 +165,13 @@ class CommentItem {
 							id: dataTemp.id,
 							parentID: dataTemp.parentID,
 							modeReply: true,
+							rootID: that.data.rootID
 						};
 
 						const commentItem = new CommentItem(commentData);
 
 						await commentItem.render().then((resultData) => {
-							const wrapperListReplies = $(`#CommentItem_${that.data.parentID} .wrapper-list__reply`);
+							//							const wrapperListReplies = $(`#CommentItem_${that.data.parentID} .wrapper-list__reply`);
 							$(`#CommentItem_${that.data.parentID} .wrapper-list__reply`).insertAdjacentHTML('afterbegin', resultData);
 						})
 					})
@@ -171,6 +180,10 @@ class CommentItem {
 					const countReplyComment = $(`#comment_item-count_reply-${that.data.parentID}`)
 
 					countReplyComment.innerHTML = parseInt(countReplyComment.innerHTML.trim()) + 1 + " ";
+				}
+
+				for (let temp of countReplies) {
+					temp.innerHTML = parseInt(temp.innerHTML.trim()) + 1 + " ";
 				}
 			}
 

@@ -1,5 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="com.util.CookieUtils"%>
+
+
+<%
+String cookieValueName = CookieUtils.get("firstName", request) + " " + CookieUtils.get("lastName", request);
+String cookieValueBiography = CookieUtils.get("biography", request);
+String cookieValueAddress = CookieUtils.get("address", request);
+String cookieValueGender = CookieUtils.get("gender", request);
+String cookieValueBirthDay = CookieUtils.get("dateOfBirth", request);
+String cookieValueCreateAt = CookieUtils.get("createAt", request).replace("_=_", "");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,34 +41,50 @@
 						fill="black" />
 		        </svg>
 			</button>
-			<button class="box_update-btn-save">Lưu</button>
+			<button id="btnSaveUpdateProfile" class="box_update-btn-save">Lưu</button>
 		</div>
 		<div class="box_update-content_box">
-			<form>
+			<form id="formUpdatePrfileUser">
 				<div class="box_update-form-floating">
-					<label for="name">Tên</label> <input type="text"
-						class="box_update-form-control" id="name" name="name" />
+					<label for="box_update-name">Tên</label> <input type="text"
+						class="box_update-form-control" id="box_update-name" name="name"
+						value="<%=cookieValueName%>" />
 				</div>
 				<div class="box_update-form-floating">
 					<label for="box_update-story">Tiểu sử</label>
 					<textarea class="box_update-form-control" id="box_update-story"
-						name="box_update-story"></textarea>
+						name="story"><%=cookieValueBiography%></textarea>
+				</div>
+
+				<div class="box_update-form-floating">
+					<label for="box_update-gender">Giới tính</label> <select
+						class="box_update-form-control" id="box_update-gender"
+						name="gender">
+						<option <%=cookieValueGender.equals("false") ? "" : "selected"%>
+							value="true">Nam</option>
+						<option <%=cookieValueGender.equals("false") ? "selected" : ""%>
+							value="false">Nữ</option>
+					</select>
 				</div>
 
 				<div class="box_update-form-floating">
 					<label for="box_update-local">Vị trí </label> <input type="text"
-						class="box_update-form-control" id="box_update-local"
-						name="box_update-local" />
+						class="box_update-form-control" id="box_update-local" name="local"
+						value="<%=cookieValueAddress%>" />
 				</div>
 				<div class="box_update-form-floating">
-					<label for="box_update-birth">Ngày sinh -
-						<button class="header_box-edit_birth">Chỉnh sửa</button>
-					</label> <input type="text" style="margin-top: 13px"
-						class="box_update-form-control" id="box_update-birth"
-						name="box_update-birth" />
+					<label for="box_update-birth">Ngày sinh </label> <input type="date"
+						style="margin-top: 13px" class="box_update-form-control"
+						id="box_update-birth" name="birth"
+						value="<%=cookieValueBirthDay%>" />
 				</div>
 			</form>
 		</div>
 	</div>
 </body>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/profile_user/update_profile_user.js"></script>
+
+
 </html>

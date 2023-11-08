@@ -21,7 +21,6 @@ class Comment {
 						try {
 							const data = JSON.parse(xhr.responseText);
 							this.listComment = data;
-							console.log(data)
 							resolve(data);
 						} catch (error) {
 							console.log("JSON parsing error:", error);
@@ -39,6 +38,7 @@ class Comment {
 	}
 
 	async renderComments() {
+		const that = this;
 		const renderListComment = await Promise.all(this.listComment.map(async (element) => {
 			const commentData = {
 				image: element.image,
@@ -50,6 +50,7 @@ class Comment {
 				parentID: element.parentID,
 				id: element.id,
 				modeReply: false,
+				rootID: that.data.parentID,
 			};
 
 
@@ -126,6 +127,7 @@ class Comment {
 					id: dataTemp.id,
 					parentID: dataTemp.parentID,
 					modeReply: false,
+					rootID: that.data.parentID,
 				};
 
 				const commentItem = new CommentItem(commentData);

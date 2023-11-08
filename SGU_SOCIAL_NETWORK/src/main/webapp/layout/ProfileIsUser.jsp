@@ -3,24 +3,47 @@
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
 
+<%@page import="com.util.CookieUtils"%>
+
+
+<%
+String cookieValueID = CookieUtils.get("id", request);
+%>
+
+<%
+String cookieValueName = CookieUtils.get("firstName", request) + " " + CookieUtils.get("lastName", request);
+
+String originalDataImage = CookieUtils.get("image", request);
+
+String originalDataBackground = CookieUtils.get("background", request);
+%>
+
 <%
 String queryString = request.getQueryString();
 String currentURL = request.getRequestURI();
 
 if (queryString != null && !queryString.isEmpty()) {
-	currentURL += "?" + queryString;
+	String[] queryParams = queryString.split("&");
+	String targetParamValue = null;
+
+	for (String param : queryParams) {
+		String[] paramParts = param.split("=");
+		if (paramParts.length == 2 && paramParts[0].equals("page")) {
+	targetParamValue = paramParts[1];
+	break; // Nếu đã tìm thấy tham số "page", thoát khỏi vòng lặp
+		}
+	}
+
+	if (targetParamValue != null) {
+		currentURL += "?page=" + targetParamValue;
+	}
+
 }
 
-String tab1_1URL = "/SGU_SOCIAL_NETWORK/Profile.jsp";
 String tab1URL = "/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend";
 String tab2URL = "/SGU_SOCIAL_NETWORK/Profile.jsp?page=friend";
 String tab3URL = "/SGU_SOCIAL_NETWORK/Profile.jsp?page=follow";
 String tab4URL = "/SGU_SOCIAL_NETWORK/Profile.jsp?page=image";
-
-if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.equals(tab2URL)
-		&& !currentURL.equals(tab3URL) && !currentURL.equals(tab4URL)) {
-	response.sendRedirect("/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend");
-}
 %>
 
 <!DOCTYPE html>
@@ -41,7 +64,7 @@ if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.
 	<div class="profile_user">
 		<div class="profile_user-header_profile">
 			<img id="profile_user-img_background"
-				src="/SGU_SOCIAL_NETWORK/assets/images/logo.png" alt="" />
+				src="<%=originalDataBackground%>" alt="" />
 			<div id="profile_user-tabs-update_picture_background"
 				class="profile_user-tabs-update_picture">
 				<svg xmlns="http://www.w3.org/2000/svg" width="21" height="22"
@@ -61,8 +84,7 @@ if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.
 		</div>
 		<div class="profile_user-body_profile">
 			<div class="profile_user-picture_main">
-				<img id="profile_user-img_avata"
-					src="/SGU_SOCIAL_NETWORK/assets/images/logo.png" alt="" />
+				<img id="profile_user-img_avata" src="<%=originalDataImage%>" alt="" />
 				<div id="profile_user-tabs-update_picture_avata"
 					class="profile_user-screen_picture">
 					<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19"
@@ -76,8 +98,8 @@ if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.
 					type="file" accept=".png, .jpg, .jpeg" id="profile_user-avata_file" />
 			</div>
 			<div class="profile_user-name_profile">
-				<h1>Danh Võ</h1>
-				<p>1000 bạn bè - 500 bạn chung</p>
+				<h1><%=cookieValueName%></h1>
+				<!-- 				<p>1000 bạn bè</p> -->
 			</div>
 			<div id="profile_user-tabs-update_profile"
 				class="profile_user-tabs-update_profile">
@@ -101,22 +123,24 @@ if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.
 		</div>
 		<div class="profile_user-navigation">
 			<ul class="profile_user-menu-tabs">
-				<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend"><li
-					class="profile_user-tabs-item <%=currentURL.trim().equals(tab1URL.trim()) || currentURL.trim().equals(tab1_1URL.trim())
-		? "profile_user-tabs-item_active"
-		: ""%>">
+				<a
+					href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=<%=cookieValueID%>"><li
+					class="profile_user-tabs-item <%=currentURL.trim().equals(tab1URL.trim()) ? "profile_user-tabs-item_active" : ""%>">
 						Bài đăng</li></a>
-				<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=friend">
+				<a
+					href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=friend&id=<%=cookieValueID%>">
 					<li
 					class="profile_user-tabs-item <%=currentURL.trim().equals(tab2URL.trim()) ? "profile_user-tabs-item_active" : ""%>">Bạn
 						bè</li>
 				</a>
-				<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=follow">
+				<a
+					href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=follow&id=<%=cookieValueID%>">
 					<li
 					class="profile_user-tabs-item <%=currentURL.trim().equals(tab3URL.trim()) ? "profile_user-tabs-item_active" : ""%>">Theo
 						dõi</li>
 				</a>
-				<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=image">
+				<a
+					href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=image&id=<%=cookieValueID%>">
 					<li
 					class="profile_user-tabs-item <%=currentURL.trim().equals(tab4URL.trim()) ? "profile_user-tabs-item_active" : ""%>">Ảnh</li>
 				</a>
@@ -125,8 +149,7 @@ if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.
 	</div>
 
 	<c:set var="curentPage" value="${currentURL}" />
-	<c:if
-		test="<%=currentURL.trim().equals(tab1URL.trim()) || currentURL.trim().equals(tab1_1URL.trim())%>">
+	<c:if test="<%=currentURL.trim().equals(tab1URL.trim())%>">
 		<jsp:include page="../component/profile_user/ProfileUserIntroduce.jsp"></jsp:include>
 	</c:if>
 	<c:if test="<%=currentURL.trim().equals(tab2URL.trim())%>">
@@ -145,5 +168,43 @@ if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.
 	</c:if>
 
 </body>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/global.js"></script>
+
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/component/profile_user/UserFriendItem.js"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/component/PostItem.js"></script>
+
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/component/PostDetail.js"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/component/CommentItem.js"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/component/CommentWrite.js"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/component/Comment.js"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/component/Search.js"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/main.js"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/create_post.js"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/profile_user/profile_user.js"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/post.js"></script>
+
 
 </html>

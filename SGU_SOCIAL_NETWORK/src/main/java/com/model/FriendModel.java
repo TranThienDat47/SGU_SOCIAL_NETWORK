@@ -4,6 +4,42 @@ public class FriendModel {
 	private int id;
 	private int userID;
 	private int friendID;
+	public String image;
+	public String firstName;
+	public String lastName;
+	public int coutRoomate;
+
+	public int getCoutRoomate() {
+		return coutRoomate;
+	}
+
+	public void setCoutRoomate(int coutRoomate) {
+		this.coutRoomate = coutRoomate;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
 	public int getId() {
 		return id;

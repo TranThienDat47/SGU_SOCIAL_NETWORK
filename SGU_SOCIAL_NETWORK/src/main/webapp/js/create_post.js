@@ -83,16 +83,38 @@ class CreatePost {
 
 		function preview_image_create_post(event) {
 			var reader = new FileReader();
-			reader.onload = function() {
-				that.listImg.push(reader.result);
-				that.renderListImage();
+			reader.onload = function(e) {
+				var img = new Image();
+				img.onload = function() {
+					var canvas = document.createElement('canvas');
+					var ctx = canvas.getContext('2d');
 
-				if (that.listImg.length >= 4) {
-					$("#create_post-add_image").style.display = "none";
-				}
+					// Set the canvas size to the desired dimensions
+					canvas.width = img.width / 2; // Giảm kích thước xuống một nửa
+					canvas.height = img.height / 2;
+
+					// Điền màu trắng vào canvas trước
+					ctx.fillStyle = 'white';
+					ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+					// Bây giờ vẽ ảnh lên trên màu trắng
+					ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+					// Convert the canvas to a data URL with reduced quality
+					var dataUrl = canvas.toDataURL('image/jpeg', 0.5); // Điều chỉnh chất lượng ở đây
+
+					that.listImg.push(dataUrl);
+					that.renderListImage();
+
+					if (that.listImg.length >= 4) {
+						$("#create_post-add_image").style.display = "none";
+					}
+				};
+				img.src = e.target.result;
 			}
 			reader.readAsDataURL(event.target.files[0]);
 		}
+
 
 		if (createPostUpload)
 			createPostUpload.onchange = (e) => {

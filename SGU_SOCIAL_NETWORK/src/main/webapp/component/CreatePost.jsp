@@ -1,17 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<%@page import="java.util.Base64, java.nio.charset.StandardCharsets"%>
 <%@page import="com.util.CookieUtils"%>
 
 
 <%
-byte[] decodedImg = Base64.getDecoder().decode(CookieUtils.get("image", request));
-
-String originalDataImg = new String(decodedImg, StandardCharsets.UTF_8);
+String originalDataImg = CookieUtils.get("image", request);
 
 String fullName = CookieUtils.get("firstName", request) + " " + CookieUtils.get("lastName", request);
-
 %>
 
 

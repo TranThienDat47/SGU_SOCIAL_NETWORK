@@ -15,6 +15,15 @@ public class UserModel {
 	private String biography;
 	private String background;
 	private boolean gender;
+	public int countRoomate;
+	
+	public int getCountRoomate() {
+		return countRoomate;
+	}
+
+	public void setCountRoomate(int countRoomate) {
+		this.countRoomate = countRoomate;
+	}
 
 	public int getId() {
 		return id;

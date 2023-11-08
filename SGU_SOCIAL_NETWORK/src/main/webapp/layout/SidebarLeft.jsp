@@ -1,11 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
+<%@page import="com.util.CookieUtils"%>
+
+
+<%
+String cookieValueID = CookieUtils.get("id", request);
+%>
+
+
 <div id="sidebar-left"
 	style="width: 356px; position: fixed; margin-top: var(--height-default-header); top: 0; height: 100vh; background-color: #fff;">
 	<div class="sidebar_left-wrapper">
 		<div class="sidebar_left-top">
 			<ul class="sidebar_left-menu">
-				<a href="/SGU_SOCIAL_NETWORK/Profile.jsp"><li
+				<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend"><li
 					class="sidebar_left-menu-item"><i> <svg
 								xmlns="http://www.w3.org/2000/svg" height="1em"
 								viewBox="0 0 448 512">
@@ -50,7 +59,9 @@
                                     </svg>
 					</i>
 						<div>Trang chủ</div></li></a>
-				<a href=""><li class="sidebar_left-menu-item"><i><svg
+				<a
+					href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=follow&id=<%=cookieValueID%>"><li
+					class="sidebar_left-menu-item"><i><svg
 								xmlns="http://www.w3.org/2000/svg" height="1em"
 								viewBox="0 0 448 512">
 								<!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
@@ -58,7 +69,9 @@
 									d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM337 209L209 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L303 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z" /></svg>
 					</i>
 						<div>Theo dõi</div></li></a>
-				<a href=""><li class="sidebar_left-menu-item"><i> <svg
+				<a
+					href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=friend&id=<%=cookieValueID%>"><li
+					class="sidebar_left-menu-item"><i> <svg
 								xmlns="http://www.w3.org/2000/svg" height="1em"
 								viewBox="0
                                             0
@@ -106,6 +119,15 @@
                                             </svg>
 					</i>
 						<div>Bạn bè</div></li></a>
+
+				<a href="/SGU_SOCIAL_NETWORK/FriendRequest.jsp"><li
+					class="sidebar_left-menu-item"><i><svg
+								xmlns="http://www.w3.org/2000/svg" height="1em"
+								viewBox="0 0 640 512">
+								<!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+								<path
+									d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" /></svg></i>
+						<div>Lời mời kết bạn</div></li></a>
 			</ul>
 		</div>
 

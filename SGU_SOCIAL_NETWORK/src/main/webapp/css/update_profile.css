@@ -15,6 +15,7 @@
 	bottom: 0;
 	position: fixed;
 	transition: background-color 0.3s ease-in-out;
+	z-index: 30;
 }
 
 .profile_user_modal_box.profile_user_modal_box_show {
@@ -23,7 +24,6 @@
 
 .box_update {
 	width: 751px;
-	height: 471px;
 	margin: 0 auto;
 	border-radius: 16px;
 	background: #fff;
@@ -62,7 +62,8 @@
 }
 
 .box_update-content_box textarea,
-.box_update-content_box input {
+.box_update-content_box input,
+.box_update-content_box select {
 	background: #fff;
 	font-size: 14px;
 	font-weight: 700;

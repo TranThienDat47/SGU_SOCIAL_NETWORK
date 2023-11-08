@@ -30,7 +30,7 @@ class GloabPost {
 						try {
 							const data = JSON.parse(xhr.responseText);
 
-							that.listPostHome = [...that.listPostHome, ...data];
+							if (data) that.listPostHome = [...that.listPostHome, ...data];
 							resolve(data);
 						} catch (error) {
 							console.log("JSON parsing error:", error);
@@ -69,9 +69,10 @@ class GloabPost {
 						try {
 							const data = JSON.parse(xhr.responseText);
 
-							console.log(data)
+							console.log(limitValue, offsetValue, userID)
 
-							that.listPostProfile = [...that.listPostProfile, ...data];
+							if (data)
+								that.listPostProfile = [...that.listPostProfile, ...data];
 							resolve(data);
 						} catch (error) {
 							console.log("JSON parsing error:", error);
@@ -204,6 +205,38 @@ class GloabPost {
 
 					await that.innerListProfilePost().then((resultRender) => {
 						const wrapperRenderListPostProfile = $('#render_list_post_profile');
+						if (wrapperRenderListPostProfile) {
+							wrapperRenderListPostProfile.innerHTML = resultRender;
+						}
+					})
+				}
+			}
+
+		}
+	}
+
+	async renderListPostProfileOtherUser(userID) {
+		const that = this;
+
+		await that.fetchListPostProfile(that.initLengProfile, 0, userID);
+
+		await that.innerListProfilePost().then((resultRender) => {
+			const wrapperRenderListPostProfile = $('#render_list_post_profile_other_user');
+			if (wrapperRenderListPostProfile) {
+				wrapperRenderListPostProfile.innerHTML = resultRender;
+			}
+		})
+
+
+		window.onscroll = async () => {
+			if (that.listPostHome.length > 0) {
+				const isScrollAtBottom = window.innerHeight + window.pageYOffset + 3 >= document.documentElement.scrollHeight;
+
+				if (isScrollAtBottom) {
+					await that.fetchListPostHome(that.LENGPAGE * that.initLengProfile, that.listPostHome.length, "");
+
+					await that.innerListProfilePost().then((resultRender) => {
+						const wrapperRenderListPostProfile = $('#render_list_post_profile_other_user');
 						if (wrapperRenderListPostProfile) {
 							wrapperRenderListPostProfile.innerHTML = resultRender;
 						}

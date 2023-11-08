@@ -2,16 +2,19 @@
 	pageEncoding="UTF-8"%>
 
 <%@page import="com.util.CookieUtils"%>
-
-
+<%@page
+	import="java.util.Base64, java.nio.charset.StandardCharsets, java.net.URLDecoder"%>
 
 <%
-String cookieValueBiography = CookieUtils.get("biography", request);
-String cookieValueAddress = CookieUtils.get("address", request);
-String cookieValueGender = CookieUtils.get("gender", request).equals("false") ? "Nữ" : "Nam";
-String cookieValueBirthDay = CookieUtils.get("dateOfBirth", request);
-String cookieValueCreateAt = CookieUtils.get("createAt", request).substring(0,
-		CookieUtils.get("createAt", request).indexOf("_=_"));
+String valueName = URLDecoder.decode(request.getParameter("name"), "UTF-8");
+String valueAddress = URLDecoder.decode(request.getParameter("address"), "UTF-8");
+String valueBiography = URLDecoder.decode(request.getParameter("biography"), "UTF-8");
+
+String valueGender = request.getParameter("gender").equals("false") ? "Nữ" : "Nam";
+
+String valueCreateAT = URLDecoder.decode(request.getParameter("createAT"), "UTF-8");
+
+String valueBirthDate = request.getParameter("birth_date");
 %>
 
 <div class="profile_user-container">
@@ -21,7 +24,7 @@ String cookieValueCreateAt = CookieUtils.get("createAt", request).substring(0,
 			<div class="profile_introduce">
 				<h2>Giới thiệu</h2>
 				<div class="name_introduce">
-					<p><%=cookieValueBiography%></p>
+					<p><%=valueBiography%></p>
 				</div>
 				<div>
 					<div class="profile_info">
@@ -33,7 +36,7 @@ String cookieValueCreateAt = CookieUtils.get("createAt", request).substring(0,
 			          	</svg>
 						<p>
 							Vị trí:
-							<%=cookieValueAddress%></p>
+							<%=valueAddress%></p>
 					</div>
 
 					<div class="profile_info">
@@ -44,7 +47,7 @@ String cookieValueCreateAt = CookieUtils.get("createAt", request).substring(0,
 								d="M176 288a112 112 0 1 0 0-224 112 112 0 1 0 0 224zM352 176c0 86.3-62.1 158.1-144 173.1V384h32c17.7 0 32 14.3 32 32s-14.3 32-32 32H208v32c0 17.7-14.3 32-32 32s-32-14.3-32-32V448H112c-17.7 0-32-14.3-32-32s14.3-32 32-32h32V349.1C62.1 334.1 0 262.3 0 176C0 78.8 78.8 0 176 0s176 78.8 176 176zM271.9 360.6c19.3-10.1 36.9-23.1 52.1-38.4c20 18.5 46.7 29.8 76.1 29.8c61.9 0 112-50.1 112-112s-50.1-112-112-112c-7.2 0-14.3 .7-21.1 2c-4.9-21.5-13-41.7-24-60.2C369.3 66 384.4 64 400 64c37 0 71.4 11.4 99.8 31l20.6-20.6L487 41c-6.9-6.9-8.9-17.2-5.2-26.2S494.3 0 504 0H616c13.3 0 24 10.7 24 24V136c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-33.4-33.4L545 140.2c19.5 28.4 31 62.7 31 99.8c0 97.2-78.8 176-176 176c-50.5 0-96-21.3-128.1-55.4z" /></svg>
 						<p>
 							Giới tính:
-							<%=cookieValueGender%></p>
+							<%=valueGender%></p>
 					</div>
 
 					<div class="profile_info">
@@ -56,7 +59,7 @@ String cookieValueCreateAt = CookieUtils.get("createAt", request).substring(0,
 			          	</svg>
 						<p>
 							Ngày sinh:
-							<%=cookieValueBirthDay%></p>
+							<%=valueBirthDate%></p>
 					</div>
 					<div class="profile_info">
 						<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19"
@@ -67,7 +70,7 @@ String cookieValueCreateAt = CookieUtils.get("createAt", request).substring(0,
 				          </svg>
 						<p>
 							Tham gia ngày:
-							<%=cookieValueCreateAt%></p>
+							<%=valueCreateAT%></p>
 					</div>
 				</div>
 			</div>
@@ -129,26 +132,21 @@ String cookieValueCreateAt = CookieUtils.get("createAt", request).substring(0,
 		</div>
 	</div>
 	<div class="profile_user-container_right">
-		<div class="wrapper_of_block">
-			<jsp:include page="../CreatePost.jsp"></jsp:include>
-		</div>
+		<!-- 		<div class="wrapper_of_block"> -->
+		<%-- 			<jsp:include page="../CreatePost.jsp"></jsp:include> --%>
+		<!-- 		</div> -->
 
-		<div id=render_list_post_profile></div>
+		<div id=render_list_post_profile_other_user></div>
 
 		<script>
-				window.onload = () => {
-					new GloabPost().renderListPostProfile();
-				}
+							window.onload = () => {
+								new GloabPost().renderListPostProfileOtherUser(<%=request.getParameter("id")%>);
+							}
 		</script>
-	</div>
-
-	<div id="profile_user_modal_box" class="profile_user_modal_box">
-		<jsp:include page="./UpdateProfileUser.jsp"></jsp:include>
 	</div>
 
 </div>
 
-<!-- <div id="showPostDetailGloabal"></div> -->
 <div id="showCreatePostGloabal" style="display: none;">
 	<jsp:include page="../CreatePostAfter.jsp"></jsp:include>
 </div>
