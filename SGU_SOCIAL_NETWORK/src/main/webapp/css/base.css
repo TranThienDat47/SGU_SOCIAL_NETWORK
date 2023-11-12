@@ -364,6 +364,7 @@ li {
 	justify-content: center;
 	align-items: center;
 	font-size: 1.5rem;
+	overflow: hidden;
 }
 
 .header_search_result-item_avt>img {

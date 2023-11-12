@@ -158,7 +158,6 @@ if (queryString != null && !queryString.isEmpty()) {
 				<jsp:param name="background" value="<%=background%>" />
 			</jsp:include>
 		</c:if>
-
 	</div>
 	<!-- End container -->
 	<div class="toolkit_message-wrapper"></div>

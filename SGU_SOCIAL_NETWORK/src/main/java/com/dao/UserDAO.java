@@ -34,11 +34,34 @@ public class UserDAO {
 		}
 	}
 
+	public static String standardized(String str) {
+		str = str.replaceAll("\\s+", " ");
+
+		str = str.trim();
+
+		str = str.replaceAll("[àáạảãâầấậẩẫăằắặẳẵ]", "a");
+		str = str.replaceAll("[èéẹẻẽêềếệểễ]", "e");
+		str = str.replaceAll("[ìíịỉĩ]", "i");
+		str = str.replaceAll("[òóọỏõôồốộổỗơờớợởỡ]", "o");
+		str = str.replaceAll("[ùúụủũưừứựửữ]", "u");
+		str = str.replaceAll("[ỳýỵỷỹ]", "y");
+		str = str.replaceAll("đ", "d");
+		str = str.replaceAll("[ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴ]", "A");
+		str = str.replaceAll("[ÈÉẸẺẼÊỀẾỆỂỄ]", "E");
+		str = str.replaceAll("[ÌÍỊỈĨ]", "I");
+		str = str.replaceAll("[ÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ]", "O");
+		str = str.replaceAll("[ÙÚỤỦŨƯỪỨỰỬỮ]", "U");
+		str = str.replaceAll("[ỲÝỴỶỸ]", "Y");
+		str = str.replaceAll("Đ", "D");
+
+		return str;
+	}
+
 	public UserModel addUser(UserModel user) {
 		DatabaseGlobal dtConnection = new DatabaseGlobal();
 
-		String newSQL = "INSERT INTO users (email, password, phoneNumber, firstName, lastName, dateOfBirth, address, gender) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		String newSQL = "INSERT INTO users (email, password, phoneNumber, firstName, lastName, dateOfBirth, address, gender, keySearch) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try {
 			dtConnection.getConnection();
@@ -51,6 +74,7 @@ public class UserDAO {
 			pst.setString(6, user.getDateOfBirth());
 			pst.setString(7, user.getAddress());
 			pst.setBoolean(8, user.isGender());
+			pst.setString(9, standardized(user.getFirstName() + " " + user.getLastName()));
 
 			int rowCount = pst.executeUpdate();
 
@@ -64,6 +88,17 @@ public class UserDAO {
 					user.setId(userId);
 					user.setImage(imgTemp);
 					user.setBackground(imgTemp);
+
+					String selectSQL = "SELECT * FROM users WHERE id = ?";
+					PreparedStatement selectPst = dtConnection.getConn().prepareStatement(selectSQL);
+					selectPst.setInt(1, userId);
+					ResultSet result = selectPst.executeQuery();
+
+					if (result.next()) {
+						user.setCreateAt(result.getString("createAt"));
+						user.setBiography("");
+					}
+
 					return user;
 				}
 			}
@@ -80,7 +115,7 @@ public class UserDAO {
 	public UserModel updateUser(UserModel user) {
 		DatabaseGlobal dtConnection = new DatabaseGlobal();
 
-		String updateSQL = "UPDATE users SET phoneNumber = ?, firstName = ?, lastName = ?, dateOfBirth = ?, address = ?, gender = ?, biography = ? WHERE id = ?";
+		String updateSQL = "UPDATE users SET phoneNumber = ?, firstName = ?, lastName = ?, dateOfBirth = ?, address = ?, gender = ?, biography = ?, keySearch = ? WHERE id = ?";
 
 		try {
 			dtConnection.getConnection();
@@ -92,7 +127,8 @@ public class UserDAO {
 			pst.setString(5, user.getAddress());
 			pst.setBoolean(6, user.isGender());
 			pst.setString(7, user.getBiography());
-			pst.setInt(8, user.getId()); // Sử dụng id để xác định người dùng cần được cập nhật
+			pst.setString(8, standardized(user.getFirstName() + " " + user.getLastName()));
+			pst.setInt(9, user.getId()); // Sử dụng id để xác định người dùng cần được cập nhật
 
 			int rowCount = pst.executeUpdate();
 
@@ -107,6 +143,48 @@ public class UserDAO {
 		}
 
 		return null;
+	}
+
+	public boolean updateAvataUser(int id, String avata) {
+		DatabaseGlobal dtConnection = new DatabaseGlobal();
+		String updateSQL = "UPDATE users SET image = ? WHERE id = ?";
+
+		try {
+			dtConnection.getConnection();
+			PreparedStatement pst = dtConnection.getConn().prepareStatement(updateSQL);
+			pst.setString(1, avata);
+			pst.setInt(2, id);
+
+			int rowCount = pst.executeUpdate();
+
+			return rowCount > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			dtConnection.closeDB();
+		}
+	}
+
+	public boolean updateBackgroundUser(int id, String background) {
+		DatabaseGlobal dtConnection = new DatabaseGlobal();
+		String updateSQL = "UPDATE users SET background = ? WHERE id = ?";
+
+		try {
+			dtConnection.getConnection();
+			PreparedStatement pst = dtConnection.getConn().prepareStatement(updateSQL);
+			pst.setString(1, background);
+			pst.setInt(2, id);
+
+			int rowCount = pst.executeUpdate();
+
+			return rowCount > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			dtConnection.closeDB();
+		}
 	}
 
 	public UserModel login(String email, String password) {
@@ -187,15 +265,18 @@ public class UserDAO {
 				int commonFriendCount = 0;
 
 				// Truy vấn để lấy số lượng bạn chung
-				String commonFriendCountSQL = "SELECT COUNT(DISTINCT f1.friendID) AS friendCount "
-						+ "FROM friends f1 JOIN friends f2 ON f1.friendID = f2.friendID " + "WHERE f1.userID = "
-						+ userID + " AND f2.userID = " + friendID;
+				String commonFriendCountSQL = "SELECT SUM(sub.friendCount) AS totalFriendCount" + " FROM ("
+						+ "    SELECT COUNT(*) AS friendCount " + "    FROM friends f1 "
+						+ "    JOIN friends f2 ON f1.friendID = f2.friendID " + "    WHERE f1.userID = " + userID
+						+ " AND f2.userID = " + friendID + "" + "    UNION " + "    SELECT COUNT(*) AS friendCount "
+						+ "    FROM friends f1 " + "    JOIN friends f2 ON f1.userID = f2.userID "
+						+ "    WHERE f1.friendID = " + userID + " AND f2.friendID = " + friendID + "" + ") AS sub";
 
 				Statement stmt1 = dtConnection.getConn().createStatement();
 				ResultSet rs1 = stmt1.executeQuery(commonFriendCountSQL);
 
 				if (rs1.next()) {
-					commonFriendCount = rs1.getInt("friendCount");
+					commonFriendCount = rs1.getInt("totalFriendCount");
 				}
 
 				user.setCountRoomate(commonFriendCount);
@@ -244,6 +325,152 @@ public class UserDAO {
 			}
 
 			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			dtConnection.closeDB();
+		}
+	}
+
+	public List<UserModel> searchUser(int userID, int offset, int limit, String valueSearch) {
+		DatabaseGlobal dtConnection = new DatabaseGlobal();
+
+		try {
+			dtConnection.getConnection();
+
+			PreparedStatement pst = dtConnection.getConn()
+					.prepareStatement("SELECT * FROM users u WHERE " + "CONCAT(' ', LOWER(u.keySearch), ' ') LIKE ? OR "
+							+ "CONVERT(LOWER(CONCAT(u.lastName, ' ', u.firstName)) USING utf8) LIKE ? OR "
+							+ "POSITION(LOWER(u.firstName) IN LOWER(?)) > 0 OR "
+							+ "POSITION(LOWER(u.lastName) IN LOWER(?)) > 0 LIMIT ? OFFSET ?");
+			pst.setString(1, "%" + valueSearch + "%");
+			pst.setString(2, "%" + valueSearch + "%");
+			pst.setString(3, valueSearch);
+			pst.setString(4, valueSearch);
+			pst.setInt(5, limit);
+			pst.setInt(6, offset);
+
+			ResultSet rs = pst.executeQuery();
+			List<UserModel> userList = new ArrayList<>();
+
+			while (rs.next()) {
+				UserModel user = new UserModel();
+				user.setId(rs.getInt("id"));
+				user.setPassword(rs.getString("password"));
+				user.setEmail(rs.getString("email"));
+				user.setImage(rs.getString("image"));
+				user.setPhoneNumber(rs.getString("phoneNumber"));
+				user.setFirstName(rs.getString("firstName"));
+				user.setLastName(rs.getString("lastName"));
+				user.setDateOfBirth(rs.getString("dateOfBirth"));
+				user.setCreateAt(rs.getString("createAt"));
+				user.setAddress(rs.getString("address"));
+				user.setBiography(rs.getString("biography"));
+				user.setGender(rs.getBoolean("gender"));
+				user.setBackground(rs.getString("background"));
+
+				// Lấy số lượng bạn chung
+				int friendID = Integer.parseInt(rs.getString("id"));
+				int commonFriendCount = 0;
+
+				String commonFriendCountSQL = "SELECT SUM(sub.friendCount) AS totalFriendCount" + " FROM ("
+						+ "    SELECT COUNT(*) AS friendCount " + "    FROM friends f1 "
+						+ "    JOIN friends f2 ON f1.friendID = f2.friendID " + "    WHERE f1.userID = " + userID
+						+ " AND f2.userID = " + friendID + "" + "    UNION " + "    SELECT COUNT(*) AS friendCount "
+						+ "    FROM friends f1 " + "    JOIN friends f2 ON f1.userID = f2.userID "
+						+ "    WHERE f1.friendID = " + userID + " AND f2.friendID = " + friendID + "" + ") AS sub";
+
+				Statement stmt1 = dtConnection.getConn().createStatement();
+				ResultSet rs1 = stmt1.executeQuery(commonFriendCountSQL);
+
+				if (rs1.next()) {
+					commonFriendCount = rs1.getInt("totalFriendCount");
+				}
+
+				rs1.close();
+				stmt1.close();
+
+				user.setCountRoomate(commonFriendCount);
+				userList.add(user);
+			}
+			return userList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			dtConnection.closeDB();
+		}
+	}
+
+	public List<UserModel> searchUserWithFriend(int userID, int offset, int limit, String valueSearch) {
+		DatabaseGlobal dtConnection = new DatabaseGlobal();
+
+		try {
+			dtConnection.getConnection();
+
+			String searchFriendsSQL = "SELECT sub.* FROM (" + "    SELECT f.*, u.image, u.firstName, u.lastName "
+					+ "    FROM FRIENDS f " + "    INNER JOIN USERS u ON f.friendID = u.id "
+					+ "    WHERE f.userID = ?  " + "      AND (CONCAT(' ', LOWER(u.keySearch), ' ') LIKE ? OR "
+					+ "           CONVERT(LOWER(CONCAT(u.lastName, ' ', u.firstName)) USING utf8) LIKE ? OR "
+					+ "           POSITION(LOWER(u.firstName) IN LOWER(?)) > 0 OR "
+					+ "           POSITION(LOWER(u.lastName) IN LOWER(?)) > 0) " + "    UNION "
+					+ "    SELECT f.*, u.image, u.firstName, u.lastName " + "    FROM FRIENDS f "
+					+ "    INNER JOIN USERS u ON f.userID = u.id " + "    WHERE f.friendID = ? "
+					+ "      AND (CONCAT(' ', LOWER(u.keySearch), ' ') LIKE ? OR "
+					+ "           CONVERT(LOWER(CONCAT(u.lastName, ' ', u.firstName)) USING utf8) LIKE ? OR "
+					+ "           POSITION(LOWER(u.firstName) IN LOWER(?)) > 0 OR "
+					+ "           POSITION(LOWER(u.lastName) IN LOWER(?)) > 0) " + ") AS sub LIMIT ? OFFSET ?";
+
+			PreparedStatement pst = dtConnection.getConn().prepareStatement(searchFriendsSQL);
+			pst.setInt(1, userID);
+			pst.setString(2, "%" + valueSearch + "%");
+			pst.setString(3, "%" + valueSearch + "%");
+			pst.setString(4, valueSearch);
+			pst.setString(5, valueSearch);
+			pst.setInt(6, userID);
+			pst.setString(7, "%" + valueSearch + "%");
+			pst.setString(8, "%" + valueSearch + "%");
+			pst.setString(9, valueSearch);
+			pst.setString(10, valueSearch);
+			pst.setInt(11, limit);
+			pst.setInt(12, offset);
+
+			ResultSet rs = pst.executeQuery();
+			List<UserModel> userList = new ArrayList<>();
+
+			while (rs.next()) {
+				UserModel user = new UserModel();
+				user.setId(rs.getInt("id"));
+				user.setImage(rs.getString("image"));
+				user.setFirstName(rs.getString("firstName"));
+				user.setLastName(rs.getString("lastName"));
+
+				// Lấy số lượng bạn chung
+				int friendID = Integer.parseInt(rs.getString("id"));
+				int commonFriendCount = 0;
+
+				String commonFriendCountSQL = "SELECT SUM(sub.friendCount) AS totalFriendCount" + " FROM ("
+						+ "    SELECT COUNT(*) AS friendCount " + "    FROM friends f1 "
+						+ "    JOIN friends f2 ON f1.friendID = f2.friendID " + "    WHERE f1.userID = " + userID
+						+ " AND f2.userID = " + friendID + "" + "    UNION " + "    SELECT COUNT(*) AS friendCount "
+						+ "    FROM friends f1 " + "    JOIN friends f2 ON f1.userID = f2.userID "
+						+ "    WHERE f1.friendID = " + userID + " AND f2.friendID = " + friendID + "" + ") AS sub";
+
+				Statement stmt1 = dtConnection.getConn().createStatement();
+				ResultSet rs1 = stmt1.executeQuery(commonFriendCountSQL);
+
+				if (rs1.next()) {
+					commonFriendCount = rs1.getInt("totalFriendCount");
+				}
+
+				rs1.close();
+				stmt1.close();
+
+				user.setCountRoomate(commonFriendCount);
+				userList.add(user);
+			}
+			return userList;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

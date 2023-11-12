@@ -38,7 +38,7 @@ String tab3URL = "/SGU_SOCIAL_NETWORK/index.jsp?page=recommend";
 			<div class="header_search">
 				<input class="header_search_input" type="text"
 					placeholder="Tìm kiếm" name="txtSearch" vlaue="" />
-				<button class="header_search_btn">
+				<button id="bthSearchHeader" class="header_search_btn">
 					<svg xmlns="http://www.w3.org/2000/svg" height="1em"
 						viewBox="0 0 512 512">
 						<path
@@ -201,14 +201,14 @@ String tab3URL = "/SGU_SOCIAL_NETWORK/index.jsp?page=recommend";
 					style="padding: 0; width: 35.6px; height: 35.6px">
 					<div class="icon"
 						style="margin: 0; border-radius: 999px; overflow: hidden">
-						<img style="width: 35.6px; height: 35.6px;"
-							src="<%=originalDataImg%>" alt="" />
+						<img class="globalImageOfUser"
+							style="width: 35.6px; height: 35.6px;" src="" alt="" />
 					</div>
 
 					<div class="user_setting-box_setting">
 						<div class="user_setting-setting_header">
 							<div class="user_setting-img_profile">
-								<img src="<%=originalDataImg%>" alt="" />
+								<img class="globalImageOfUser" src="" alt="" />
 							</div>
 							<div class="user_setting-setting_name">
 								<p><%=fullName%></p>
@@ -237,3 +237,8 @@ String tab3URL = "/SGU_SOCIAL_NETWORK/index.jsp?page=recommend";
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/renderImageAndBackground.js"></script>
+
+

@@ -14,8 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet({ "/api/post/search_post_value_search", "/api/post/get_one", "/api/post/create_post",
-		"/api/post/search_post_of_user" })
+@WebServlet({ "/api/post/search_post_value_search", "/api/post/search_post_value_with_friend", "/api/post/get_one",
+		"/api/post/create_post", "/api/post/search_post_of_user" })
 public class PostController extends HttpServlet {
 
 	@Override
@@ -29,8 +29,30 @@ public class PostController extends HttpServlet {
 			this.doCreate(req, resp);
 		} else if (uri.contains("search_post_of_user")) {
 			this.doSearchOfUser(req, resp);
+		} else if (uri.contains("search_post_value_with_friend")) {
+			this.doSearchWithFriend(req, resp);
 		}
 
+	}
+
+	protected void doSearchWithFriend(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String limitValue = jsonNode.get("limitValue").asText();
+		String offsetValue = jsonNode.get("offsetValue").asText();
+		String searchValue = jsonNode.get("searchValue").asText();
+		String userID = jsonNode.get("userID").asText();
+
+		PostDAO posts = new PostDAO();
+
+		String jsonResponse = objectMapper.writeValueAsString(posts.searchPostWithFriend(Integer.parseInt(offsetValue),
+				Integer.parseInt(limitValue), searchValue, Integer.parseInt(userID)));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
 	}
 
 	protected void doSearch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

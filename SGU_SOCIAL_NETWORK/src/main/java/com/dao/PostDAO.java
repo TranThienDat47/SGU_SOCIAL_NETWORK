@@ -91,26 +91,55 @@ public class PostDAO {
 		}
 	}
 
+	public List<PostModel> searchPostWithFriend(int offset, int limit, String keySearch, int userID) {
+		DatabaseGlobal conn = new DatabaseGlobal();
+		conn.getConnection();
+
+		String newSQL = "";
+
+		newSQL = "SELECT DISTINCT p.*, u.image, u.firstName, u.lastName " + "FROM POSTS p "
+				+ "INNER JOIN USERS u ON p.authorID = u.id "
+				+ "INNER JOIN FRIENDS f ON (p.authorID = f.friendID AND f.userID = " + userID
+				+ ") OR (p.authorID = f.userID AND f.friendID = " + userID + ") " + "WHERE '" + keySearch
+				+ "' LIKE CONCAT('%', p.content, '%') OR p.content LIKE '%" + keySearch + "%' " + "LIMIT " + limit
+				+ " OFFSET " + offset;
+		List<PostModel> listPost = new ArrayList<PostModel>();
+		try {
+			Statement stmt = conn.getConn().createStatement();
+			ResultSet rs = stmt.executeQuery(newSQL);
+			while (rs.next()) {
+				PostModel post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
+						rs.getString("title"), rs.getString("content"), rs.getString("image1"), rs.getString("image2"),
+						rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"), rs.getInt("replies"),
+						rs.getString("createAt"), rs.getString("updateAt"));
+
+				post.setImage(rs.getString("image"));
+				post.setFirstName(rs.getString("firstName"));
+				post.setLastName(rs.getString("lastName"));
+
+				listPost.add(post);
+			}
+			rs.close();
+			conn.closeDB();
+
+			return listPost;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			conn.closeDB();
+			return null;
+		}
+	}
+
 	public List<PostModel> searchPost(int offset, int limit, String keySearch) {
 		DatabaseGlobal conn = new DatabaseGlobal();
 		conn.getConnection();
 
 		String newSQL = "";
 
-		if (offset != -1 && limit != -1 && !keySearch.trim().equals("")) {
-			newSQL = "SELECT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
-					+ "INNER JOIN USERS u ON p.authorID = u.id " + "WHERE p.content LIKE '%" + keySearch + "%' LIMIT "
-					+ limit + " OFFSET " + offset;
-		} else if (offset != -1 && limit != -1 && keySearch.trim().equals("")) {
-			newSQL = "SELECT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
-					+ "INNER JOIN USERS u ON p.authorID = u.id " + "LIMIT " + limit + " OFFSET " + offset;
-		} else if (offset == -1 && limit == -1 && !keySearch.trim().equals("")) {
-			newSQL = "SELECT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
-					+ "INNER JOIN USERS u ON p.authorID = u.id " + "WHERE p.content LIKE '%" + keySearch + "%'";
-		} else {
-			newSQL = "SELECT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
-					+ "INNER JOIN USERS u ON p.authorID = u.id";
-		}
+		newSQL = "SELECT DISTINCT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
+				+ "INNER JOIN USERS u ON p.authorID = u.id " + "WHERE '" + keySearch
+				+ "' LIKE CONCAT('%', p.content, '%') or p.content LIKE '%" + keySearch + "%' " + "LIMIT " + limit
+				+ " OFFSET " + offset;
 
 		List<PostModel> listPost = new ArrayList<PostModel>();
 		try {

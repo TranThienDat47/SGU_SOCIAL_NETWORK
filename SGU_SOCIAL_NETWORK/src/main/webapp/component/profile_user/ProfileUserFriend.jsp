@@ -60,7 +60,7 @@
 </div>
 
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/remind_friend.js"></script>
+	src="${pageContext.request.contextPath}/js/profile_user/remind_friend.js"></script>
 
 
 

@@ -5,7 +5,7 @@
 
 
 <%
-String originalDataImg = CookieUtils.get("image", request);
+// String originalDataImg = CookieUtils.get("image", request);
 
 String fullName = CookieUtils.get("firstName", request) + " " + CookieUtils.get("lastName", request);
 %>
@@ -24,7 +24,7 @@ String fullName = CookieUtils.get("firstName", request) + " " + CookieUtils.get(
 		<div class="create_post-content-wrapper-title">
 			<div class="sidebar_left-user-profile">
 				<div class="sidebar_left-profile-image">
-					<img src="<%=originalDataImg%>" alt="avata" />
+					<img class="globalImageOfUser" src="" alt="avata" />
 				</div>
 				<div class="create_post-profile-name">
 					<p><%=fullName%></p>
@@ -46,4 +46,8 @@ String fullName = CookieUtils.get("firstName", request) + " " + CookieUtils.get(
 		</div>
 	</div>
 </body>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/renderImageAndBackground.js"></script>
+
 </html>

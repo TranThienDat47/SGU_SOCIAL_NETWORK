@@ -15,7 +15,7 @@ public class FriendDAO {
 	public FriendDAO() {
 	}
 
-	public List<FriendModel> searchFriendOfUser(int offset, int limit, int userID) {
+	public List<FriendModel> searchFriendOfUser(int offset, int limit, int userID, int tempID) {
 		DatabaseGlobal conn = new DatabaseGlobal();
 		conn.getConnection();
 
@@ -49,15 +49,18 @@ public class FriendDAO {
 				int commonFriendCount = 0;
 
 				// Truy vấn để lấy số lượng bạn chung
-				String commonFriendCountSQL = "SELECT COUNT(DISTINCT f1.friendID) AS friendCount "
-						+ "FROM friends f1 JOIN friends f2 ON f1.friendID = f2.friendID " + "WHERE f1.userID = "
-						+ userID + " AND f2.userID = " + friendID;
+				String commonFriendCountSQL = "SELECT SUM(sub.friendCount) AS totalFriendCount" + " FROM ("
+						+ "    SELECT COUNT(*) AS friendCount " + "    FROM friends f1 "
+						+ "    JOIN friends f2 ON f1.friendID = f2.friendID " + "    WHERE f1.userID = " + tempID
+						+ " AND f2.userID = " + friendID + "" + "    UNION " + "    SELECT COUNT(*) AS friendCount "
+						+ "    FROM friends f1 " + "    JOIN friends f2 ON f1.userID = f2.userID "
+						+ "    WHERE f1.friendID = " + tempID + " AND f2.friendID = " + friendID + "" + ") AS sub";
 
 				Statement stmt1 = conn.getConn().createStatement();
 				ResultSet rs1 = stmt1.executeQuery(commonFriendCountSQL);
 
 				if (rs1.next()) {
-					commonFriendCount = rs1.getInt("friendCount");
+					commonFriendCount = rs1.getInt("totalFriendCount");
 				}
 
 				rs1.close();
@@ -69,7 +72,6 @@ public class FriendDAO {
 			rs.close();
 			stmt.close();
 			conn.closeDB();
-
 			return listPost;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -77,6 +79,73 @@ public class FriendDAO {
 			return null;
 		}
 	}
+
+//	public List<FriendModel> searchFriend(int offset, int limit, String searchValue, int userID) {
+//		DatabaseGlobal conn = new DatabaseGlobal();
+//		conn.getConnection();
+//
+//		String newSQL = "";
+//		System.out.println(searchValue);
+//		String searchValueLower = searchValue.toLowerCase();
+//
+//		newSQL = "FROM (" + "    SELECT f.*, u.image, u.firstName, u.lastName " + "    FROM FRIENDS f "
+//				+ "    INNER JOIN USERS u ON f.friendID = u.id "
+//				+ "    WHERE CONCAT(' ', LOWER(u.keySearch), ' ') LIKE '%" + searchValueLower + "%' "
+//				+ "       OR CONVERT(LOWER(CONCAT(u.lastName, ' ', u.firstName)) USING utf8) LIKE '%" + searchValueLower
+//				+ "%' or POSITION(firstName IN '" + searchValueLower + "') > 0 or POSITION(lastName IN '"
+//				+ searchValueLower + "') > 0" + " LIMIT " + limit + " OFFSET " + offset + ";";
+//
+//		List<FriendModel> listPost = new ArrayList<>();
+//
+//		try {
+//			Statement stmt = conn.getConn().createStatement();
+//			ResultSet rs = stmt.executeQuery(newSQL);
+//			while (rs.next()) {
+//				System.out.println("haha");
+//				FriendModel friend = new FriendModel();
+//
+//				friend.setId(Integer.parseInt(rs.getString("id")));
+//				friend.setUserID(Integer.parseInt(rs.getString("userID")));
+//				friend.setFriendID(Integer.parseInt(rs.getString("friendID")));
+//				friend.setImage(rs.getString("image"));
+//				friend.setFirstName(rs.getString("firstName"));
+//				friend.setLastName(rs.getString("lastName"));
+//
+//				// Lấy số lượng bạn chung
+//				int friendID = Integer.parseInt(rs.getString("friendID"));
+//				int commonFriendCount = 0;
+//
+//				// Truy vấn để lấy số lượng bạn chung
+//				String commonFriendCountSQL = "SELECT SUM(sub.friendCount) AS totalFriendCount" + " FROM ("
+//						+ "    SELECT COUNT(*) AS friendCount " + "    FROM friends f1 "
+//						+ "    JOIN friends f2 ON f1.friendID = f2.friendID " + "    WHERE f1.userID = " + userID
+//						+ " AND f2.userID = " + friendID + "" + "    UNION " + "    SELECT COUNT(*) AS friendCount "
+//						+ "    FROM friends f1 " + "    JOIN friends f2 ON f1.userID = f2.userID "
+//						+ "    WHERE f1.friendID = " + userID + " AND f2.friendID = " + friendID + "" + ") AS sub";
+//
+//				Statement stmt1 = conn.getConn().createStatement();
+//				ResultSet rs1 = stmt1.executeQuery(commonFriendCountSQL);
+//
+//				if (rs1.next()) {
+//					commonFriendCount = rs1.getInt("totalFriendCount");
+//				}
+//
+//				rs1.close();
+//				stmt1.close();
+//
+//				friend.setCoutRoomate(commonFriendCount);
+//				listPost.add(friend);
+//			}
+//			rs.close();
+//			stmt.close();
+//			conn.closeDB();
+//			return listPost;
+//		} catch (Exception ex) {
+//			ex.printStackTrace();
+//			conn.closeDB();
+//			return null;
+//		}
+//	}
 
 	public boolean addFriend(int userID, int friendID) {
 

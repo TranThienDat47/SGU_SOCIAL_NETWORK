@@ -40,7 +40,6 @@ public class FriendRequestDAO {
 				// Lấy số lượng bạn chung
 				int friendID = Integer.parseInt(rs.getString("userID"));
 				int commonFriendCount = 0;
-				System.out.println(friendID + " " + userID);
 
 				// Truy vấn để lấy số lượng bạn chung
 				String commonFriendCountSQL = "SELECT COUNT(DISTINCT f1.friendID) AS friendCount "
@@ -93,14 +92,17 @@ public class FriendRequestDAO {
 		}
 	}
 
-	public boolean acceptRequest(int id) {
+	public boolean acceptRequest(int userID, int requestID) {
 		DatabaseGlobal conn = new DatabaseGlobal();
 		conn.getConnection();
 
-		String sql = "DELETE FROM friendrequests WHERE id = ?";
+		String sql = "DELETE FROM friendrequests WHERE (userID = ? and requestID = ?) or (userID = ? and requestID = ?)";
 		try {
 			PreparedStatement pstmt = conn.getConn().prepareStatement(sql);
-			pstmt.setInt(1, id);
+			pstmt.setInt(1, userID);
+			pstmt.setInt(2, requestID);
+			pstmt.setInt(3, requestID);
+			pstmt.setInt(4, userID);
 			int rowsAffected = pstmt.executeUpdate();
 			pstmt.close();
 			return rowsAffected > 0;

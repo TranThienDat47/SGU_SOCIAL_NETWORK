@@ -138,5 +138,4 @@ if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.
 	src="${pageContext.request.contextPath}/js/post.js"></script>
 
 
-
 </html>

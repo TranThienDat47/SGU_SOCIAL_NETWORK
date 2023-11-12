@@ -1,12 +1,12 @@
-class RemindFriend {
+class RemindFollow {
 
 	constructor() {
 		this.LENGTHPAGE = 8;
 		this.currendPage = 0;
-		this.listFriend = [];
+		this.listFollow = [];
 	}
 
-	async fetchListFriendRemind() {
+	async fetchListFolloeRemind() {
 
 		function getCookieGlobal(name) {
 			var cookies = document.cookie.split(';');
@@ -21,11 +21,9 @@ class RemindFriend {
 			return null;
 		}
 
-
-
 		const that = this;
 
-		const url = "/SGU_SOCIAL_NETWORK/api/friend/search_friend";
+		const url = "/SGU_SOCIAL_NETWORK/api/follow/search_follow";
 		const send_data = {
 			limitValue: that.LENGTHPAGE,
 			offsetValue: that.LENGTHPAGE * that.currendPage,
@@ -43,10 +41,9 @@ class RemindFriend {
 					if (xhr.status === 200) {
 						try {
 							const data = JSON.parse(xhr.responseText);
-							that.listFriend = data;
+							that.listFollow = data;
 
 							that.currendPage += 1;
-
 							resolve(data);
 						} catch (error) {
 							console.log("JSON parsing error:", error);
@@ -63,22 +60,22 @@ class RemindFriend {
 		});
 	}
 
-	async renderListFriend() {
+	async renderListFollow() {
 		const that = this;
 
-		if (that.listFriend) {
+		if (that.listFollow) {
 
-			const renderListfriends = await Promise.all(that.listFriend.map(async (element) => {
-				const friendData = {
+			const renderListfriends = await Promise.all(that.listFollow.map(async (element) => {
+				const followData = {
 					image: element.image,
 					name: element.firstName + " " + element.lastName,
 					id: element.id,
 					countRoomate: element.coutRoomate,
-					friendID: parseInt(element.friendID) === parseInt(getCookieGlobal("id")) ? element.userID : element.friendID,
+					followID: element.followID,
 				};
 
-				const userFriendItem = new UserFriendItem(friendData);
-				const result = userFriendItem.render();
+				const userFollowItem = new UserFollowItem(followData);
+				const result = userFollowItem.render();
 
 				return result;
 			}));
@@ -94,16 +91,17 @@ class RemindFriend {
 		const $ = document.querySelector.bind(document);
 
 		const that = this;
-		const wrapperRemindFriend = $("#list_friend-list_member")
-		await that.fetchListFriendRemind();
-		await that.renderListFriend().then((resultRender) => {
-			const wrapperRenderListFriend = $('#list_friend-list_member');
-			if (wrapperRenderListFriend) {
-				wrapperRenderListFriend.innerHTML = resultRender;
+
+		await that.fetchListFolloeRemind();
+		await that.renderListFollow().then((resultRender) => {
+			const wrapperRenderListFollow = $('#list_follow-list_member');
+			console.log(wrapperRenderListFollow)
+			if (wrapperRenderListFollow) {
+				wrapperRenderListFollow.innerHTML = resultRender;
 			}
 		});
 
 	}
 }
 
-new RemindFriend().render();
+new RemindFollow().render();

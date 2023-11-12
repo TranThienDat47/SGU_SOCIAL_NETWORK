@@ -1,6 +1,7 @@
 class RemindFriend {
 
-	constructor() {
+	constructor(data = { userID: "" }) {
+		this.data = data;
 		this.LENGTHPAGE = 8;
 		this.currendPage = 0;
 		this.listFriend = [];
@@ -8,28 +9,13 @@ class RemindFriend {
 
 	async fetchListFriendRemind() {
 
-		function getCookieGlobal(name) {
-			var cookies = document.cookie.split(';');
-			for (var i = 0; i < cookies.length; i++) {
-				var cookie = cookies[i].trim();
-				if (cookie.indexOf(name + '=') === 0) {
-					var encodedValue = cookie.substring(name.length + 1, cookie.length);
-					var decodedValue = decodeURIComponent(encodedValue);
-					return decodedValue;
-				}
-			}
-			return null;
-		}
-
-
-
 		const that = this;
 
 		const url = "/SGU_SOCIAL_NETWORK/api/friend/search_friend";
 		const send_data = {
 			limitValue: that.LENGTHPAGE,
 			offsetValue: that.LENGTHPAGE * that.currendPage,
-			userID: getCookieGlobal("id")
+			userID: that.data.userID
 		};
 
 		return new Promise((resolve, reject) => {
@@ -74,7 +60,7 @@ class RemindFriend {
 					name: element.firstName + " " + element.lastName,
 					id: element.id,
 					countRoomate: element.coutRoomate,
-					friendID: parseInt(element.friendID) === parseInt(getCookieGlobal("id")) ? element.userID : element.friendID,
+					friendID: parseInt(element.friendID) === parseInt(that.data.userID) ? element.userID : element.friendID,
 				};
 
 				const userFriendItem = new UserFriendItem(friendData);
@@ -94,7 +80,6 @@ class RemindFriend {
 		const $ = document.querySelector.bind(document);
 
 		const that = this;
-		const wrapperRemindFriend = $("#list_friend-list_member")
 		await that.fetchListFriendRemind();
 		await that.renderListFriend().then((resultRender) => {
 			const wrapperRenderListFriend = $('#list_friend-list_member');
@@ -106,4 +91,4 @@ class RemindFriend {
 	}
 }
 
-new RemindFriend().render();
+//new RemindFriend().render();

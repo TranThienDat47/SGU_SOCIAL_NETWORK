@@ -95,7 +95,6 @@ class RecommendFriendItem {
 				} else {
 					await handleCancleAddFriendRequest()
 					btnRecommendFriend.innerHTML = `<p>Thêm bạn bè</p>`
-
 				}
 
 			}

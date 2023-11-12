@@ -26,6 +26,53 @@ class UserFriendItem {
 					}
 				}
 
+			const btnUnfriend = $(`#btnUnfriendProfielFriend-${that.data.id}`);
+
+			const handleUnfriend = async () => {
+				const url = "/SGU_SOCIAL_NETWORK/api/friend/unfriend";
+				const send_data = {
+					userID: getCookieGlobal("id"),
+					friendID: that.data.friendID,
+				};
+
+				return new Promise((resolve, reject) => {
+					const xhr = new XMLHttpRequest();
+					xhr.open("POST", url, true);
+
+					xhr.setRequestHeader("Content-Type", "application/json");
+
+					xhr.onreadystatechange = function() {
+						if (xhr.readyState === 4) {
+							if (xhr.status === 200) {
+								try {
+									const data = JSON.parse(xhr.responseText);
+									console.log(data)
+
+									resolve(data);
+								} catch (error) {
+									console.log("JSON parsing error:", error);
+									reject(error);
+								}
+							} else {
+								console.log("Request failed with status:", xhr.status);
+								reject(new Error(`Error: ${xhr.statusText}`));
+							}
+						}
+					}.bind(this);
+
+					xhr.send(JSON.stringify(send_data));
+				});
+			}
+
+			btnUnfriend.onclick = () => {
+				const wrapperBtnCancle = $(`#list_friend-box_show_action-${that.data.id}`)
+				const rootOfItem = $(`#list_friend-info_member-${that.data.id}`)
+
+				wrapperBtnCancle.remove();
+				btnShowDetail.remove();
+				handleUnfriend();
+
+			}
 		})
 	}
 
@@ -37,12 +84,13 @@ class UserFriendItem {
 		return `
 		<div id="list_friend-info_member-${that.data.id}" class="list_friend-info_member">
 			<div class="list_friend-img_member">
-				<img
+			<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=${that.data.friendID}">
+				<img 
 					src="${that.data.image}"
-					alt="" />
+					alt="" /> </a>
 			</div>
 			<div class="list_friend-name_member">
-				<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend?id=${that.data.friendID}"><p class="list_friend-name_child">${that.data.name}</p></a>
+				<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=${that.data.friendID}"><p class="list_friend-name_child">${that.data.name}</p></a>
 				<p class="list_friend-friend_child">${that.data.countRoomate} bạn chung</p>
 			</div>
 			<div id="btnShowAction-${that.data.id}" data-id="${that.data.id}" class="list_friend-action_icon">
@@ -53,8 +101,8 @@ class UserFriendItem {
 						fill="black" />
 	            </svg>
 			</div>
-			<div class="list_friend-box_show_action">
-				<div class="list_friend-child">
+			<div class="list_friend-box_show_action" id="list_friend-box_show_action-${that.data.id}">
+				<div id="btnUnfriendProfielFriend-${that.data.id}" class="list_friend-child">
 					<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21"
 						viewBox="0 0 21 21" fill="none">
 		                <g clip-path="url(#clip0_156_1721)">

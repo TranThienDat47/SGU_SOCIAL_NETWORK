@@ -77,6 +77,7 @@
 	border: 1px solid var(--border-color);
 	background: #fff;
 	margin-left: 13px;
+	position: relative
 }
 
 .profile_user-tabs-update_picture {
@@ -94,9 +95,9 @@
 	flex-shrink: 0;
 }
 
-.global_post-status_profile p,
-.profile_user-tabs-update_profile p,
-.profile_user-tabs-update_picture p {
+.global_post-status_profile>p,
+.profile_user-tabs-update_profile>p,
+.profile_user-tabs-update_picture>p {
 	font-size: 15px;
 	font-weight: 500;
 	margin: 0px;
@@ -375,7 +376,7 @@
 	align-items: center;
 }
 
-.Profile_friend-wrapper-friend>.Profile_friend-image {
+.Profile_friend-wrapper-friend .Profile_friend-image {
 	border-radius: 999px;
 }
 
@@ -396,5 +397,21 @@
 }
 
 .profile_user-dropdown-menu.profile_user-dropdown-menu_show {
+	display: block;
+}
+
+.global_post-status_profile_unfollow {
+	display: none;
+	position: absolute;
+	width: 100%;
+	border-radius: 999px;
+	border: 1px solid var(--border-color);
+	bottom: -36px;
+	padding: 7px 6px;
+	left: -13px;
+}
+
+
+.global_post-status_profile_show_unfollow>.global_post-status_profile_unfollow {
 	display: block;
 }

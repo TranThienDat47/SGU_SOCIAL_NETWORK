@@ -5,6 +5,7 @@
 
 <%@page import="com.util.CookieUtils"%>
 <%@page import="com.dao.FriendDAO"%>
+<%@page import="com.dao.FollowDAO"%>
 <%@page import="com.dao.FriendRequestDAO"%>
 
 
@@ -62,6 +63,7 @@ String tab4URL = "/SGU_SOCIAL_NETWORK/Profile.jsp?page=image";
 
 <%
 FriendDAO friendDAO = new FriendDAO();
+FollowDAO followDAO = new FollowDAO();
 FriendRequestDAO friendRequestDAO = new FriendRequestDAO();
 
 int countFriend = friendDAO.getQuantityFriend(Integer.parseInt(valueID));
@@ -73,6 +75,9 @@ boolean userIsSendRequest = friendRequestDAO.checkIsSendRequest(Integer.parseInt
 
 boolean otherIsSendRequest = friendRequestDAO.checkIsSendRequest(Integer.parseInt(valueID),
 		Integer.parseInt(CookieUtils.get("id", request)));
+
+boolean checkIsFollow = followDAO.checkIsFollow(Integer.parseInt(CookieUtils.get("id", request)),
+		Integer.parseInt(valueID));
 %>
 
 <!DOCTYPE html>
@@ -111,8 +116,8 @@ boolean otherIsSendRequest = friendRequestDAO.checkIsSendRequest(Integer.parseIn
 
 				<c:if test="<%=isFriend%>">
 					<div style="position: relative">
-						<button type="button" class="global_post-status_profile"
-							data-bs-toggle="dropdown">
+						<button id="btnFriendUserProfile" type="button"
+							class="global_post-status_profile" data-bs-toggle="dropdown">
 							<svg xmlns="http://www.w3.org/2000/svg" width="29" height="21"
 								viewBox="-1 0 21 21" fill="none">
 			              <path
@@ -123,7 +128,7 @@ boolean otherIsSendRequest = friendRequestDAO.checkIsSendRequest(Integer.parseIn
 						</button>
 						<ul style="padding: 0; margin: 0; width: 140px"
 							class="profile_user-dropdown-menu">
-							<li>
+							<li id="btnUnfriendProfile">
 								<div class="profile_user-dropdown-item">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21"
 										fill="none">
@@ -160,6 +165,12 @@ boolean otherIsSendRequest = friendRequestDAO.checkIsSendRequest(Integer.parseIn
 					<button type="button" class="global_post-status_profile">
 						<p>Đã gửi yêu cầu kết bạn</p>
 					</button>
+
+
+					<button id="btnCancleFriendReuestProfile" type="button"
+						class="global_post-status_profile">
+						<p>Hủy yêu cầu</p>
+					</button>
 				</c:if>
 				<c:if test="<%=otherIsSendRequest%>">
 					<button id="btnAcceptFriendReuestProfile" type="button"
@@ -167,14 +178,11 @@ boolean otherIsSendRequest = friendRequestDAO.checkIsSendRequest(Integer.parseIn
 						<p>Chấp nhận yêu cầu kết bạn</p>
 					</button>
 
-					<button id="btnAcceptFriendReuestProfile" type="button"
+					<button id="btnCancleFriendReuestProfile" type="button"
 						class="global_post-status_profile">
 						<p>Từ chối</p>
 					</button>
 				</c:if>
-
-
-
 
 				<button type="button" class="global_post-status_profile">
 					<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23"
@@ -192,15 +200,36 @@ boolean otherIsSendRequest = friendRequestDAO.checkIsSendRequest(Integer.parseIn
 			          </svg>
 					<p>Nhắn tin</p>
 				</button>
-				<button type="button" class="global_post-status_profile">
-					<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21"
-						viewBox="0 0 21 21" fill="none">
-			            <path
-							d="M3 1.3125C1.34531 1.3125 0 2.48965 0 3.9375V17.0625C0 18.5104 1.34531 19.6875 3 19.6875H18C19.6547 19.6875 21 18.5104 21 17.0625V3.9375C21 2.48965 19.6547 1.3125 18 1.3125H3ZM9.375 14.1094V11.4844H6.375C5.75156 11.4844 5.25 11.0455 5.25 10.5C5.25 9.95449 5.75156 9.51562 6.375 9.51562H9.375V6.89062C9.375 6.34512 9.87656 5.90625 10.5 5.90625C11.1234 5.90625 11.625 6.34512 11.625 6.89062V9.51562H14.625C15.2484 9.51562 15.75 9.95449 15.75 10.5C15.75 11.0455 15.2484 11.4844 14.625 11.4844H11.625V14.1094C11.625 14.6549 11.1234 15.0938 10.5 15.0938C9.87656 15.0938 9.375 14.6549 9.375 14.1094Z"
-							fill="black" />
-			          </svg>
-					<p>Theo dõi</p>
-				</button>
+
+				<c:if test="<%=!checkIsFollow%>">
+					<button id="btnProfileUserFollow" type="button"
+						class="global_post-status_profile">
+						<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21"
+							viewBox="0 0 21 21" fill="none">
+				            <path
+								d="M3 1.3125C1.34531 1.3125 0 2.48965 0 3.9375V17.0625C0 18.5104 1.34531 19.6875 3 19.6875H18C19.6547 19.6875 21 18.5104 21 17.0625V3.9375C21 2.48965 19.6547 1.3125 18 1.3125H3ZM9.375 14.1094V11.4844H6.375C5.75156 11.4844 5.25 11.0455 5.25 10.5C5.25 9.95449 5.75156 9.51562 6.375 9.51562H9.375V6.89062C9.375 6.34512 9.87656 5.90625 10.5 5.90625C11.1234 5.90625 11.625 6.34512 11.625 6.89062V9.51562H14.625C15.2484 9.51562 15.75 9.95449 15.75 10.5C15.75 11.0455 15.2484 11.4844 14.625 11.4844H11.625V14.1094C11.625 14.6549 11.1234 15.0938 10.5 15.0938C9.87656 15.0938 9.375 14.6549 9.375 14.1094Z"
+								fill="black" />
+				        </svg>
+						<p>Theo dõi</p>
+					</button>
+				</c:if>
+
+				<c:if test="<%=checkIsFollow%>">
+					<button id="wrapperBtnUnfollowProfile" type="button"
+						class="global_post-status_profile ">
+						<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21"
+							viewBox="0 0 448 512">
+							<!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+							<path
+								d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM337 209L209 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L303 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z" /></svg>
+						<p>Đã theo dõi</p>
+
+						<div id="btnUnfollowProfile"
+							class="global_post-status_profile_unfollow">
+							<p>Bỏ theo dõi</p>
+						</div>
+					</button>
+				</c:if>
 			</div>
 		</div>
 		<div class="profile_user-navigation">
@@ -221,10 +250,10 @@ boolean otherIsSendRequest = friendRequestDAO.checkIsSendRequest(Integer.parseIn
 					class="profile_user-tabs-item <%=currentURL.trim().equals(tab3URL.trim()) ? "profile_user-tabs-item_active" : ""%>">Theo
 						dõi</li>
 				</a>
-				<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=image&id=<%=valueID%>">
-					<li
-					class="profile_user-tabs-item <%=currentURL.trim().equals(tab4URL.trim()) ? "profile_user-tabs-item_active" : ""%>">Ảnh</li>
-				</a>
+				<%-- 				<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=image&id=<%=valueID%>"> --%>
+				<!-- 					<li -->
+				<%-- 					class="profile_user-tabs-item <%=currentURL.trim().equals(tab4URL.trim()) ? "profile_user-tabs-item_active" : ""%>">Ảnh</li> --%>
+				<!-- 				</a> -->
 			</ul>
 		</div>
 	</div>
@@ -242,27 +271,37 @@ boolean otherIsSendRequest = friendRequestDAO.checkIsSendRequest(Integer.parseIn
 			<jsp:param name="createAT" value="<%=valueCreateAT%>" />
 		</jsp:include>
 	</c:if>
-	<%-- 	<c:if test="<%=currentURL.trim().equals(tab2URL.trim())%>"> --%>
-	<!-- 		<div class="wrapper_of_block" -->
-	<!-- 			style="border: 1px solid var(--border-color); margin-top: 16px;"> -->
-	<%-- 			<jsp:include page="../component/profile_user/ProfileUserFriend.jsp"></jsp:include> --%>
-	<!-- 		</div> -->
-	<%-- 	</c:if> --%>
-	<%-- 	<c:if test="<%=currentURL.trim().equals(tab3URL.trim())%>"> --%>
-	<!-- 		<div class="wrapper_of_block" -->
-	<!-- 			style="border: 1px solid var(--border-color); margin-top: 16px;"> -->
-	<%-- 			<jsp:include page="../component/profile_user/ProfileUserFollow.jsp"></jsp:include> --%>
-	<!-- 		</div> -->
-	<%-- 	</c:if> --%>
-	<%-- 	<c:if test="<%=currentURL.trim().equals(tab4URL.trim())%>"> --%>
-	<%-- 	</c:if> --%>
+	<c:if test="<%=currentURL.trim().equals(tab2URL.trim())%>">
+		<div class="wrapper_of_block"
+			style="border: 1px solid var(--border-color); margin-top: 16px;">
+			<jsp:include
+				page="../component/profile_other_user/ProfileUserFriend.jsp">
+				<jsp:param name="id" value='<%=request.getParameter("id")%>' />
+			</jsp:include>
+		</div>
+	</c:if>
+	<c:if test="<%=currentURL.trim().equals(tab3URL.trim())%>">
+		<div class="wrapper_of_block"
+			style="border: 1px solid var(--border-color); margin-top: 16px;">
+			<jsp:include
+				page="../component/profile_other_user/ProfileUserFollow.jsp">
+				<jsp:param name="id" value='<%=request.getParameter("id")%>' />
+			</jsp:include>
+		</div>
+	</c:if>
+	<c:if test="<%=currentURL.trim().equals(tab4URL.trim())%>">
+	</c:if>
 
 </body>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/global.js"></script>
 
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/component/profile_user/UserFriendItem.js"></script>
+	src="${pageContext.request.contextPath}/component/profile_other_user/UserFriendItem.js"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/component/profile_other_user/UserFollowItem.js"></script>
+
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/component/PostItem.js"></script>
@@ -291,6 +330,12 @@ boolean otherIsSendRequest = friendRequestDAO.checkIsSendRequest(Integer.parseIn
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/post.js"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/profile_other_friend/remind_friend.js"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/profile_other_friend/remind_follow.js"></script>
 
 
 <script>

@@ -13,9 +13,9 @@ String cookieValueID = CookieUtils.get("id", request);
 <%
 String cookieValueName = CookieUtils.get("firstName", request) + " " + CookieUtils.get("lastName", request);
 
-String originalDataImage = CookieUtils.get("image", request);
+// String originalDataImage = CookieUtils.get("image", request);
 
-String originalDataBackground = CookieUtils.get("background", request);
+// String originalDataBackground = CookieUtils.get("background", request);
 %>
 
 <%
@@ -63,8 +63,8 @@ String tab4URL = "/SGU_SOCIAL_NETWORK/Profile.jsp?page=image";
 
 	<div class="profile_user">
 		<div class="profile_user-header_profile">
-			<img id="profile_user-img_background"
-				src="<%=originalDataBackground%>" alt="" />
+			<img id="profile_user-img_background" class="globalBackgroundOfUser"
+				src="" alt="" />
 			<div id="profile_user-tabs-update_picture_background"
 				class="profile_user-tabs-update_picture">
 				<svg xmlns="http://www.w3.org/2000/svg" width="21" height="22"
@@ -84,7 +84,8 @@ String tab4URL = "/SGU_SOCIAL_NETWORK/Profile.jsp?page=image";
 		</div>
 		<div class="profile_user-body_profile">
 			<div class="profile_user-picture_main">
-				<img id="profile_user-img_avata" src="<%=originalDataImage%>" alt="" />
+				<img class="globalImageOfUser" id="profile_user-img_avata" src=""
+					alt="" />
 				<div id="profile_user-tabs-update_picture_avata"
 					class="profile_user-screen_picture">
 					<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19"
@@ -139,11 +140,11 @@ String tab4URL = "/SGU_SOCIAL_NETWORK/Profile.jsp?page=image";
 					class="profile_user-tabs-item <%=currentURL.trim().equals(tab3URL.trim()) ? "profile_user-tabs-item_active" : ""%>">Theo
 						dõi</li>
 				</a>
-				<a
-					href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=image&id=<%=cookieValueID%>">
-					<li
-					class="profile_user-tabs-item <%=currentURL.trim().equals(tab4URL.trim()) ? "profile_user-tabs-item_active" : ""%>">Ảnh</li>
-				</a>
+<!-- 				<a -->
+<%-- 					href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=image&id=<%=cookieValueID%>"> --%>
+<!-- 					<li -->
+<%-- 					class="profile_user-tabs-item <%=currentURL.trim().equals(tab4URL.trim()) ? "profile_user-tabs-item_active" : ""%>">Ảnh</li> --%>
+<!-- 				</a> -->
 			</ul>
 		</div>
 	</div>
@@ -176,6 +177,9 @@ String tab4URL = "/SGU_SOCIAL_NETWORK/Profile.jsp?page=image";
 	src="${pageContext.request.contextPath}/component/profile_user/UserFriendItem.js"></script>
 
 <script type="text/javascript"
+	src="${pageContext.request.contextPath}/component/profile_user/UserFollowItem.js"></script>
+
+<script type="text/javascript"
 	src="${pageContext.request.contextPath}/component/PostItem.js"></script>
 
 
@@ -205,6 +209,9 @@ String tab4URL = "/SGU_SOCIAL_NETWORK/Profile.jsp?page=image";
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/post.js"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/renderImageAndBackground.js"></script>
 
 
 </html>

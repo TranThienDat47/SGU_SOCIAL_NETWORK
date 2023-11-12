@@ -3,6 +3,8 @@ class GloabPost {
 		this.listPostHome = [];
 		this.listPostProfile = [];
 		this.pagePostHome = 1;
+		this.pagePostSearch = 1;
+
 		this.LENGPAGE = 3;
 		this.initLengHome = 6;
 		this.initLengProfile = 6;
@@ -29,6 +31,7 @@ class GloabPost {
 					if (xhr.status === 200) {
 						try {
 							const data = JSON.parse(xhr.responseText);
+
 
 							if (data) that.listPostHome = [...that.listPostHome, ...data];
 							resolve(data);
@@ -69,7 +72,6 @@ class GloabPost {
 						try {
 							const data = JSON.parse(xhr.responseText);
 
-							console.log(limitValue, offsetValue, userID)
 
 							if (data)
 								that.listPostProfile = [...that.listPostProfile, ...data];
@@ -154,7 +156,8 @@ class GloabPost {
 	async renderListPostHome() {
 		const that = this;
 
-		await that.fetchListPostHome(this.initLengHome, 0, "");
+		await that.fetchListPostHome(this.initLengHome, 0, "").then(() => {
+		});
 
 		await that.innerListPostHome().then((resultRender) => {
 			const wrapperRenderListPostHome = $('#render_list_post_home');

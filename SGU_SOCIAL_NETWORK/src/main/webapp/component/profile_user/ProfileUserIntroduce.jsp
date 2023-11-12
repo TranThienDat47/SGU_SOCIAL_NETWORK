@@ -1,8 +1,16 @@
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
 <%@page import="com.util.CookieUtils"%>
+<%@page import="com.dao.FriendDAO"%>
+<%@page import="com.model.FriendModel"%>
 
+
+<%
+String cookieValueID = CookieUtils.get("id", request);
+%>
 
 
 <%
@@ -10,8 +18,17 @@ String cookieValueBiography = CookieUtils.get("biography", request);
 String cookieValueAddress = CookieUtils.get("address", request);
 String cookieValueGender = CookieUtils.get("gender", request).equals("false") ? "Nữ" : "Nam";
 String cookieValueBirthDay = CookieUtils.get("dateOfBirth", request);
-String cookieValueCreateAt = CookieUtils.get("createAt", request).substring(0,
-		CookieUtils.get("createAt", request).indexOf("_=_"));
+String cookieValueCreateAt = CookieUtils.get("createAt", request);
+%>
+
+<%
+FriendDAO friendDAO = new FriendDAO();
+List<FriendModel> listFriends = null;
+
+listFriends = friendDAO.searchFriendOfUser(0, 6, Integer.parseInt(cookieValueID), Integer.parseInt(cookieValueID));
+
+request.setAttribute("listFriends", listFriends);
+request.setAttribute("userID", cookieValueID);
 %>
 
 <div class="profile_user-container">
@@ -73,57 +90,67 @@ String cookieValueCreateAt = CookieUtils.get("createAt", request).substring(0,
 			</div>
 		</div>
 
-		<div class="wrapper_of_block">
-			<div class="Profile_friend-component">
-				<div class="Profile_friend-header">
-					<div class="Profile_friend-title">Ảnh</div>
-					<a class="Profile_friend-read-more" href="#">Xem thêm</a>
-				</div>
-				<div class="Profile_friend-images">
-					<div class="Profile_friend-image"></div>
-					<div class="Profile_friend-image"></div>
-					<div class="Profile_friend-image"></div>
-					<div class="Profile_friend-image"></div>
-					<div class="Profile_friend-image"></div>
-					<div class="Profile_friend-image"></div>
-					<div class="Profile_friend-image"></div>
-					<div class="Profile_friend-image"></div>
-					<div class="Profile_friend-image"></div>
-				</div>
-			</div>
-		</div>
+		<!-- 		<div class="wrapper_of_block"> -->
+		<!-- 			<div class="Profile_friend-component"> -->
+		<!-- 				<div class="Profile_friend-header"> -->
+		<!-- 					<div class="Profile_friend-title">Ảnh</div> -->
+		<!-- 					<a class="Profile_friend-read-more" href="#">Xem thêm</a> -->
+		<!-- 				</div> -->
+		<!-- 				<div class="Profile_friend-images"> -->
+		<!-- 					<div class="Profile_friend-image"></div> -->
+		<!-- 					<div class="Profile_friend-image"></div> -->
+		<!-- 					<div class="Profile_friend-image"></div> -->
+		<!-- 					<div class="Profile_friend-image"></div> -->
+		<!-- 					<div class="Profile_friend-image"></div> -->
+		<!-- 					<div class="Profile_friend-image"></div> -->
+		<!-- 					<div class="Profile_friend-image"></div> -->
+		<!-- 					<div class="Profile_friend-image"></div> -->
+		<!-- 					<div class="Profile_friend-image"></div> -->
+		<!-- 				</div> -->
+		<!-- 			</div> -->
+		<!-- 		</div> -->
 
 		<div class="wrapper_of_block">
 			<div class="Profile_friend-component">
 				<div class="Profile_friend-header">
 					<div class="Profile_friend-title">Bạn bè</div>
-					<a class="Profile_friend-read-more" href="#">Xem thêm</a>
+					<a class="Profile_friend-read-more"
+						href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=friend&id=<%=cookieValueID%>">Xem
+						thêm</a>
 				</div>
 				<div class="Profile_friend-images">
-					<div class="Profile_friend-wrapper-friend">
-						<img class="Profile_friend-image" src="" alt="" />
-						<div class="Profile_friend-name">Nam Van</div>
-					</div>
-					<div class="Profile_friend-wrapper-friend">
-						<img class="Profile_friend-image" src="" alt="" />
-						<div class="Profile_friend-name">Nam Van</div>
-					</div>
-					<div class="Profile_friend-wrapper-friend">
-						<img class="Profile_friend-image" src="" alt="" />
-						<div class="Profile_friend-name">Nam Van</div>
-					</div>
-					<div class="Profile_friend-wrapper-friend">
-						<img class="Profile_friend-image" src="" alt="" />
-						<div class="Profile_friend-name">Nam Van</div>
-					</div>
-					<div class="Profile_friend-wrapper-friend">
-						<img class="Profile_friend-image" src="" alt="" />
-						<div class="Profile_friend-name">Nam Van</div>
-					</div>
-					<div class="Profile_friend-wrapper-friend">
-						<img class="Profile_friend-image" src="" alt="" />
-						<div class="Profile_friend-name">Nam Van</div>
-					</div>
+
+
+
+
+					<c:forEach var="friend" items="${listFriends}">
+						<div class="Profile_friend-wrapper-friend">
+							<a
+								href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=${Integer.parseInt(friend.userID) == Integer.parseInt(userID) ? friend.friendID : friend.userID }"><img
+								class="Profile_friend-image" src="${friend.image}" alt="" /></a> <a
+								href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=${Integer.parseInt(friend.userID) == Integer.parseInt(userID) ? friend.friendID : friend.userID }"><div
+									class="Profile_friend-name">${friend.firstName}
+									${friend.lastName}</div></a>
+						</div>
+					</c:forEach>
+
+
+					<!-- 					<div class="Profile_friend-wrapper-friend"> -->
+					<!-- 						<img class="Profile_friend-image" src="" alt="" /> -->
+					<!-- 						<div class="Profile_friend-name">Nam Van</div> -->
+					<!-- 					</div> -->
+					<!-- 					<div class="Profile_friend-wrapper-friend"> -->
+					<!-- 						<img class="Profile_friend-image" src="" alt="" /> -->
+					<!-- 						<div class="Profile_friend-name">Nam Van</div> -->
+					<!-- 					</div> -->
+					<!-- 					<div class="Profile_friend-wrapper-friend"> -->
+					<!-- 						<img class="Profile_friend-image" src="" alt="" /> -->
+					<!-- 						<div class="Profile_friend-name">Nam Van</div> -->
+					<!-- 					</div> -->
+					<!-- 					<div class="Profile_friend-wrapper-friend"> -->
+					<!-- 						<img class="Profile_friend-image" src="" alt="" /> -->
+					<!-- 						<div class="Profile_friend-name">Nam Van</div> -->
+					<!-- 					</div> -->
 				</div>
 			</div>
 		</div>

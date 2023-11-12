@@ -78,26 +78,31 @@
 
 /* box show action */
 .list_follow-box_show_action {
-	width: 140px;
-	height: 80px;
-	border-radius: 16px;
+	border-radius: 999px;
 	background: #fff;
 	position: absolute;
 	right: 16px;
 	border: 1px solid #cccccc;
 	font-size: 13px;
 	font-weight: 400;
-	bottom: -40px;
+	bottom: -1px;
 	display: none;
 }
 
 .list_follow-box_show_action .list_follow-child {
 	display: flex;
+	border-radius: 999px;
 	height: 50%;
 	align-items: center;
 	justify-content: start;
 	padding: 0 16px;
 	user-select: none;
+	cursor: pointer;
+	padding: 9px 16px;
+}
+
+
+.list_follow-action_icon>svg {
 	cursor: pointer;
 }
 
@@ -121,4 +126,8 @@
 
 .list_follow-child p {
 	margin-left: 8px;
+}
+
+.list_follow-info_member.list_follow-info_member_show_action .list_follow-box_show_action {
+	display: block !important;
 }

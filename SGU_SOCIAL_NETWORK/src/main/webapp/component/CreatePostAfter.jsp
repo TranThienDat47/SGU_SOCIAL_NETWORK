@@ -24,7 +24,7 @@ String fullName = CookieUtils.get("firstName", request) + " " + CookieUtils.get(
 				<div class="sidebar_left-user-profile"
 					style="display: flex; justify-content: space-between;">
 					<div class="sidebar_left-profile-image">
-						<img src="<%=originalDataImg%>" alt="avata" />
+						<img class="globalImageOfUser" src="" alt="avata" />
 
 					</div>
 					<div class="create_post-profile-name">
@@ -107,6 +107,8 @@ String fullName = CookieUtils.get("firstName", request) + " " + CookieUtils.get(
 		</div>
 	</div>
 </body>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/renderImageAndBackground.js"></script>
 
 
 </html>

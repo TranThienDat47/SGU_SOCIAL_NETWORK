@@ -33,7 +33,7 @@ public class FollowDAO {
 
 				follow.setId(Integer.parseInt(rs.getString("id")));
 				follow.setUserID(Integer.parseInt(rs.getString("userID")));
-				follow.setFollowID(Integer.parseInt(rs.getString("friendID")));
+				follow.setFollowID(Integer.parseInt(rs.getString("followID")));
 				follow.setImage(rs.getString("image"));
 				follow.setFirstName(rs.getString("firstName"));
 				follow.setLastName(rs.getString("lastName"));
@@ -43,15 +43,18 @@ public class FollowDAO {
 				int commonFriendCount = 0;
 
 				// Truy vấn để lấy số lượng bạn chung
-				String commonFriendCountSQL = "SELECT COUNT(DISTINCT f1.friendID) AS friendCount "
-						+ "FROM friends f1 JOIN friends f2 ON f1.friendID = f2.friendID " + "WHERE f1.userID = "
-						+ userID + " AND f2.userID = " + friendID;
+				String commonFriendCountSQL = "SELECT SUM(sub.friendCount) AS totalFriendCount" + " FROM ("
+						+ "    SELECT COUNT(*) AS friendCount " + "    FROM friends f1 "
+						+ "    JOIN friends f2 ON f1.friendID = f2.friendID " + "    WHERE f1.userID = " + userID
+						+ " AND f2.userID = " + friendID + "" + "    UNION " + "    SELECT COUNT(*) AS friendCount "
+						+ "    FROM friends f1 " + "    JOIN friends f2 ON f1.userID = f2.userID "
+						+ "    WHERE f1.friendID = " + userID + " AND f2.friendID = " + friendID + "" + ") AS sub";
 
 				Statement stmt1 = conn.getConn().createStatement();
 				ResultSet rs1 = stmt1.executeQuery(commonFriendCountSQL);
 
 				if (rs1.next()) {
-					commonFriendCount = rs1.getInt("friendCount");
+					commonFriendCount = rs1.getInt("totalFriendCount");
 				}
 
 				rs1.close();

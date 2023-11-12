@@ -4,37 +4,34 @@ class MainOfWeb {
 	}
 
 	render() {
-
-
-		const headerLeft = $(".header_left");
-		const inputSearch = $(".header_search_input");
-		const btnSearchClear = $(".header_left .header_btn_clear");
-
-
-		inputSearch.onkeyup = () => {
-			const valueSearch = inputSearch.value;
-			if (valueSearch.trim() === "") {
-
-				headerLeft.classList.remove("header_type");
-				$('.header_search_result-inner').style.display = "none";
-			} else {
-				headerLeft.classList.add("header_type");
-
-				$('.header_search_result-inner').style.display = "block";
-			}
-		}
-
-		btnSearchClear.onclick = () => {
-			inputSearch.value = "";
-			if (headerLeft.classList.contains("header_type")) {
-				$('.header_search_result-inner').style.display = "none";
-
-				headerLeft.classList.remove("header_type");
-			}
-
-			inputSearch.focus();
-		}
-
+		//		const headerLeft = $(".header_left");
+		//		const inputSearch = $(".header_search_input");
+		//		const btnSearchClear = $(".header_left .header_btn_clear");
+		//
+		//
+		//		inputSearch.onkeyup = () => {
+		//			const valueSearch = inputSearch.value;
+		//			if (valueSearch.trim() === "") {
+		//
+		//				headerLeft.classList.remove("header_type");
+		//				$('.header_search_result-inner').style.display = "none";
+		//			} else {
+		//				headerLeft.classList.add("header_type");
+		//
+		//				$('.header_search_result-inner').style.display = "block";
+		//			}
+		//		}
+		//
+		//		btnSearchClear.onclick = () => {
+		//			inputSearch.value = "";
+		//			if (headerLeft.classList.contains("header_type")) {
+		//				$('.header_search_result-inner').style.display = "none";
+		//
+		//				headerLeft.classList.remove("header_type");
+		//			}
+		//
+		//			inputSearch.focus();
+		//		}
 
 		var headerItems = document.getElementsByClassName('header_center-item');
 

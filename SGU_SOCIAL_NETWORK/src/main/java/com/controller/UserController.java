@@ -14,7 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet({ "/api/user/search_recommend_friend", "/api/user/update_profile_user", "/get_one_user" })
+@WebServlet({ "/api/user/search_recommend_friend", "/api/user/update_profile_user", "/get_one_user",
+		"/api/user/update_avata", "/api/user/update_background" })
 public class UserController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -25,6 +26,10 @@ public class UserController extends HttpServlet {
 			this.doUpdateProfileUser(req, resp);
 		} else if (uri.contains("/get_one_user")) {
 			this.doGetOneUser(req, resp);
+		} else if (uri.contains("/api/user/update_avata")) {
+			this.doUpdateAvata(req, resp);
+		} else if (uri.contains("/api/user/update_background")) {
+			this.doUpdateBackground(req, resp);
 		}
 
 	}
@@ -76,6 +81,43 @@ public class UserController extends HttpServlet {
 		user.setPhoneNumber(phoneNumber.trim());
 
 		String jsonResponse = objectMapper.writeValueAsString(users.updateUser(user));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
+	}
+
+	protected void doUpdateAvata(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String id = jsonNode.get("userID").asText();
+		String avata = jsonNode.get("avata").asText();
+
+		UserDAO users = new UserDAO();
+
+		String jsonResponse = objectMapper.writeValueAsString(users.updateAvataUser(Integer.parseInt(id), avata));
+
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
+	}
+
+	protected void doUpdateBackground(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String id = jsonNode.get("userID").asText();
+		String background = jsonNode.get("background").asText();
+
+		UserDAO users = new UserDAO();
+
+		String jsonResponse = objectMapper
+				.writeValueAsString(users.updateBackgroundUser(Integer.parseInt(id), background));
+
 		PrintWriter out = resp.getWriter();
 		out.println(jsonResponse);
 	}

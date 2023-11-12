@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet({ "/api/friend_request/accept_friend_request", "/api/friend_request/cancle_add_friend_request",
+@WebServlet({ "/api/friend_request/accept_friend_request", "/api/friend_request/deny_add_friend_request",
 		"/api/friend_request/add_friend_request", "/api/friend_request/search_friend_reuqest" })
 public class FriendRequestController extends HttpServlet {
 	@Override
@@ -24,7 +24,7 @@ public class FriendRequestController extends HttpServlet {
 			this.doSearch(req, resp);
 		} else if (uri.contains("/api/friend_request/accept_friend_request")) {
 			this.doAcceptFriend(req, resp);
-		} else if (uri.contains("/api/friend_request/cancle_add_friend_request")) {
+		} else if (uri.contains("/api/friend_request/deny_add_friend_request")) {
 			this.doDenyAddFriend(req, resp);
 		} else if (uri.contains("/api/friend_request/add_friend_request")) {
 			this.doAddFriend(req, resp);
@@ -65,7 +65,7 @@ public class FriendRequestController extends HttpServlet {
 
 		boolean result = false;
 
-		if (friendRequest.acceptRequest(Integer.parseInt(friendRequestID))) {
+		if (friendRequest.acceptRequest(Integer.parseInt(userID), Integer.parseInt(requestID))) {
 			result = friend.addFriend(Integer.parseInt(userID), Integer.parseInt(requestID));
 		}
 
@@ -100,6 +100,7 @@ public class FriendRequestController extends HttpServlet {
 
 		String requestID = jsonNode.get("requestID").asText();
 		String userID = jsonNode.get("userID").asText();
+
 		FriendRequestDAO friendRequest = new FriendRequestDAO();
 
 		String jsonResponse = objectMapper

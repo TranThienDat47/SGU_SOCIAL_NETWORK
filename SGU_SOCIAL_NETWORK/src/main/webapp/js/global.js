@@ -91,6 +91,21 @@ function getCookieGlobal(name) {
 	return null;
 }
 
+function setCookieGlobal(name, value, days) {
+	console.log(value)
+	var expires = "";
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+		expires = "; expires=" + date.toUTCString();
+	}
+	var encodedValue = encodeURIComponent(value); // Mã hóa giá trị
+
+	console.log(encodedValue)
+
+	document.cookie = name + "=" + encodedValue + expires + "; path=/";
+}
+
 
 
 // document.body.addEventListener('wheel', preventScroll, { passive: false });

@@ -108,8 +108,7 @@ class SearchPage {
 
 			await that.innerListFriend().then((result) => {
 				if (that.listSearchFriendReult.length > 0) {
-					$("#search_page-friend-list-wrapper").innerHTML = result + `<a href="/SGU_SOCIAL_NETWORK/Search.jsp?page=user&value=${valueParam}"><button class="btn search_page-btn_view_all_with_friend">Xem
-				tất cả</button></a>`;
+					$("#search_page-friend-list-wrapper").innerHTML = result;
 				} else {
 					$("#search_page-friend-list-wrapper").innerHTML = `<p style="padding: 0 16px 16px;">Không có kết quả nào</p>`;
 				}
@@ -119,8 +118,7 @@ class SearchPage {
 
 			await that.innerListFriend().then((result) => {
 				if (that.listSearchFriendReult.length > 0) {
-					$("#search_page-friend-list-wrapper").innerHTML = result + `<button class="btn search_page-btn_view_all_with_friend">Xem
-				tất cả</button>`;
+					$("#search_page-friend-list-wrapper").innerHTML = result;
 				} else {
 					$("#search_page-friend-list-wrapper").innerHTML = `<p style="padding: 0 16px 16px;">Không có kết quả nào</p>`;
 				}

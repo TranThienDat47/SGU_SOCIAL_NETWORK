@@ -83,7 +83,7 @@
 /* box show action */
 .list_friend-box_show_action {
 	width: 140px;
-	border-radius: 16px;
+	border-radius: 999px;
 	background: #fff;
 	position: absolute;
 	right: 16px;
@@ -94,12 +94,17 @@
 	display: none;
 }
 
+.list_friend-action_icon>svg {
+	cursor: pointer;
+}
+
 .list_friend-box_show_action .list_friend-child {
 	display: flex;
+	border-radius: 999px;
 	height: 50%;
 	align-items: center;
 	justify-content: start;
-	padding: 6px 16px;
+	padding: 9px 16px;
 	user-select: none;
 	cursor: pointer;
 }

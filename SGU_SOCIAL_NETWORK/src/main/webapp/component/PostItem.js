@@ -36,8 +36,6 @@ class GlobalPostItem {
 			}
 		})
 
-		console.log(that.data.firstName)
-
 
 		return `
 			<div class="wrapper_of_block ">
