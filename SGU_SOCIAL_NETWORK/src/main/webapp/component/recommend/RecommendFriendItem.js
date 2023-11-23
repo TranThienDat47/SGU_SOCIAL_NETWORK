@@ -108,13 +108,13 @@ class RecommendFriendItem {
 
 		return `
 					<div class="recommend_friend-info_friend">
-						<a href="" class="recommend_friend-img_friend"> 
+						<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=${that.data.id}" class="recommend_friend-img_friend"> 
 							<img
 								src="${that.data.image}"
 								alt="" />
 						</a>
 						<div class="recommend_friend-name_friend">
-							<a href="" class="recommend_friend-child_name">${that.data.name}</a>
+							<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=${that.data.id}" class="recommend_friend-child_name">${that.data.name}</a>
 							<p class="recommend_friend-child_friend">${that.data.countRoomate} bạn chung</p>
 						</div>
 						<button id="btnRecommendFriend-${that.data.id}" class="recommend_friend-addnew">

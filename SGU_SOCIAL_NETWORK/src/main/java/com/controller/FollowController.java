@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet({ "/api/follow/add_follow", "/api/follow/unfollow", "/api/follow/search_follow" })
 public class FollowController extends HttpServlet {
+	
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String uri = req.getRequestURI();

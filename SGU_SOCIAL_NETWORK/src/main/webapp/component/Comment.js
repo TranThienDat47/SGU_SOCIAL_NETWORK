@@ -51,6 +51,7 @@ class Comment {
 				id: element.id,
 				modeReply: false,
 				rootID: that.data.parentID,
+				userID: element.userID
 			};
 
 
@@ -128,6 +129,7 @@ class Comment {
 					parentID: dataTemp.parentID,
 					modeReply: false,
 					rootID: that.data.parentID,
+					userID: dataTemp.userID
 				};
 
 				const commentItem = new CommentItem(commentData);

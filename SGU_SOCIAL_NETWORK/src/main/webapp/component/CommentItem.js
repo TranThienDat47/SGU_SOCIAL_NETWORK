@@ -10,6 +10,7 @@ class CommentItem {
 		modeReply: false,
 		id: -1,
 		rootID: "",
+		userID: "",
 	}) {
 		this.data = data;
 		this.listComment = [];
@@ -66,7 +67,8 @@ class CommentItem {
 				parentID: element.parentID,
 				id: element.id,
 				modeReply: true,
-				rootID: that.data.rootID
+				rootID: that.data.rootID,
+				userID: element.userID
 			};
 
 			const commentItem = new CommentItem(commentData);
@@ -114,7 +116,9 @@ class CommentItem {
 							id: dataTemp.id,
 							parentID: dataTemp.parentID,
 							modeReply: true,
-							rootID: that.data.rootID
+							rootID: that.data.rootID,
+							userID: dataTemp.userID
+
 						};
 
 						const commentItem = new CommentItem(commentData);
@@ -165,7 +169,9 @@ class CommentItem {
 							id: dataTemp.id,
 							parentID: dataTemp.parentID,
 							modeReply: true,
-							rootID: that.data.rootID
+							rootID: that.data.rootID,
+							userID: dataTemp.userID
+
 						};
 
 						const commentItem = new CommentItem(commentData);
@@ -301,12 +307,12 @@ class CommentItem {
 	                <div class="inner-top">
 	                    <div class="comment-left">
 	                        <div class="avata">
-	                            <img class="avt ${this.data.modeReply ? `reply` : ``}" src="${this.data.image}" alt="" />
+	                           <a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=${that.data.userID}"> <img class="avt ${this.data.modeReply ? `reply` : ``}" src="${this.data.image}" alt="" /> </a>
 	                        </div>
 	                    </div>
 	                    <div class="comment-right">
 	                        <div class="info">
-	                            <span class="string-formatted strong small">${this.data.name}</span>
+	                           <a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=${that.data.userID}"> <span class="string-formatted strong small">${this.data.name}</span> </a>
 	                            <span class="string-fomatted"> </span>
 	                            <span class="string-formatted very-small blur">${this.data.createAt}</span>
 	                        </div>

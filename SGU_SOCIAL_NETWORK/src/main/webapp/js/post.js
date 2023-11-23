@@ -1,7 +1,11 @@
 class GloabPost {
 	constructor() {
 		this.listPostHome = [];
+		this.tempListPostHome = [];
+		this.hasMoreHome = true;
+
 		this.listPostProfile = [];
+
 		this.pagePostHome = 1;
 		this.pagePostSearch = 1;
 
@@ -33,7 +37,13 @@ class GloabPost {
 							const data = JSON.parse(xhr.responseText);
 
 
-							if (data) that.listPostHome = [...that.listPostHome, ...data];
+							if (data) {
+								that.tempListPostHome = data;
+								that.listPostHome = [...that.listPostHome, ...data];
+							}
+
+							if (data.length <= 0) that.hasMoreHome = false;
+
 							resolve(data);
 						} catch (error) {
 							console.log("JSON parsing error:", error);
@@ -92,7 +102,7 @@ class GloabPost {
 	}
 
 	async innerListPostHome() {
-		const renderListPost = await Promise.all(this.listPostHome.map(async (element) => {
+		const renderListPost = await Promise.all(this.tempListPostHome.map(async (element, index) => {
 			const postItemData = {
 				postID: element.id,
 				authorID: element.authorID,
@@ -110,6 +120,7 @@ class GloabPost {
 				firstName: element.firstName,
 				lastName: element.lastName,
 				image: element.image,
+				timeDelay: index * 10,
 			};
 
 
@@ -162,13 +173,14 @@ class GloabPost {
 		await that.innerListPostHome().then((resultRender) => {
 			const wrapperRenderListPostHome = $('#render_list_post_home');
 			if (wrapperRenderListPostHome) {
-				wrapperRenderListPostHome.innerHTML = resultRender;
+				wrapperRenderListPostHome.insertAdjacentHTML('beforeend', resultRender);
 			}
 		})
 
 
 		window.onscroll = async () => {
-			if (that.listPostHome.length > 0) {
+			if (that.listPostHome.length > 0 && that.hasMoreHome) {
+				console.log(that.hasMoreHome)
 				const isScrollAtBottom = window.innerHeight + window.pageYOffset + 3 >= document.documentElement.scrollHeight;
 
 				if (isScrollAtBottom) {
@@ -177,7 +189,7 @@ class GloabPost {
 					await that.innerListPostHome().then((resultRender) => {
 						const wrapperRenderListPostHome = $('#render_list_post_home');
 						if (wrapperRenderListPostHome) {
-							wrapperRenderListPostHome.innerHTML = resultRender;
+							wrapperRenderListPostHome.insertAdjacentHTML('beforeend', resultRender);
 						}
 					})
 				}

@@ -3,7 +3,7 @@ class AuthUser {
 
 	}
 
-	render() {
+	async render() {
 		const formLogin = document.querySelector("#form-login");
 		const formRegister = document.querySelector("#form-register");
 
@@ -57,4 +57,4 @@ class AuthUser {
 	}
 }
 
-new AuthUser().render();
+await new AuthUser().render();

@@ -16,12 +16,12 @@ class SearchPageItem {
 		return `
 				<div id="search_page-friend-list-${that.data.id}" class="search_page-friend-list" class="search_page-friend-list">
 					<div class="search_page-friend-item">
-						<a hreflang="" class="search_page-friend-avatar"> <img
+						<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=${that.data.id}" class="search_page-friend-avatar"> <img
 							src="${that.data.image}"
 							alt="" />
 						</a>
 						<div class="search_page-friend-details">
-							<p>${that.data.name}</p>
+							<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=${that.data.id}"><p>${that.data.name}</p></a>
 							<span>${that.data.countRoomate} bạn chung</span>
 						</div>
 					</div>

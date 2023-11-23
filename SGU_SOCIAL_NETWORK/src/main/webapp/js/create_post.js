@@ -55,7 +55,7 @@ class CreatePost {
 
 	}
 
-	render() {
+	async render() {
 		const that = this;
 
 		const wrapperCreatePostRender = $("#showCreatePostGloabal")
@@ -196,5 +196,9 @@ class CreatePost {
 	}
 }
 
-const createPost = new CreatePost().render();
+const fncRenderCreatePost = async () => {
+	const createPost = await new CreatePost().render();
 
+}
+
+fncRenderCreatePost();

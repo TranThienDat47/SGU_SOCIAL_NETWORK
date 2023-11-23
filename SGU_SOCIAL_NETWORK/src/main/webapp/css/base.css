@@ -694,9 +694,9 @@ li {
 }
 
 .sidebar_right-action-buttons button {
-	padding: 6px 16px;
-	background-color: #000;
-	color: #fff;
+	padding: 6px 9px;
+	background-color: #fff;
+	font-size: 1.1rem;
 }
 
 .sidebar_right-action-buttons button:hover {
@@ -717,6 +717,12 @@ li {
 
 .sidebar_right-bottom .sidebar_left-user-profile .sidebar_left-profile-info p {
 	font-size: 12px;
+}
+
+#btnRecommendFriendHome.btn_recommend_friend_home-disable {
+	background-color: var(--disable-color);
+	color: var(--text-bland);
+	cursor: default;
 }
 
 /*sidebar right end*/

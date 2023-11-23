@@ -12,6 +12,14 @@ public class LikeCommentModel {
 		this.userID = userID;
 	}
 
+	@Override
+	public String toString() {
+		return "LikeCommentModel [id=" + id + ", commentID=" + commentID + ", userID=" + userID + "]";
+	}
+
+	public LikeCommentModel() {
+	}
+
 	public int getId() {
 		return id;
 	}
