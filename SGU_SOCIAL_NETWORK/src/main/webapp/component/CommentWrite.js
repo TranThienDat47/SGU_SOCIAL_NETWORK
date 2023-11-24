@@ -86,7 +86,7 @@ class CommentWrite {
 							</div>
 						</div>
 						<div class="comment-right write-comment">
-							<div id="comment-content" contenteditable="true" class="comment-content"></div>
+							<div id="comment-content" contenteditable="true" class="comment-content ${parseInt(this.data.modeReply) === 0 ? `comment_gloabal_comment_write_text` : ``}"></div>
 							<div class="write-comment--controls">
 								<div class="control-left"></div>
 								<div class="control-right">

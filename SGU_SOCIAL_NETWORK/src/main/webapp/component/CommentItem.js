@@ -149,11 +149,13 @@ class CommentItem {
 
 						countReplyComment.innerHTML = parseInt(countReplyComment.innerHTML.trim()) + 1 + " ";
 					}
-					const countReplies = $$(`.post_detail-count_replies-${that.data.parentID}`);
+					setTimeout(() => {
+						const countReplies = $$(`.post_detail-count_replies-${that.data.parentID}`);
 
-					for (let temp of countReplies) {
-						temp.innerHTML = parseInt(temp.innerHTML.trim()) + 1 + " ";
-					}
+						if (countReplies) for (let temp of countReplies) {
+							temp.innerHTML = parseInt(temp.innerHTML.trim()) + 1 + " ";
+						}
+					})
 
 				}
 			} else {
@@ -188,9 +190,15 @@ class CommentItem {
 					countReplyComment.innerHTML = parseInt(countReplyComment.innerHTML.trim()) + 1 + " ";
 				}
 
-				for (let temp of countReplies) {
-					temp.innerHTML = parseInt(temp.innerHTML.trim()) + 1 + " ";
-				}
+				setTimeout(() => {
+					const countReplies = $$(`.post_detail-count_replies-${that.data.parentID}`);
+
+					for (let temp of countReplies) {
+						temp.innerHTML = parseInt(temp.innerHTML.trim()) + 1 + " ";
+					}
+				})
+
+
 			}
 
 		};

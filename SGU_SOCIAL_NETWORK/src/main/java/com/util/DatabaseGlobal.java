@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DatabaseGlobal {
+	private static final long serialVersionUID = 1L;
+
 	private static Connection conn = null;
 	private static String DB_URL = "jdbc:mysql://localhost:3306/sgu_social_network";
 	private static String USER_NAME = "root";

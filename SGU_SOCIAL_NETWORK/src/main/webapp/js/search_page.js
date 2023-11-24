@@ -77,7 +77,6 @@ class SearchPage {
 
 	async innerListFriend() {
 		const renderListFriend = await Promise.all(this.listSearchFriendReult.map(async (element) => {
-			console.log(element)
 			const friendItemData = {
 				id: element.id,
 				countRoomate: element.countRoomate,
@@ -104,27 +103,31 @@ class SearchPage {
 
 		if (!that.modeView) {
 
-			await this.fetchDataSearchPageAll(valueParam);
-
-			await that.innerListFriend().then((result) => {
-				if (that.listSearchFriendReult.length > 0) {
-					$("#search_page-friend-list-wrapper").innerHTML = result + `<a href="/SGU_SOCIAL_NETWORK/Search.jsp?page=user&value=${valueParam}"><button class="btn search_page-btn_view_all_with_friend">Xem
+			await this.fetchDataSearchPageAll(valueParam).then(async () => {
+				await that.innerListFriend().then((result) => {
+					if (that.listSearchFriendReult.length > 0) {
+						$("#search_page-friend-list-wrapper").innerHTML = result + `<a href="/SGU_SOCIAL_NETWORK/Search.jsp?page=user&value=${valueParam}"><button class="btn search_page-btn_view_all_with_friend">Xem
 				tất cả</button></a>`;
-				} else {
-					$("#search_page-friend-list-wrapper").innerHTML = `<p style="padding: 0 16px 16px;">Không có kết quả nào</p>`;
-				}
-			})
-		} else {
-			await this.fetchDataSearchPageAllWithFriend(valueParam);
+					} else {
+						$("#search_page-friend-list-wrapper").innerHTML = `<p style="padding: 0 16px 16px;">Không có kết quả nào</p>`;
+					}
+				})
+			});
 
-			await that.innerListFriend().then((result) => {
-				if (that.listSearchFriendReult.length > 0) {
-					$("#search_page-friend-list-wrapper").innerHTML = result + `<button class="btn search_page-btn_view_all_with_friend">Xem
+
+		} else {
+			await this.fetchDataSearchPageAllWithFriend(valueParam).then(async () => {
+				await that.innerListFriend().then((result) => {
+					if (that.listSearchFriendReult.length > 0) {
+						$("#search_page-friend-list-wrapper").innerHTML = result + `<button class="btn search_page-btn_view_all_with_friend">Xem
 				tất cả</button>`;
-				} else {
-					$("#search_page-friend-list-wrapper").innerHTML = `<p style="padding: 0 16px 16px;">Không có kết quả nào</p>`;
-				}
-			})
+					} else {
+						$("#search_page-friend-list-wrapper").innerHTML = `<p style="padding: 0 16px 16px;">Không có kết quả nào</p>`;
+					}
+				})
+			});
+
+
 		}
 	}
 
