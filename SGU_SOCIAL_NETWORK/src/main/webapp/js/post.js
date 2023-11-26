@@ -42,7 +42,7 @@ class GloabPost {
 								that.listPostHome = [...that.listPostHome, ...data];
 							}
 
-							if (data.length <= 0) that.hasMoreHome = false;
+							if (data && data.length <= 0) that.hasMoreHome = false;
 
 							resolve(data);
 						} catch (error) {
@@ -180,7 +180,6 @@ class GloabPost {
 
 		window.onscroll = async () => {
 			if (that.listPostHome.length > 0 && that.hasMoreHome) {
-				console.log(that.hasMoreHome)
 				const isScrollAtBottom = window.innerHeight + window.pageYOffset + 3 >= document.documentElement.scrollHeight;
 
 				if (isScrollAtBottom) {

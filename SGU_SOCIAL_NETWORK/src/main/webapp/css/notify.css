@@ -40,11 +40,11 @@
 
 .notify_content_child {
 	padding: 0 16px;
-	height: 46px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	cursor: pointer;
+	display: flex;
 }
 
 .notify_content_child:hover {
@@ -52,14 +52,15 @@
 }
 
 .notify_content_child img {
-	width: 33px;
-	height: 33px;
+	width: 39px;
+	height: 39px;
 	border-radius: 999px;
 	border: 1px solid rgba(0, 0, 0, 0.20);
 }
 
 .child_content {
 	width: 220px;
+	padding: 6px 0px;
 }
 
 .child_content p {
@@ -67,4 +68,20 @@
 	line-height: 1.3;
 	font-size: 12px;
 	color: #000;
+}
+
+.header_item-action_number {
+	position: absolute;
+	top: 0;
+	right: -4px;
+	border: 1px solid var(--border-color);
+	border-radius: 999px;
+	width: 16px;
+	height: 16px;
+	background-color: red;
+	color: #fff;
+	font-size: 1.1rem;
+	font-weight: 600;
+	text-align: center;
+	line-height: 1.5rem;
 }

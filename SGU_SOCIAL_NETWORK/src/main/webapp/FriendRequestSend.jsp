@@ -67,5 +67,4 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/friend_request/friend_request_send.js"></script>
 
-
 </html>

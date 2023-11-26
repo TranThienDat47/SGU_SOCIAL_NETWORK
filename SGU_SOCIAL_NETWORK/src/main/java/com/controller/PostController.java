@@ -169,8 +169,11 @@ public class PostController extends HttpServlet {
 
 		PostDAO postDAO = new PostDAO();
 
-		if (postDAO.createPost(post)) {
-			String jsonResponse = objectMapper.writeValueAsString("{success: true, message: Tạo bài viết thành công!}");
+		int tempRefID = postDAO.createPost(post);
+
+		if (tempRefID > 0) {
+			String jsonResponse = objectMapper
+					.writeValueAsString("{\"success\": true, \"refID\": \"" + tempRefID + "\", \"message\": \"Tạo bài viết thành công!\"}");
 			PrintWriter out = resp.getWriter();
 			out.println(jsonResponse);
 

@@ -120,5 +120,4 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/recommend/recommend_friend.js"></script>
 
-
 </html>

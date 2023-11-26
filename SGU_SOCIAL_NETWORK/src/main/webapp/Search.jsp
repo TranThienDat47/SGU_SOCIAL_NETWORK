@@ -85,6 +85,4 @@ if ((!currentURL.contains(tab1_1URL) && !currentURL.contains(tab2URL) && !curren
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/main.js"></script>
 
-
-
 </html>

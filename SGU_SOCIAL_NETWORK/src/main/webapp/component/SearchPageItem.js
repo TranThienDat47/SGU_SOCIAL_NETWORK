@@ -10,8 +10,6 @@ class SearchPageItem {
 
 	async render() {
 		const that = this;
-		console.log(that.data)
-
 
 		return `
 				<div id="search_page-friend-list-${that.data.id}" class="search_page-friend-list" class="search_page-friend-list">

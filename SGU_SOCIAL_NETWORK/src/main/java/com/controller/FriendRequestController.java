@@ -107,10 +107,15 @@ public class FriendRequestController extends HttpServlet {
 
 		FriendRequestDAO friendRequest = new FriendRequestDAO();
 
-		String jsonResponse = objectMapper.writeValueAsString(
-				friendRequest.addFriendRequest(Integer.parseInt(userID), Integer.parseInt(requestID)));
-		PrintWriter out = resp.getWriter();
-		out.println(jsonResponse);
+		if (!friendRequest.checkIsSendRequest(Integer.parseInt(userID), Integer.parseInt(requestID))) {
+			String jsonResponse = objectMapper.writeValueAsString(
+					friendRequest.addFriendRequest(Integer.parseInt(userID), Integer.parseInt(requestID)));
+			PrintWriter out = resp.getWriter();
+			out.println(jsonResponse);
+		} else {
+			PrintWriter out = resp.getWriter();
+			out.println(true);
+		}
 	}
 
 	protected void doDenyAddFriend(HttpServletRequest req, HttpServletResponse resp)

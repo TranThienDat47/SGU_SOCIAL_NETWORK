@@ -108,7 +108,7 @@ if (cookieValue.length() <= 0) {
 <script type="text/javascript">
 		setTimeout(async () => {
 			await new RecommendFriendHome().render();
-		}, 100)
+		}, 1000)
 </script>
 
 

@@ -187,7 +187,7 @@ class ProfileUser {
 					ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
 					// Convert the canvas to a data URL with reduced quality
-					var dataUrl = canvas.toDataURL('image/jpeg', 0.3); // Điều chỉnh chất lượng ở đây
+					var dataUrl = canvas.toDataURL('image/jpeg', 0.2); // Điều chỉnh chất lượng ở đây
 
 					tempSrc = avataImage.src;
 

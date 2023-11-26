@@ -65,22 +65,22 @@ class MainOfWeb {
 		}
 
 
-		const wrapperNotify = $(".header_item-action_notify");
-		const btnNotify = $("#btnShowNotify");
-
-		const notify = $(".box_notify");
-
-		btnNotify.onclick = () => {
-			if (notify.classList.contains("box_notify-show")) {
-				notify.classList.remove("box_notify-show");
-				document.body.removeEventListener('wheel', preventScroll, { passive: false });
-				$('.notify_content').removeEventListener('wheel', scroll, { passive: true });
-			} else {
-				notify.classList.add("box_notify-show");
-				$('.notify_content').addEventListener('wheel', scroll);
-				document.body.addEventListener('wheel', preventScroll, { passive: false });
-			}
-		}
+//		const wrapperNotify = $(".header_item-action_notify");
+//		const btnNotify = $("#btnShowNotify");
+//
+//		const notify = $(".box_notify");
+//
+//		btnNotify.onclick = () => {
+//			if (notify.classList.contains("box_notify-show")) {
+//				notify.classList.remove("box_notify-show");
+//				document.body.removeEventListener('wheel', preventScroll, { passive: false });
+//				$('.notify_content').removeEventListener('wheel', scroll, { passive: true });
+//			} else {
+//				notify.classList.add("box_notify-show");
+//				$('.notify_content').addEventListener('wheel', scroll);
+//				document.body.addEventListener('wheel', preventScroll, { passive: false });
+//			}
+//		}
 
 		window.onclick = function(e) {
 			if (notify.classList.contains('box_notify-show')) {

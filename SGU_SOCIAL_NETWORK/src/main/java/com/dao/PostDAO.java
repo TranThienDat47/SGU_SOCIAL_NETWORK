@@ -14,7 +14,7 @@ public class PostDAO {
 	public PostDAO() {
 	}
 
-	public boolean createPost(PostModel post) {
+	public int createPost(PostModel post) {
 		DatabaseGlobal conn = new DatabaseGlobal();
 		conn.getConnection();
 
@@ -22,7 +22,7 @@ public class PostDAO {
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 		try {
-			PreparedStatement pstmt = conn.getConn().prepareStatement(newSQL);
+			PreparedStatement pstmt = conn.getConn().prepareStatement(newSQL, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, post.getAuthorID());
 			pstmt.setInt(2, post.getPrivacySettingID());
 			pstmt.setString(3, post.getContent());
@@ -32,12 +32,21 @@ public class PostDAO {
 			pstmt.setString(7, post.getImage4());
 
 			int rowsAffected = pstmt.executeUpdate();
-			pstmt.close();
 
-			return rowsAffected > 0;
+			if (rowsAffected > 0) {
+				ResultSet generatedKeys = pstmt.getGeneratedKeys();
+				if (generatedKeys.next()) {
+					int generatedId = generatedKeys.getInt(1);
+					pstmt.close();
+					return generatedId;
+				}
+			}
+
+			pstmt.close();
+			return -1; // hoặc giá trị khác thích hợp để biểu thị lỗi
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			return false;
+			return -1; // hoặc giá trị khác thích hợp để biểu thị lỗi
 		} finally {
 			conn.closeDB();
 		}

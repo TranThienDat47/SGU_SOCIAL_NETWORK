@@ -126,7 +126,6 @@ class SearchPagePost {
 	async renderListPostSearch(valueSearch = "") {
 		const that = this;
 		that.listPostSearch = []
-		console.log("haha")
 
 		if (!that.modeView) {
 			await that.fetchListPostSearch(this.initLengHome, 0, valueSearch.trim()).then(() => {

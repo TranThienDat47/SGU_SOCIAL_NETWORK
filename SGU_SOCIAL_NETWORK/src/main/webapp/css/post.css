@@ -134,6 +134,7 @@ p {
 
 .global_post-interact_child {
 	cursor: pointer;
+	height: 100%;
 }
 
 .global_post-interact_child>p {

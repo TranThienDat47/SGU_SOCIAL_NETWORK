@@ -155,7 +155,56 @@ class CreatePost {
 
 		const btnSubmitCreatePost = $("#create_post-submit-btn_after");
 
-		if (btnSubmitCreatePost)
+		var wsUrl;
+		if (window.location.protocol == 'http:') {
+			wsUrl = 'ws://';
+		} else {
+			wsUrl = 'wss://';
+		}
+		var ws = new WebSocket(wsUrl + window.location.host + "/SGU_SOCIAL_NETWORK/notify");
+
+
+
+		if (btnSubmitCreatePost) {
+
+			const handleSendNotification = async (refID = -1) => {
+				const url = "/SGU_SOCIAL_NETWORK/api/notification/create";
+				const send_data = {
+					refID,
+					rootID: getCookieGlobal("id"),
+					userID: getCookieGlobal("id"),
+					content: `${getCookieGlobal("firstName")} ${getCookieGlobal("lastName")} người mà bạn theo dõi đã thêm bài viết mới`,
+					title: "Thêm bài viết mới"
+				};
+
+				return new Promise((resolve, reject) => {
+					const xhr = new XMLHttpRequest();
+					xhr.open("POST", url, true);
+
+					xhr.setRequestHeader("Content-Type", "application/json");
+
+					xhr.onreadystatechange = function() {
+						if (xhr.readyState === 4) {
+							if (xhr.status === 200) {
+								try {
+									const data = JSON.parse(xhr.responseText);
+									resolve(data);
+								} catch (error) {
+									console.log("JSON parsing error:", error);
+									reject(error);
+								}
+							} else {
+								console.log("Request failed with status:", xhr.status);
+								reject(new Error(`Error: ${xhr.statusText}`));
+							}
+						}
+					}.bind(this);
+
+					xhr.send(JSON.stringify(send_data));
+				});
+			}
+
+
 			btnSubmitCreatePost.onclick = () => {
 				const url = "/SGU_SOCIAL_NETWORK/api/post/create_post";
 				const send_data = {
@@ -172,14 +221,19 @@ class CreatePost {
 				xhr.open("POST", url, true);
 				xhr.setRequestHeader("Content-Type", "application/json");
 
-				xhr.onreadystatechange = function() {
+				xhr.onreadystatechange = async function() {
 					if (xhr.readyState === 4) {
 						if (xhr.status === 200) {
 							try {
-								const data = JSON.parse(xhr.responseText);
+								const data = JSON.parse(JSON.parse(xhr.responseText));
 								showMessageGlobal("Tạo bài viết thành công!")
 								wrapperCreatePostRender.style.display = "none";
 								txtCreatePost.innerHTML = "";
+
+								await handleSendNotification(data.refID).then((result) => {
+									ws.send(JSON.stringify(result));
+								});
+
 							} catch (error) {
 								console.log("JSON parsing error:", error);
 							}
@@ -189,10 +243,10 @@ class CreatePost {
 					}
 				}
 				xhr.send(JSON.stringify(send_data));
-
-
-
 			}
+		}
+
+
 	}
 }
 
