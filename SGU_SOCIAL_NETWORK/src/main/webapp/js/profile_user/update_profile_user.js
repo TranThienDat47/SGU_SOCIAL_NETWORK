@@ -67,8 +67,6 @@ class UpdateProfileUser {
 				biography: formData.story.value,
 			};
 
-			console.log(send_data);
-
 			return new Promise((resolve, reject) => {
 				const xhr = new XMLHttpRequest();
 				xhr.open("POST", url, true);
@@ -85,7 +83,7 @@ class UpdateProfileUser {
 									setCookieGlobal("firstName", send_data.firstName.trim(), 20);
 									setCookieGlobal("lastName", send_data.lastName.trim(), 20);
 									setCookieGlobal("gender", send_data.gender.trim(), 20);
-									setCookieGlobal("dayOfBirth", send_data.dayOfBirth.trim(), 20);
+									setCookieGlobal("dateOfBirth", send_data.dayOfBirth.trim(), 20);
 									setCookieGlobal("address", send_data.address.trim(), 20);
 									setCookieGlobal("phoneNumber", send_data.phoneNumber.trim(), 20);
 									setCookieGlobal("biography", send_data.biography.trim(), 20);

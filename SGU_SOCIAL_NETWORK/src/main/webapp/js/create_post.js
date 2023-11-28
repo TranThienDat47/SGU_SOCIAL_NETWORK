@@ -168,7 +168,7 @@ class CreatePost {
 		if (btnSubmitCreatePost) {
 
 			const handleSendNotification = async (refID = -1) => {
-				const url = "/SGU_SOCIAL_NETWORK/api/notification/create";
+				const url = "/SGU_SOCIAL_NETWORK/api/notification/create_post_notifiation";
 				const send_data = {
 					refID,
 					rootID: getCookieGlobal("id"),

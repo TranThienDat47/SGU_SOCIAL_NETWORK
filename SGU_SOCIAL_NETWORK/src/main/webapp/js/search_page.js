@@ -76,59 +76,64 @@ class SearchPage {
 	}
 
 	async innerListFriend() {
-		const renderListFriend = await Promise.all(this.listSearchFriendReult.map(async (element) => {
-			const friendItemData = {
-				id: element.id,
-				countRoomate: element.countRoomate,
-				name: element.firstName + " " + element.lastName,
-				image: element.image,
-			};
+		if (this.listSearchFriendReult) {
 
-			const friendItem = new SearchPageItem(friendItemData);
-			const result = await friendItem.render();
+			const renderListFriend = await Promise.all(this.listSearchFriendReult.map(async (element, index) => {
+				const friendItemData = {
+					id: element.id,
+					countRoomate: element.countRoomate,
+					name: element.firstName + " " + element.lastName,
+					image: element.image,
+					timeDelay: index,
+				};
 
-			return result;
-		}));
+				const friendItem = new SearchPageItem(friendItemData);
 
-		return renderListFriend.join("");
+				const result = await friendItem.render();
+
+				return result;
+			}));
+
+			return renderListFriend.join("");
+		} else {
+			return "Không có kết quả"
+		}
 	}
 
 	async renderListFriendPageAll() {
 		const that = this;
-		const queryString = window.location.search;
+		setTimeout(async () => {
+			const queryString = window.location.search;
 
-		const params = new URLSearchParams(queryString);
+			const params = new URLSearchParams(queryString);
 
-		const valueParam = params.get('value');
+			const valueParam = params.get('value');
 
-		if (!that.modeView) {
+			if (!that.modeView) {
 
-			await this.fetchDataSearchPageAll(valueParam).then(async () => {
-				await that.innerListFriend().then((result) => {
-					if (that.listSearchFriendReult.length > 0) {
-						$("#search_page-friend-list-wrapper").innerHTML = result + `<a href="/SGU_SOCIAL_NETWORK/Search.jsp?page=user&value=${valueParam}"><button class="btn search_page-btn_view_all_with_friend">Xem
+				await this.fetchDataSearchPageAll(valueParam).then(async () => {
+					await that.innerListFriend().then((result) => {
+						if (that.listSearchFriendReult && that.listSearchFriendReult.length > 0) {
+							$("#search_page-friend-list-wrapper").innerHTML = result + `<a href="/SGU_SOCIAL_NETWORK/Search.jsp?page=user&value=${valueParam}"><button class="btn search_page-btn_view_all_with_friend">Xem
 				tất cả</button></a>`;
-					} else {
-						$("#search_page-friend-list-wrapper").innerHTML = `<p style="padding: 0 16px 16px;">Không có kết quả nào</p>`;
-					}
-				})
-			});
-
-
-		} else {
-			await this.fetchDataSearchPageAllWithFriend(valueParam).then(async () => {
-				await that.innerListFriend().then((result) => {
-					if (that.listSearchFriendReult.length > 0) {
-						$("#search_page-friend-list-wrapper").innerHTML = result + `<button class="btn search_page-btn_view_all_with_friend">Xem
+						} else {
+							$("#search_page-friend-list-wrapper").innerHTML = `<p style="padding: 0 16px 16px;">Không có kết quả nào</p>`;
+						}
+					})
+				});
+			} else {
+				await this.fetchDataSearchPageAllWithFriend(valueParam).then(async () => {
+					await that.innerListFriend().then((result) => {
+						if (that.listSearchFriendReult.length > 0) {
+							$("#search_page-friend-list-wrapper").innerHTML = result + `<button class="btn search_page-btn_view_all_with_friend">Xem
 				tất cả</button>`;
-					} else {
-						$("#search_page-friend-list-wrapper").innerHTML = `<p style="padding: 0 16px 16px;">Không có kết quả nào</p>`;
-					}
-				})
-			});
-
-
-		}
+						} else {
+							$("#search_page-friend-list-wrapper").innerHTML = `<p style="padding: 0 16px 16px;">Không có kết quả nào</p>`;
+						}
+					})
+				});
+			}
+		}, 200)
 	}
 
 	async render() {

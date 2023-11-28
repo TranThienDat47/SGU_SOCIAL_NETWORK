@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet({ "/api/notification/read", "/api/notification/create", "/api/notification/delete",
+@WebServlet({ "/api/notification/read", "/api/notification/create_post_notifiation", "/api/notification/delete",
 		"/api/notification/get" })
 public class NotificationController extends HttpServlet {
 
@@ -23,8 +23,8 @@ public class NotificationController extends HttpServlet {
 		String uri = req.getRequestURI();
 		if (uri.contains("/api/notification/read")) {
 			this.doRead(req, resp);
-		} else if (uri.contains("/api/notification/create")) {
-			this.doCreate(req, resp);
+		} else if (uri.contains("/api/notification/create_post_notifiation")) {
+			this.doCreatePostNotification(req, resp);
 		} else if (uri.contains("/api/notification/delete")) {
 			this.doDeleteNotification(req, resp);
 		} else if (uri.contains("/api/notification/get")) {
@@ -47,7 +47,8 @@ public class NotificationController extends HttpServlet {
 		out.println(jsonResponse);
 	}
 
-	protected void doCreate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doCreatePostNotification(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
 		resp.setContentType("application/json; charset=UTF-8");
 
 		ObjectMapper objectMapper = new ObjectMapper();

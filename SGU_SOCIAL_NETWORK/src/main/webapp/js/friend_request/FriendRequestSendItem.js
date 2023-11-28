@@ -15,7 +15,7 @@ class FriendRequestSendItem {
 					userID: getCookieGlobal("id"),
 					requestID: that.data.userID,
 				};
-				
+
 				console.log(send_data)
 
 				return new Promise((resolve, reject) => {
@@ -67,12 +67,12 @@ class FriendRequestSendItem {
 		that.addEvent();
 		return `
 					<div class="friend_request-info_friend">
-						<a href="" class="friend_request-img_friend"> <img
+						<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=${that.data.userID}" class="friend_request-img_friend"> <img
 							src="${that.data.image}"
 							alt="" />
 						</a>
 						<div class="friend_request-name_friend">
-							<a href="" class="friend_request-child_name">${that.data.name}</a>
+							<a href="/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=${that.data.userID}" class="friend_request-child_name">${that.data.name}</a>
 							<p class="friend_request-child_friend">${that.data.countRoomate} bạn chung</p>
 						</div>
 						<button id="btnFriendRequest-${that.data.id}" class="friend_request-addnew" style=" ">

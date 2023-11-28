@@ -61,7 +61,7 @@ if (cookieValue.length() <= 0) {
 				</a>
 				<div class="sidebar_right-action-buttons">
 					<button data-id="${item.id}" id="btnRecommendFriendHome"
-						class="btn">Thêm bạn bè</button>
+						class="btn btnRecommendFriendHome">Thêm bạn bè</button>
 				</div>
 			</div>
 		</c:forEach>

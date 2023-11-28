@@ -75,7 +75,7 @@ public class FriendRequestDAO {
 		DatabaseGlobal conn = new DatabaseGlobal();
 		conn.getConnection();
 
-		String newSQL = "SELECT f.*, u.image, u.firstName, u.lastName FROM friendrequests f INNER JOIN USERS u ON f.userID = u.id"
+		String newSQL = "SELECT f.*, u.image, u.firstName, u.lastName FROM friendrequests f INNER JOIN USERS u ON f.requestID = u.id"
 				+ " WHERE userID = " + userID + " LIMIT " + limit + " OFFSET " + offset;
 		;
 
@@ -93,7 +93,7 @@ public class FriendRequestDAO {
 				friend.setImage(rs.getString("image"));
 				friend.setFirstName(rs.getString("firstName"));
 				friend.setLastName(rs.getString("lastName"));
-				
+
 				// Lấy số lượng bạn chung
 				int friendID = Integer.parseInt(rs.getString("requestID"));
 				int commonFriendCount = 0;

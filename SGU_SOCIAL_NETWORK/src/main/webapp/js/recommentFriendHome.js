@@ -1,11 +1,10 @@
 class RecommendFriendHome {
 	constructor() {
-		this.isAdd = false;
 	}
 
 	async render() {
 		const that = this;
-		const btnAddFriend = $("#btnRecommendFriendHome");
+		const btnAddFriend = $$(".btnRecommendFriendHome");
 
 		if (btnAddFriend) {
 			const handleAddFriendRequest = (id) => {
@@ -45,12 +44,15 @@ class RecommendFriendHome {
 				});
 			}
 
-			btnAddFriend.onclick = async () => {
-				if (!that.isAdd) {
-					that.isAdd = true;
-					await handleAddFriendRequest(btnAddFriend.getAttribute("data-id"));
-					btnAddFriend.textContent = "Đã gửi yêu cầu";
-					btnAddFriend.classList.add('btn_recommend_friend_home-disable')
+			for (let temp of btnAddFriend) {
+				temp.onclick = async () => {
+					if (temp.getAttribute("data-id")) {
+						await handleAddFriendRequest(temp.getAttribute("data-id"));
+						temp.textContent = "Đã gửi yêu cầu";
+						temp.classList.add('btn_recommend_friend_home-disable')
+
+						temp.removeAttribute("data-id")
+					}
 				}
 			}
 		}

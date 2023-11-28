@@ -12,7 +12,7 @@ class FriendRequest {
 		const send_data = {
 			limitValue: that.LENGTHPAGE,
 			offsetValue: that.LENGTHPAGE * that.currendPage,
-			userID: getCookieGlobal("id")
+			userID: getCookieGlobal("id"),
 		};
 
 		return new Promise((resolve, reject) => {
@@ -27,6 +27,9 @@ class FriendRequest {
 						try {
 							const data = JSON.parse(xhr.responseText);
 							that.listFriendRequest = data;
+
+							console.log(data)
+
 							that.currendPage += 1;
 							resolve(data);
 						} catch (error) {

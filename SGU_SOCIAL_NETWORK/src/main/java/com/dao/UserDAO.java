@@ -5,11 +5,14 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.model.UserModel;
 import com.util.DatabaseGlobal;
 
 public class UserDAO {
+
+	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	public UserDAO() {
 	}
@@ -67,7 +70,10 @@ public class UserDAO {
 			dtConnection.getConnection();
 			PreparedStatement pst = dtConnection.getConn().prepareStatement(newSQL, Statement.RETURN_GENERATED_KEYS);
 			pst.setString(1, user.getEmail());
-			pst.setString(2, user.getPassword());
+
+			String hashedPassword = passwordEncoder.encode(user.getPassword());
+			pst.setString(2, hashedPassword);
+
 			pst.setString(3, user.getPhoneNumber());
 			pst.setString(4, user.getFirstName());
 			pst.setString(5, user.getLastName());

@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet({ "/api/friend/unfriend", "/api/friend/search_friend", "/api/friend/search_value_friend",
-		"/api/friend/search_with_friend_value", "/api/friend/search_user" })
+		"/api/friend/search_with_friend_value", "/api/friend/search_user", "/api/friend/check_is_friend" })
 public class FriendController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -29,7 +29,27 @@ public class FriendController extends HttpServlet {
 			this.doSearchValue(req, resp);
 		} else if (uri.contains("/api/friend/search_with_friend_value")) {
 			this.doSearchValueWithFriend(req, resp);
+		} else if (uri.contains("/api/friend/check_is_friend")) {
+			this.doCheckIsFriend(req, resp);
 		}
+	}
+
+	protected void doCheckIsFriend(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String valueID = jsonNode.get("valueID").asText();
+		String userID = jsonNode.get("userID").asText();
+
+		FriendDAO friends = new FriendDAO();
+
+		String jsonResponse = objectMapper
+				.writeValueAsString(friends.checkIsFriend(Integer.parseInt(valueID), Integer.parseInt(userID)));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
 	}
 
 	protected void doSearchValueWithFriend(HttpServletRequest req, HttpServletResponse resp)

@@ -70,8 +70,6 @@ public class AuthController extends HttpServlet {
 
 				CookieUtils.add("email", email, hours, resp);
 				CookieUtils.add("id", String.valueOf(newUser.getId()), hours, resp);
-//				CookieUtils.add("image", encodedBase64Img, hours, resp);
-//				CookieUtils.add("background", encodedBase64Img, hours, resp);
 				CookieUtils.add("phoneNumber", newUser.getPhoneNumber(), hours, resp);
 				CookieUtils.add("firstName", newUser.getFirstName(), hours, resp);
 				CookieUtils.add("lastName", newUser.getLastName(), hours, resp);
@@ -94,25 +92,13 @@ public class AuthController extends HttpServlet {
 			if (user != null) {
 				if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
 
-//					String encodedBase64Img = Base64.getEncoder().encodeToString(user.getImage().getBytes());
-//					String encodedBase64Background = Base64.getEncoder()
-//							.encodeToString(user.getBackground().getBytes());
-
-//					byte[] decodedImg = Base64.getDecoder().decode(encodedBase64Img);
-
-//					String originalDataImage = new String(decodedImg, StandardCharsets.UTF_8);
 					String originalDataImage = URLEncoder.encode(user.getImage(), "UTF-8");
 
-//					byte[] decodedBackground = Base64.getDecoder().decode(encodedBase64Background);
-
-//					String originalDataBackground = new String(decodedBackground, StandardCharsets.UTF_8);
 					String originalDataBackground = URLEncoder.encode(user.getBackground(), "UTF-8");
 
 					int hours = 30 * 24;
 					CookieUtils.add("email", email, hours, resp);
 					CookieUtils.add("id", String.valueOf(user.getId()), hours, resp);
-//					CookieUtils.add("image", originalDataImage, hours, resp);
-//					CookieUtils.add("background", originalDataBackground.trim(), hours, resp);
 					CookieUtils.add("phoneNumber", user.getPhoneNumber(), hours, resp);
 					CookieUtils.add("firstName", user.getFirstName(), hours, resp);
 					CookieUtils.add("lastName", user.getLastName(), hours, resp);
@@ -121,9 +107,6 @@ public class AuthController extends HttpServlet {
 					CookieUtils.add("biography", user.getBiography().trim(), hours, resp);
 					CookieUtils.add("gender", String.valueOf(user.isGender()), hours, resp);
 					CookieUtils.add("address", user.getAddress().trim(), hours, resp);
-
-//					resp.sendRedirect("SaveImageAndBackground.jsp?image=" + originalDataImage + "&background="
-//							+ originalDataBackground);
 
 					req.setAttribute("background", originalDataBackground);
 					req.setAttribute("image", originalDataImage);

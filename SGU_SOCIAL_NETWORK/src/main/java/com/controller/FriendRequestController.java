@@ -7,6 +7,7 @@ import com.dao.FriendDAO;
 import com.dao.FriendRequestDAO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.util.CookieUtils;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,7 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet({ "/api/friend_request/accept_friend_request", "/api/friend_request/deny_add_friend_request",
 		"/api/friend_request/add_friend_request", "/api/friend_request/search_friend_reuqest",
-		"/api/friend_request/search_reuqest_send" })
+		"/api/friend_request/search_reuqest_send", "/api/friend_request/check_send_request" })
 public class FriendRequestController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,7 +32,27 @@ public class FriendRequestController extends HttpServlet {
 			this.doAddFriend(req, resp);
 		} else if (uri.contains("/api/friend_request/search_reuqest_send")) {
 			this.doSearchFriendRequestSend(req, resp);
+		} else if (uri.contains("/api/friend_request/check_send_request")) {
+			this.doCheckSendRequest(req, resp);
 		}
+	}
+
+	protected void doCheckSendRequest(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String valueID = jsonNode.get("valueID").asText();
+		String userID = jsonNode.get("userID").asText();
+
+		FriendRequestDAO friends = new FriendRequestDAO();
+
+		String jsonResponse = objectMapper
+				.writeValueAsString(friends.checkIsSendRequest(Integer.parseInt(valueID), Integer.parseInt(userID)));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
 	}
 
 	protected void doSearch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

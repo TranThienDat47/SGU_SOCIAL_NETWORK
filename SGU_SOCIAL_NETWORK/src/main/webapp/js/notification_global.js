@@ -26,6 +26,7 @@ class NotificationSocket {
 		const wrapperNotification = $("#notify_content_global");
 
 		if (that.listNotification) {
+			var tempCount = 0;
 			const renderListNotification = await Promise.all(that.listNotification.map(async (element, index) => {
 				const notifiData = {
 					image: element.image,
@@ -42,13 +43,15 @@ class NotificationSocket {
 
 
 				const postItem = that.notificationItem(notifiData);
-				console.log(element.read)
+
 				if (!element.read) {
-					that.countNotification++;
+					tempCount++;
 				}
 
 				return postItem;
 			}));
+
+			that.countNotification = tempCount;
 
 			wrapperNotification.innerHTML = renderListNotification.join("");
 
@@ -166,14 +169,13 @@ class NotificationSocket {
 		ws.onmessage = async function(event) {
 			const dataTemp = JSON.parse(event.data);
 
-			dataTemp.forEach((element) => {
+			dataTemp.forEach((element, index) => {
 				if (parseInt(element) === parseInt(getCookieGlobal("id"))) {
-					console.log(element)
 					setTimeout(async () => {
 						await handleGetNotification().then(() => {
 							that.renderNotitfication();
 						});;
-					}, 100)
+					}, index * 30 * 2.9)
 					return;
 				}
 			})

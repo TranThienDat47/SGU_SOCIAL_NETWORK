@@ -123,6 +123,35 @@ public class NotificationDAO {
 		}
 	}
 
+	public boolean createNotification(NotificationModel notify) {
+		DatabaseGlobal conn = new DatabaseGlobal();
+		conn.getConnection();
+
+		String sql = "INSERT INTO notifications (refID, userID, title, content, rootID) VALUES (?, ?, ?, ?, ?)";
+
+		try {
+			PreparedStatement pstmt = conn.getConn().prepareStatement(sql);
+			pstmt.setInt(1, notify.getRefID());
+			pstmt.setInt(2, notify.getUserID());
+			pstmt.setString(3, notify.getTitle());
+			pstmt.setString(4, notify.getContent());
+			pstmt.setInt(5, notify.getRootID());
+
+			int rowsAffected = pstmt.executeUpdate();
+
+			boolean result = rowsAffected > 0;
+
+			pstmt.close();
+
+			return result;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			return false;
+		} finally {
+			conn.closeDB();
+		}
+	}
+
 	public NotificationModel addFriendNotification(NotificationModel notify) {
 		DatabaseGlobal conn = new DatabaseGlobal();
 		conn.getConnection();

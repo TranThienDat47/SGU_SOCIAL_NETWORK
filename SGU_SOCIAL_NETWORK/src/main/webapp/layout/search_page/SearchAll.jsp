@@ -81,35 +81,34 @@
         
         // Gọi hàm renderListPostSearch và truyền tham số vào
       	const searchPostTemp = new SearchPagePost();
-      	await searchPostTemp.renderListPostSearch(valueParam);
+      
         
     	const searchPageTemp = new SearchPage();
     	
-		 searchPageTemp.render();
-			const filterRadio = $$('.sidebar_left_search-filter_right');
+		searchPageTemp.render();
+		const filterRadio = $$('.sidebar_left_search-filter_right');
 
-			for (let temp of filterRadio) {
-				temp.onchange = async () => {
-					if (temp.checked) {
-						if (temp.value == "all") {
-							searchPageTemp.modeView = false;
-							searchPostTemp.modeView = false;
-
-						} else {
-							searchPageTemp.modeView = true;
-							searchPostTemp.modeView = true;
-
-						}
-					    await searchPostTemp.renderListPostSearch(valueParam);
-						await searchPageTemp.renderListFriendPageAll();
+		for (let temp of filterRadio) {
+			temp.onchange = async () => {
+				if (temp.checked) {
+					if (temp.value == "all") {
+						searchPageTemp.modeView = false;
+						searchPostTemp.modeView = false;
+					} else {
+						searchPageTemp.modeView = true;
+						searchPostTemp.modeView = true;
 					}
-
+				    await searchPostTemp.renderListPostSearch(valueParam).then( async () => {
+				    	await searchPageTemp.renderListFriendPageAll();
+				    });
+					
 				}
 			}
-			
-			await searchPageTemp.renderListFriendPageAll();
-
-	        
+		}
+		
+		await searchPostTemp.renderListPostSearch(valueParam).then(async () => {
+      		await searchPageTemp.renderListFriendPageAll();
+      	});
 		
     }
 	</script>
