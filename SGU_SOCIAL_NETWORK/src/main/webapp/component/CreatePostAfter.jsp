@@ -15,6 +15,9 @@ String fullName = CookieUtils.get("firstName", request) + " " + CookieUtils.get(
 <title>Insert title here</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/create_post.css" />
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
 </head>
 <body>
 	<div class="showCreatePostGloabal-inner">

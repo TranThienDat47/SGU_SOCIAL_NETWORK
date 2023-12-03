@@ -1,5 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
+<%@page import="com.util.AuthorizationToken"%>
+<%@page import="com.util.CookieUtils"%>
+
+
+<%
+String token = CookieUtils.getPlus("token", request);
+
+if (!AuthorizationToken.authorizationToken(token)) {
+	response.sendRedirect("AuthUser.jsp");
+	return;
+}
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +31,8 @@
 
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/friend_request.css" />
-
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
 
 </head>
 <body>

@@ -57,4 +57,3 @@ class AuthUser {
 	}
 }
 
-await new AuthUser().render();

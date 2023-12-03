@@ -3,6 +3,19 @@
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
 
+<%@page import="com.util.AuthorizationToken"%>
+<%@page import="com.util.CookieUtils"%>
+
+
+<%
+String token = CookieUtils.getPlus("token", request);
+
+if (!AuthorizationToken.authorizationToken(token)) {
+	response.sendRedirect("AuthUser.jsp");
+	return;
+}
+%>
+
 <%
 String queryString = request.getQueryString();
 String currentURL = request.getRequestURI();
@@ -42,7 +55,8 @@ if ((!currentURL.contains(tab1_1URL) && !currentURL.contains(tab2URL) && !curren
 	href="${pageContext.request.contextPath}/css/search_page.css" />
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/global.js"></script>
-
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
 </head>
 <body>
 	<!-- 	Start Header -->

@@ -3,24 +3,17 @@
 <%@page import="java.util.Arrays"%>
 <%@page import="com.util.CookieUtils"%>
 <%@ page import="java.net.URLDecoder, java.nio.charset.StandardCharsets"%>
+<%@page import="com.util.AuthorizationToken"%>
 
 
 <%
-String cookieValue = CookieUtils.get("email", request);
+String token = CookieUtils.getPlus("token", request);
 
-// Cookie[] cookies = request.getCookies();
-// String cookieValue = "";
-// if (cookies != null) {
-// 	for (Cookie cookie : cookies) {
-// 		if (cookie.getName().equals("email")) {
-// 	cookieValue = cookie.getValue();
-// 		}
-// 	}
-// }
-
-if (cookieValue.length() > 0) {
+if (AuthorizationToken.authorizationToken(token)) {
 	response.sendRedirect("index.jsp");
+	return;
 }
+
 %>
 <!DOCTYPE html>
 <html>
@@ -32,7 +25,8 @@ if (cookieValue.length() > 0) {
 
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/auth_user.css" />
-
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
 </head>
 <body>
 	<div id="wrapper">
@@ -40,10 +34,10 @@ if (cookieValue.length() > 0) {
 			<input type="hidden" name="action" value="login" />
 
 			<h1 class="form-heading">Đăng nhập</h1>
+			<div style="color: #e03e3e;">${message}</div>
 			<div class="form-group">
 				<i class="fa-solid fa-user"></i> <input class="form-input"
-					type="text" name="email" placeholder="Tên đăng nhập"
-					value="${email}" />
+					type="email" name="email" placeholder="Email" value="${email}" />
 			</div>
 			<div class="form-group">
 				<i class="fa-solid fa-key"></i> <input class="form-input"
@@ -53,8 +47,8 @@ if (cookieValue.length() > 0) {
 					<i class="fa-regular fa-eye"></i>
 				</div>
 			</div>
-			<input id="remember" name="remember" type="checkbox" /> <label
-				for="remember">Remember me?</label> <input type="submit"
+			<a href="/SGU_SOCIAL_NETWORK/ForgotPassword.jsp"
+				style="color: #bafb00;">Quên mật khẩu?</a> <input type="submit"
 				value="Đăng nhập" class="form-submit" /> <br>
 			<div class="form-bottom">
 				<a class="form-register"
@@ -131,6 +125,13 @@ if (cookieValue.length() > 0) {
 		</form>
 	</div>
 </body>
+
+<script>
+	window.onload = async () => {
+		await new AuthUser().render();
+	}
+</script>
+
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/auth_user.js"></script>
 </html>

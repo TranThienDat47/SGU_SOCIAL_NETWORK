@@ -66,20 +66,6 @@ if (cookieValue.length() <= 0) {
 			</div>
 		</c:forEach>
 
-		<!-- 		<div class="sidebar_left-user-profile"> -->
-		<!-- 			<div class="sidebar_left-profile-image"> -->
-		<%-- 				<img src="${pageContext.request.contextPath}/assets/images/logo.png" --%>
-		<!-- 					alt=""> -->
-		<!-- 			</div> -->
-		<!-- 			<div class="sidebar_left-profile-info"> -->
-		<!-- 				<p class="sidebar_left-user-name">Nam Văn</p> -->
-		<!-- 				<span class="sidebar_left-user-status">Bạn bè</span> -->
-		<!-- 			</div> -->
-		<!-- 			<div class="sidebar_right-action-buttons"> -->
-		<!-- 				<button class="btn">Thêm bạn bè</button> -->
-		<!-- 			</div> -->
-		<!-- 		</div> -->
-
 	</div>
 
 	<div class="sidebar_right-bottom">

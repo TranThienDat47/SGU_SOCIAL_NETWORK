@@ -8,15 +8,18 @@ import java.util.Base64;
 import com.dao.UserDAO;
 import com.model.UserModel;
 import com.util.CookieUtils;
+import com.util.JwtUtil;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @WebServlet(urlPatterns = { "/auth" })
 public class AuthController extends HttpServlet {
+	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -61,7 +64,6 @@ public class AuthController extends HttpServlet {
 			UserModel newUser = null;
 
 			newUser = register.addUser(user);
-			System.out.println(newUser);
 
 			if (newUser != null) {
 				int hours = 30 * 24;
@@ -79,8 +81,13 @@ public class AuthController extends HttpServlet {
 				CookieUtils.add("gender", String.valueOf(newUser.isGender()), hours, resp);
 				CookieUtils.add("address", newUser.getAddress(), hours, resp);
 
-				resp.sendRedirect(
-						"SaveImageAndBackground.jsp?image=" + encodedBase64Img + "&background=" + encodedBase64Img);
+				String token = JwtUtil.generateToken(email);
+
+				req.setAttribute("background", encodedBase64Img);
+				req.setAttribute("image", encodedBase64Img);
+				req.setAttribute("token", token);
+
+				req.getRequestDispatcher("SaveImageAndBackground.jsp").forward(req, resp);
 			}
 		} else if (action.trim().equals("login")) {
 			String email = req.getParameter("email");
@@ -89,8 +96,9 @@ public class AuthController extends HttpServlet {
 			UserDAO userDAO = new UserDAO();
 			UserModel user = new UserModel();
 			user = userDAO.login(email, password);
+
 			if (user != null) {
-				if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+				if (user.getEmail().equals(email) && passwordEncoder.matches(password, user.getPassword())) {
 
 					String originalDataImage = URLEncoder.encode(user.getImage(), "UTF-8");
 
@@ -108,10 +116,17 @@ public class AuthController extends HttpServlet {
 					CookieUtils.add("gender", String.valueOf(user.isGender()), hours, resp);
 					CookieUtils.add("address", user.getAddress().trim(), hours, resp);
 
+					String token = JwtUtil.generateToken(email);
+
 					req.setAttribute("background", originalDataBackground);
 					req.setAttribute("image", originalDataImage);
+					req.setAttribute("token", token);
 
 					req.getRequestDispatcher("SaveImageAndBackground.jsp").forward(req, resp);
+
+				} else {
+					req.setAttribute("message", "Thông tin đăng nhập không chính xác!");
+					req.getRequestDispatcher("AuthUser.jsp").forward(req, resp);
 
 				}
 			}

@@ -92,7 +92,6 @@ function getCookieGlobal(name) {
 }
 
 function setCookieGlobal(name, value, days) {
-	console.log(value)
 	var expires = "";
 	if (days) {
 		var date = new Date();

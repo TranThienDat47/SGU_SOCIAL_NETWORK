@@ -1,32 +1,38 @@
 
+<%@page import="com.util.AuthorizationToken"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
 <%@page import="com.util.CookieUtils"%>
+<%@page import="com.util.AuthorizationToken"%>
 
 
 <%
-String cookieValue = CookieUtils.get("email", request);
-
-if (cookieValue.length() <= 0) {
-	response.sendRedirect("AuthUser.jsp");
-}
-
 String queryString = request.getQueryString();
 String currentURL = request.getRequestURI();
 
-if (queryString != null && !queryString.isEmpty()) {
-	currentURL += "?" + queryString;
-}
 String tab1URL = "/SGU_SOCIAL_NETWORK/";
 String tab1_1URL = "/SGU_SOCIAL_NETWORK/index.jsp?page=home";
 String tab2URL = "/SGU_SOCIAL_NETWORK/index.jsp?page=follow";
 String tab3URL = "/SGU_SOCIAL_NETWORK/index.jsp?page=recommend";
 
-if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.equals(tab2URL)
-		&& !currentURL.equals(tab3URL)) {
-	response.sendRedirect("/SGU_SOCIAL_NETWORK/");
+String cookieValue = CookieUtils.get("email", request);
+
+String token = CookieUtils.getPlus("token", request);
+
+if (!AuthorizationToken.authorizationToken(token)) {
+	response.sendRedirect("AuthUser.jsp");
+	return;
+} else {
+	if (queryString != null && !queryString.isEmpty()) {
+		currentURL += "?" + queryString;
+	}
+
+	if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.equals(tab2URL)
+	&& !currentURL.equals(tab3URL)) {
+		response.sendRedirect("/SGU_SOCIAL_NETWORK/");
+	}
 }
 %>
 
@@ -49,6 +55,10 @@ if (!currentURL.equals(tab1URL) && !currentURL.equals(tab1_1URL) && !currentURL.
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/global.js"></script>
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+</head>
 
 </head>
 

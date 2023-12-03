@@ -1,12 +1,18 @@
 package com.dao;
 
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
 import com.model.UserModel;
 import com.util.DatabaseGlobal;
 
@@ -17,6 +23,62 @@ public class UserDAO {
 	public UserDAO() {
 	}
 
+	private static String envKey = "1234567890123456";
+
+	private static String encrypt(String data) {
+		if (data.trim().length() <= 0) {
+			return "";
+		}
+		try {
+			SecretKeySpec secretKeySpec = new SecretKeySpec(envKey.getBytes(StandardCharsets.UTF_8), "AES");
+			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+
+			// Tạo một IV ngẫu nhiên (tránh vấn đề với ECB)
+			SecureRandom secureRandom = new SecureRandom();
+			byte[] iv = new byte[cipher.getBlockSize()];
+			secureRandom.nextBytes(iv);
+
+			cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, new IvParameterSpec(iv));
+
+			byte[] encryptedBytes = cipher.doFinal(data.getBytes(StandardCharsets.UTF_8));
+
+			// Kết hợp IV và dữ liệu đã mã hóa thành một chuỗi Base64
+			byte[] combined = new byte[iv.length + encryptedBytes.length];
+			System.arraycopy(iv, 0, combined, 0, iv.length);
+			System.arraycopy(encryptedBytes, 0, combined, iv.length, encryptedBytes.length);
+
+			return Base64.getEncoder().encodeToString(combined);
+		} catch (Exception e) {
+			// Xử lý exception theo ý bạn muốn
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private static String decrypt(String data) {
+		if (data.trim().length() <= 0) {
+			return "";
+		}
+		try {
+			byte[] combined = Base64.getDecoder().decode(data);
+			byte[] iv = Arrays.copyOfRange(combined, 0, 16); // Lấy IV từ dữ liệu
+			byte[] encryptedBytes = Arrays.copyOfRange(combined, 16, combined.length); // Lấy dữ liệu đã mã hóa
+
+			SecretKeySpec secretKeySpec = new SecretKeySpec(envKey.getBytes(StandardCharsets.UTF_8), "AES");
+			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+
+			cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, new IvParameterSpec(iv));
+
+			byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+
+			return new String(decryptedBytes, StandardCharsets.UTF_8);
+		} catch (Exception e) {
+			// Xử lý exception theo ý bạn muốn
+			e.printStackTrace();
+			return "";
+		}
+	}
+
 	public boolean isEmailAlreadyRegistered(String email) {
 		DatabaseGlobal dtConnection = new DatabaseGlobal();
 
@@ -24,11 +86,37 @@ public class UserDAO {
 			dtConnection.getConnection();
 
 			PreparedStatement pst = dtConnection.getConn().prepareStatement("SELECT id FROM users WHERE email = ?");
-			pst.setString(1, email);
+			pst.setString(1, (email));
 
 			ResultSet rs = pst.executeQuery();
 
 			return rs.next();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			dtConnection.closeDB();
+		}
+	}
+
+	public boolean checkPassword(String email, String password) {
+		DatabaseGlobal dtConnection = new DatabaseGlobal();
+		UserModel user = new UserModel();
+
+		try {
+			dtConnection.getConnection();
+
+			PreparedStatement pst = dtConnection.getConn().prepareStatement("SELECT * from users where email = ?");
+			pst.setString(1, (email));
+			ResultSet rs = pst.executeQuery();
+
+			if (rs.next()) {
+				user.setPassword(rs.getString("password"));
+				if (passwordEncoder.matches(password, user.getPassword())) {
+					return true;
+				}
+			}
+			return false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -69,18 +157,18 @@ public class UserDAO {
 		try {
 			dtConnection.getConnection();
 			PreparedStatement pst = dtConnection.getConn().prepareStatement(newSQL, Statement.RETURN_GENERATED_KEYS);
-			pst.setString(1, user.getEmail());
+			pst.setString(1, (user.getEmail()));
 
 			String hashedPassword = passwordEncoder.encode(user.getPassword());
 			pst.setString(2, hashedPassword);
 
-			pst.setString(3, user.getPhoneNumber());
-			pst.setString(4, user.getFirstName());
-			pst.setString(5, user.getLastName());
-			pst.setString(6, user.getDateOfBirth());
-			pst.setString(7, user.getAddress());
+			pst.setString(3, encrypt(user.getPhoneNumber()));
+			pst.setString(4, (user.getFirstName()));
+			pst.setString(5, (user.getLastName()));
+			pst.setString(6, (user.getDateOfBirth()));
+			pst.setString(7, encrypt(user.getAddress()));
 			pst.setBoolean(8, user.isGender());
-			pst.setString(9, standardized(user.getFirstName() + " " + user.getLastName()));
+			pst.setString(9, (standardized(user.getFirstName() + " " + user.getLastName())));
 
 			int rowCount = pst.executeUpdate();
 
@@ -126,14 +214,14 @@ public class UserDAO {
 		try {
 			dtConnection.getConnection();
 			PreparedStatement pst = dtConnection.getConn().prepareStatement(updateSQL);
-			pst.setString(1, user.getPhoneNumber());
-			pst.setString(2, user.getFirstName());
-			pst.setString(3, user.getLastName());
-			pst.setString(4, user.getDateOfBirth());
-			pst.setString(5, user.getAddress());
+			pst.setString(1, encrypt(user.getPhoneNumber()));
+			pst.setString(2, (user.getFirstName()));
+			pst.setString(3, (user.getLastName()));
+			pst.setString(4, (user.getDateOfBirth()));
+			pst.setString(5, encrypt(user.getAddress()));
 			pst.setBoolean(6, user.isGender());
-			pst.setString(7, user.getBiography());
-			pst.setString(8, standardized(user.getFirstName() + " " + user.getLastName()));
+			pst.setString(7, encrypt(user.getBiography()));
+			pst.setString(8, (standardized(user.getFirstName() + " " + user.getLastName())));
 			pst.setInt(9, user.getId()); // Sử dụng id để xác định người dùng cần được cập nhật
 
 			int rowCount = pst.executeUpdate();
@@ -149,6 +237,30 @@ public class UserDAO {
 		}
 
 		return null;
+	}
+
+	public boolean updatePassword(String email, String newPassword) {
+		DatabaseGlobal dtConnection = new DatabaseGlobal();
+		String updateSQL = "UPDATE users SET password = ? WHERE email = ?";
+
+		try {
+			dtConnection.getConnection();
+			PreparedStatement pst = dtConnection.getConn().prepareStatement(updateSQL);
+
+			String hashedPassword = passwordEncoder.encode(newPassword);
+
+			pst.setString(1, hashedPassword);
+			pst.setString(2, email);
+
+			int rowCount = pst.executeUpdate();
+
+			return rowCount > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			dtConnection.closeDB();
+		}
 	}
 
 	public boolean updateAvataUser(int id, String avata) {
@@ -200,24 +312,22 @@ public class UserDAO {
 		try {
 			dtConnection.getConnection();
 
-			PreparedStatement pst = dtConnection.getConn()
-					.prepareStatement("SELECT * from users where email = ? and password = ?");
-			pst.setString(1, email);
-			pst.setString(2, password);
+			PreparedStatement pst = dtConnection.getConn().prepareStatement("SELECT * from users where email = ?");
+			pst.setString(1, (email));
 			ResultSet rs = pst.executeQuery();
 
 			if (rs.next()) {
 				user.setId(rs.getInt("id"));
 				user.setPassword(rs.getString("password"));
-				user.setEmail(rs.getString("email"));
+				user.setEmail((rs.getString("email")));
 				user.setImage(rs.getString("image"));
-				user.setPhoneNumber(rs.getString("phoneNumber"));
-				user.setFirstName(rs.getString("firstName"));
-				user.setLastName(rs.getString("lastName"));
+				user.setPhoneNumber(decrypt(rs.getString("phoneNumber")));
+				user.setFirstName((rs.getString("firstName")));
+				user.setLastName((rs.getString("lastName")));
 				user.setDateOfBirth(rs.getString("dateOfBirth"));
 				user.setCreateAt(rs.getString("createAt"));
-				user.setAddress(rs.getString("address"));
-				user.setBiography(rs.getString("biography"));
+				user.setAddress(decrypt(rs.getString("address")));
+				user.setBiography(decrypt(rs.getString("biography")));
 				user.setGender(rs.getBoolean("gender"));
 				user.setBackground(rs.getString("background"));
 				return user;
@@ -254,15 +364,15 @@ public class UserDAO {
 			while (rs.next()) {
 				UserModel user = new UserModel();
 				user.setId(rs.getInt("id"));
-				user.setEmail(rs.getString("email"));
+				user.setEmail((rs.getString("email")));
 				user.setImage(rs.getString("image"));
-				user.setPhoneNumber(rs.getString("phoneNumber"));
-				user.setFirstName(rs.getString("firstName"));
-				user.setLastName(rs.getString("lastName"));
+				user.setPhoneNumber(decrypt(rs.getString("phoneNumber")));
+				user.setFirstName((rs.getString("firstName")));
+				user.setLastName((rs.getString("lastName")));
 				user.setDateOfBirth(rs.getString("dateOfBirth"));
 				user.setCreateAt(rs.getString("createAt"));
-				user.setAddress(rs.getString("address"));
-				user.setBiography(rs.getString("biography"));
+				user.setAddress(decrypt(rs.getString("address")));
+				user.setBiography(decrypt(rs.getString("biography")));
 				user.setGender(rs.getBoolean("gender"));
 				user.setBackground(rs.getString("background"));
 
@@ -316,15 +426,15 @@ public class UserDAO {
 			if (rs.next()) {
 				user.setId(rs.getInt("id"));
 				user.setPassword(rs.getString("password"));
-				user.setEmail(rs.getString("email"));
+				user.setEmail((rs.getString("email")));
 				user.setImage(rs.getString("image"));
-				user.setPhoneNumber(rs.getString("phoneNumber"));
-				user.setFirstName(rs.getString("firstName"));
-				user.setLastName(rs.getString("lastName"));
+				user.setPhoneNumber(decrypt(rs.getString("phoneNumber")));
+				user.setFirstName((rs.getString("firstName")));
+				user.setLastName((rs.getString("lastName")));
 				user.setDateOfBirth(rs.getString("dateOfBirth"));
 				user.setCreateAt(rs.getString("createAt"));
-				user.setAddress(rs.getString("address"));
-				user.setBiography(rs.getString("biography"));
+				user.setAddress(decrypt(rs.getString("address")));
+				user.setBiography(decrypt(rs.getString("biography")));
 				user.setGender(rs.getBoolean("gender"));
 				user.setBackground(rs.getString("background"));
 				return user;
@@ -364,15 +474,15 @@ public class UserDAO {
 				UserModel user = new UserModel();
 				user.setId(rs.getInt("id"));
 				user.setPassword(rs.getString("password"));
-				user.setEmail(rs.getString("email"));
+				user.setEmail((rs.getString("email")));
 				user.setImage(rs.getString("image"));
-				user.setPhoneNumber(rs.getString("phoneNumber"));
-				user.setFirstName(rs.getString("firstName"));
-				user.setLastName(rs.getString("lastName"));
+				user.setPhoneNumber(decrypt(rs.getString("phoneNumber")));
+				user.setFirstName((rs.getString("firstName")));
+				user.setLastName((rs.getString("lastName")));
 				user.setDateOfBirth(rs.getString("dateOfBirth"));
 				user.setCreateAt(rs.getString("createAt"));
-				user.setAddress(rs.getString("address"));
-				user.setBiography(rs.getString("biography"));
+				user.setAddress(decrypt(rs.getString("address")));
+				user.setBiography(decrypt(rs.getString("biography")));
 				user.setGender(rs.getBoolean("gender"));
 				user.setBackground(rs.getString("background"));
 
@@ -447,7 +557,7 @@ public class UserDAO {
 
 			while (rs.next()) {
 				UserModel user = new UserModel();
-				user.setId(rs.getInt("id"));
+				user.setId(rs.getInt("userID") == userID ? rs.getInt("friendID") : rs.getInt("userID"));
 				user.setImage(rs.getString("image"));
 				user.setFirstName(rs.getString("firstName"));
 				user.setLastName(rs.getString("lastName"));

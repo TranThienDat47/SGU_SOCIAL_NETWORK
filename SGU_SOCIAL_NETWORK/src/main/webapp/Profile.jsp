@@ -8,76 +8,77 @@
 <%@page import="com.dao.UserDAO, com.model.UserModel"%>
 <%@page import="java.net.URLDecoder, java.net.URLEncoder"%>
 
+<%@page import="com.util.AuthorizationToken"%>
 
 
 <%
 boolean isNotUser = false;
 UserModel user = null;
 
-String cookieValue = CookieUtils.get("email", request);
-
-if (cookieValue.length() <= 0) {
-	response.sendRedirect("AuthUser.jsp");
-}
-
-String cookieValueID = CookieUtils.get("id", request);
-%>
-
-<%
 String queryString = request.getQueryString();
 String currentURL = request.getRequestURI();
-String idParameterValue = null;
+String idParameterValue = "";
 
-if (queryString != null && !queryString.isEmpty()) {
-	String[] queryParams = queryString.split("&");
-	String targetParamValue = null;
-	boolean hasIdParameter = false;
+String cookieValue = CookieUtils.get("email", request);
+String cookieValueID = CookieUtils.get("id", request);
 
-	for (String param : queryParams) {
-		String[] paramParts = param.split("=");
-		if (paramParts.length == 2 && paramParts[0].equals("page")) {
-	targetParamValue = paramParts[1];
-		}
+String token = CookieUtils.getPlus("token", request);
 
-		if (paramParts.length == 2 && paramParts[0].equals("id")) {
-	hasIdParameter = true;
-	idParameterValue = paramParts[1];
-		}
+if (!AuthorizationToken.authorizationToken(token)) {
+	response.sendRedirect("AuthUser.jsp");
+	return;
+} else {
+	if (queryString != null && !queryString.isEmpty()) {
+		String[] queryParams = queryString.split("&");
+		String targetParamValue = null;
+		boolean hasIdParameter = false;
+
+		for (String param : queryParams) {
+	String[] paramParts = param.split("=");
+	if (paramParts.length == 2 && paramParts[0].equals("page")) {
+		targetParamValue = paramParts[1];
 	}
 
-	if (targetParamValue != null) {
-		currentURL += "?page=" + targetParamValue;
+	if (paramParts.length == 2 && paramParts[0].equals("id")) {
+		hasIdParameter = true;
+		idParameterValue = paramParts[1];
 	}
-	if (hasIdParameter) {
-		UserDAO users = new UserDAO();
+		}
 
-		try {
-	String idParameter = request.getParameter("id");
-	if (idParameter != null && idParameter.matches("\\d+")) {
-		int id = Integer.parseInt(idParameter);
-		user = users.getOneUser(id);
-	} else {
+		if (targetParamValue != null) {
+	currentURL += "?page=" + targetParamValue;
+		}
+		if (hasIdParameter) {
+	UserDAO users = new UserDAO();
+
+	try {
+		String idParameter = request.getParameter("id");
+		if (idParameter != null && idParameter.matches("\\d+")) {
+			int id = Integer.parseInt(idParameter);
+			user = users.getOneUser(id);
+		} else {
+			String tempURL = "/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=" + cookieValueID;
+			response.sendRedirect(tempURL);
+			return;
+		}
+	} catch (NumberFormatException e) {
+	}
+
+	if (user == null) {
 		String tempURL = "/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=" + cookieValueID;
 		response.sendRedirect(tempURL);
 		return;
-	}
-		} catch (NumberFormatException e) {
-		}
+	} else if (user.getId() == Integer.parseInt(cookieValueID)) {
 
-		if (user == null) {
+	} else {
+		isNotUser = true;
+		System.out.println(isNotUser);
+	}
+		} else {
 	String tempURL = "/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=" + cookieValueID;
 	response.sendRedirect(tempURL);
 	return;
-		} else if (user.getId() == Integer.parseInt(cookieValueID)) {
-
-		} else {
-	isNotUser = true;
-	System.out.println(isNotUser);
 		}
-	} else {
-		String tempURL = "/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=" + cookieValueID;
-		response.sendRedirect(tempURL);
-		return;
 	}
 }
 %>
@@ -107,7 +108,8 @@ if (queryString != null && !queryString.isEmpty()) {
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/comment.css" />
 
-
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
 
 </head>
 

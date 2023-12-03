@@ -5,6 +5,48 @@ class NotificationSocket {
 		this.isSeenNotification = false;
 	}
 
+
+
+	decryptCookieValuePlus(encodedValue, encryptionKey) {
+		try {
+			// Decode the Base64 encoded value
+			var encryptedValue = CryptoJS.enc.Base64.parse(encodedValue);
+
+			// Create a key object from the encryption key
+			var key = CryptoJS.enc.Utf8.parse(encryptionKey);
+
+			// Perform decryption using AES
+			var decryptedBytes = CryptoJS.AES.decrypt({ ciphertext: encryptedValue }, key, {
+				mode: CryptoJS.mode.ECB,
+				padding: CryptoJS.pad.Pkcs7
+			});
+
+			// Convert the decrypted bytes to a UTF-8 string
+			var decryptedValue = decryptedBytes.toString(CryptoJS.enc.Utf8);
+
+			return decryptedValue;
+		} catch (error) {
+			console.error('Error decrypting cookie value:', error);
+			return null;
+		}
+	}
+
+	getCookieGlobalPlus(name) {
+		var cookies = document.cookie.split(';');
+		for (var i = 0; i < cookies.length; i++) {
+			var cookie = cookies[i].trim();
+			if (cookie.indexOf(name + '=') === 0) {
+				var encodedValue = cookie.substring(name.length + 1, cookie.length);
+
+				// Thực hiện giải mã với cùng một key (khóa)
+				var decryptedValue = this.decryptCookieValuePlus(encodedValue, '1234567890123456');
+
+				return decryptedValue;
+			}
+		}
+		return null;
+	}
+
 	notificationItem(data) {
 		return `
 					<a href="/SGU_SOCIAL_NETWORK/">
@@ -23,7 +65,7 @@ class NotificationSocket {
 
 	async renderNotitfication() {
 		const that = this;
-		const wrapperNotification = $("#notify_content_global");
+		const wrapperNotification = document.querySelector("#notify_content_global");
 
 		if (that.listNotification) {
 			var tempCount = 0;
@@ -76,6 +118,7 @@ class NotificationSocket {
 					xhr.open("POST", url, true);
 
 					xhr.setRequestHeader("Content-Type", "application/json");
+					xhr.setRequestHeader("Authorization", `${that.getCookieGlobalPlus("token")}`);
 
 					xhr.onreadystatechange = function() {
 						if (xhr.readyState === 4) {
@@ -99,10 +142,10 @@ class NotificationSocket {
 				});
 			}
 
-			const wrapperNotify = $(".header_item-action_notify");
-			const btnNotify = $("#btnShowNotify");
+			const wrapperNotify = document.querySelector(".header_item-action_notify");
+			const btnNotify = document.querySelector("#btnShowNotify");
 
-			const notify = $(".box_notify");
+			const notify = document.querySelector(".box_notify");
 
 			btnNotify.onclick = async () => {
 				if (notify.classList.contains("box_notify-show")) {
@@ -192,6 +235,7 @@ class NotificationSocket {
 				xhr.open("POST", url, true);
 
 				xhr.setRequestHeader("Content-Type", "application/json");
+				xhr.setRequestHeader("Authorization", `${that.getCookieGlobalPlus("token")}`);
 
 				xhr.onreadystatechange = function() {
 					if (xhr.readyState === 4) {

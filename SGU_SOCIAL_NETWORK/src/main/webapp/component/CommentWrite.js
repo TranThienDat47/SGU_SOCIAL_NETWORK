@@ -7,6 +7,48 @@ class CommentWrite {
 
 	}
 
+
+
+	decryptCookieValuePlus(encodedValue, encryptionKey) {
+		try {
+			// Decode the Base64 encoded value
+			var encryptedValue = CryptoJS.enc.Base64.parse(encodedValue);
+
+			// Create a key object from the encryption key
+			var key = CryptoJS.enc.Utf8.parse(encryptionKey);
+
+			// Perform decryption using AES
+			var decryptedBytes = CryptoJS.AES.decrypt({ ciphertext: encryptedValue }, key, {
+				mode: CryptoJS.mode.ECB,
+				padding: CryptoJS.pad.Pkcs7
+			});
+
+			// Convert the decrypted bytes to a UTF-8 string
+			var decryptedValue = decryptedBytes.toString(CryptoJS.enc.Utf8);
+
+			return decryptedValue;
+		} catch (error) {
+			console.error('Error decrypting cookie value:', error);
+			return null;
+		}
+	}
+
+	getCookieGlobalPlus(name) {
+		var cookies = document.cookie.split(';');
+		for (var i = 0; i < cookies.length; i++) {
+			var cookie = cookies[i].trim();
+			if (cookie.indexOf(name + '=') === 0) {
+				var encodedValue = cookie.substring(name.length + 1, cookie.length);
+
+				// Thực hiện giải mã với cùng một key (khóa)
+				var decryptedValue = this.decryptCookieValuePlus(encodedValue, '1234567890123456');
+
+				return decryptedValue;
+			}
+		}
+		return null;
+	}
+
 	setText(text) {
 		this.commentText = text;
 	}

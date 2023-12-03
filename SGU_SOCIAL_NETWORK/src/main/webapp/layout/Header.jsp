@@ -85,16 +85,7 @@ String tab3URL = "/SGU_SOCIAL_NETWORK/index.jsp?page=recommend";
 					<div class="notify_header">
 						<h2>Thông báo</h2>
 					</div>
-					<div id="notify_content_global" class="notify_content">
-						<!-- 						<div class="notify_content_child"> -->
-						<!-- 							<img -->
-						<!-- 								src="https://noithatbinhminh.com.vn/wp-content/uploads/2022/08/anh-dep-40.jpg" -->
-						<!-- 								alt="" /> -->
-						<!-- 							<div class="child_content"> -->
-						<!-- 								<p>Ai đó đã bình luận bài viết của bạn: "Bạn ở đâu "</p> -->
-						<!-- 							</div> -->
-						<!-- 						</div> -->
-					</div>
+					<div id="notify_content_global" class="notify_content"></div>
 				</div>
 			</div>
 
@@ -130,13 +121,14 @@ String tab3URL = "/SGU_SOCIAL_NETWORK/index.jsp?page=recommend";
 						</div>
 						<hr />
 						<div class="user_setting-setting_content">
-							<div class="user_setting-setting_child">
-								<div class="user_setting-img_setting user_setting-screen"></div>
-								<div class="user_setting-setting_name">
-									<p>Màn hình & trợ năng</p>
+							<a href="/SGU_SOCIAL_NETWORK/ChangePassword.jsp">
+								<div class="user_setting-setting_child">
+									<div class="user_setting-img_setting user_setting-screen"></div>
+									<div class="user_setting-setting_name">
+										<p>Đổi mật khẩu</p>
+									</div>
 								</div>
-							</div>
-							<a href="/SGU_SOCIAL_NETWORK/Logout.jsp">
+							</a> <a href="/SGU_SOCIAL_NETWORK/Logout.jsp">
 								<div class="user_setting-setting_child">
 									<div class="user_setting-img_setting user_setting-logout"></div>
 									<div class="user_setting-setting_name">

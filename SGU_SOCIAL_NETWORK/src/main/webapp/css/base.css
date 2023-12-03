@@ -184,7 +184,7 @@ li {
 .btn.disable {
 	background-color: var(--disable-color) !important;
 	cursor: unset;
-	color: var(--text-bland);
+	color: var(--text-bland) !important;
 }
 
 .btn.transparent {
