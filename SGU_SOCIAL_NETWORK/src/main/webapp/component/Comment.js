@@ -1,5 +1,5 @@
 class Comment {
-	constructor(data = { parentID: "-1" }) {
+	constructor(data = { parentID: "-1", authorID: -1 }) {
 		this.data = data;
 		this.listComment = [];
 		this.tempImageError = { image: "" };
@@ -254,7 +254,7 @@ class Comment {
 				xhr.setRequestHeader("Content-Type", "application/json");
 				xhr.setRequestHeader("Authorization", `${that.getCookieGlobalPlus("token")}`);
 
-				xhr.onreadystatechange = function() {
+				xhr.onreadystatechange = async function() {
 					if (xhr.readyState === 4) {
 						if (xhr.status === 200) {
 							try {
@@ -266,6 +266,62 @@ class Comment {
 
 									ws.send(JSON.stringify(data));
 								});
+
+								if (getCookieGlobal("id") != that.data.authorID) {
+									var wsUrl;
+									if (window.location.protocol == 'http:') {
+										wsUrl = 'ws://';
+									} else {
+										wsUrl = 'wss://';
+									}
+									var ws1 = new WebSocket(wsUrl + window.location.host + "/SGU_SOCIAL_NETWORK/notify");
+
+									const handleSendNotification = async () => {
+										const url = "/SGU_SOCIAL_NETWORK/api/notification/comment";
+										const send_data = {
+											refID: that.data.parentID,
+											rootID: getCookieGlobal("id"),
+											userID: that.data.authorID,
+											firstName: getCookieGlobal("firstName"),
+											lastName: getCookieGlobal("lastName"),
+											content: commentWrite.getText().trim(),
+											title: "Bình luận bài viết"
+										};
+
+
+										return new Promise((resolve, reject) => {
+											const xhr = new XMLHttpRequest();
+											xhr.open("POST", url, true);
+
+											xhr.setRequestHeader("Content-Type", "application/json");
+											xhr.setRequestHeader("Authorization", `${that.getCookieGlobalPlus("token")}`);
+
+											xhr.onreadystatechange = function() {
+												if (xhr.readyState === 4) {
+													if (xhr.status === 200) {
+														try {
+															const data = JSON.parse(xhr.responseText);
+
+															ws1.send(JSON.stringify([that.data.authorID]))
+
+															resolve(data);
+														} catch (error) {
+															console.log("JSON parsing error:", error);
+															reject(error);
+														}
+													} else {
+														console.log("Request failed with status:", xhr.status);
+														reject(new Error(`Error: ${xhr.statusText}`));
+													}
+												}
+											}.bind(this);
+
+											xhr.send(JSON.stringify(send_data));
+										});
+									}
+
+									await handleSendNotification();
+								}
 
 
 							} catch (error) {

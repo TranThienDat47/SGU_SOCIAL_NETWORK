@@ -140,8 +140,11 @@ class RemindFriend {
 		await that.fetchListFriendRemind();
 		await that.renderListFriend().then((resultRender) => {
 			const wrapperRenderListFriend = $('#list_friend-list_member');
-			if (wrapperRenderListFriend) {
+			console.log(resultRender)
+			if (wrapperRenderListFriend && resultRender) {
 				wrapperRenderListFriend.innerHTML = resultRender;
+			} else {
+				wrapperRenderListFriend.innerHTML = `<div style="margin-left: 16px;opacity: 0.6">Danh sách trống</div>`;
 			}
 		});
 

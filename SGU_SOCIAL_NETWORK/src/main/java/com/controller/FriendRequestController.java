@@ -2,11 +2,14 @@ package com.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Pattern;
 
 import com.dao.FriendDAO;
 import com.dao.FriendRequestDAO;
+import com.dao.NotificationDAO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.model.NotificationModel;
 import com.util.CookieUtils;
 
 import jakarta.servlet.ServletException;

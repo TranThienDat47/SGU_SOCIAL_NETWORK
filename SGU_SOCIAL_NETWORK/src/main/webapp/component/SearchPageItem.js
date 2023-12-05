@@ -50,7 +50,7 @@ class SearchPageItem {
 
 	handleUpdateMode() {
 		const that = this;
-		const btnMode = $(`#wrapperButtonSearchPageItem-${that.data.id}`)
+		const btnMode = $(`#wrapperButtonSearchPageItem-${that.data.id}`);
 
 		btnMode.innerHTML = that.modeItem == 0 ? `<button id="btnActionFriendSearchPageAdd-${that.data.id}" class="search_page-addnew"><p>Thêm bạn bè</p></button>`
 			: (that.modeItem == 1 ? `<button id="btnActionFriendSearchPageAccept-${that.data.id}" class="search_page-addnew"> <p>Chấp nhận</p></button> <button style="margin-left: 9px" id="btnActionFriendSearchPageDeny-${that.data.id}" class="search_page-addnew"> <p>Từ chối</p></button>`
@@ -73,12 +73,68 @@ class SearchPageItem {
 					xhr.setRequestHeader("Content-Type", "application/json");
 					xhr.setRequestHeader("Authorization", `${that.getCookieGlobalPlus("token")}`);
 
-					xhr.onreadystatechange = function() {
+					xhr.onreadystatechange = async function() {
 						if (xhr.readyState === 4) {
 							if (xhr.status === 200) {
 								try {
 									const data = JSON.parse(xhr.responseText);
 									that.modeItem = 2;
+
+									console.log(getCookieGlobal("id"), that.data.id)
+
+									
+										var wsUrl;
+										if (window.location.protocol == 'http:') {
+											wsUrl = 'ws://';
+										} else {
+											wsUrl = 'wss://';
+										}
+										var ws = new WebSocket(wsUrl + window.location.host + "/SGU_SOCIAL_NETWORK/notify");
+
+										const handleSendNotification = async () => {
+											const url = "/SGU_SOCIAL_NETWORK/api/notification/send_friend_request";
+											const send_data = {
+												refID: -1,
+												rootID: getCookieGlobal("id"),
+												userID: that.data.id,
+												firstName: getCookieGlobal("firstName"),
+												lastName: getCookieGlobal("lastName"),
+												title: "Yêu thích bài viết"
+											};
+
+
+											return new Promise((resolve, reject) => {
+												const xhr = new XMLHttpRequest();
+												xhr.open("POST", url, true);
+
+												xhr.setRequestHeader("Content-Type", "application/json");
+												xhr.setRequestHeader("Authorization", `${that.getCookieGlobalPlus("token")}`);
+
+												xhr.onreadystatechange = function() {
+													if (xhr.readyState === 4) {
+														if (xhr.status === 200) {
+															try {
+																const data = JSON.parse(xhr.responseText);
+
+																ws.send(JSON.stringify([that.data.id]))
+
+																resolve(data);
+															} catch (error) {
+																console.log("JSON parsing error:", error);
+																reject(error);
+															}
+														} else {
+															console.log("Request failed with status:", xhr.status);
+															reject(new Error(`Error: ${xhr.statusText}`));
+														}
+													}
+												}.bind(this);
+
+												xhr.send(JSON.stringify(send_data));
+											});
+										}
+
+										await handleSendNotification();
 
 									resolve(data);
 								} catch (error) {
@@ -120,12 +176,66 @@ class SearchPageItem {
 					xhr.setRequestHeader("Content-Type", "application/json");
 					xhr.setRequestHeader("Authorization", `${that.getCookieGlobalPlus("token")}`);
 
-					xhr.onreadystatechange = function() {
+					xhr.onreadystatechange = async function() {
 						if (xhr.readyState === 4) {
 							if (xhr.status === 200) {
 								try {
 									const data = JSON.parse(xhr.responseText);
 									that.modeItem = 3;
+
+									var wsUrl;
+									if (window.location.protocol == 'http:') {
+										wsUrl = 'ws://';
+									} else {
+										wsUrl = 'wss://';
+									}
+									var ws = new WebSocket(wsUrl + window.location.host + "/SGU_SOCIAL_NETWORK/notify");
+
+									const handleSendNotificationAccept = async () => {
+										const url = "/SGU_SOCIAL_NETWORK/api/notification/accept_friend";
+										const send_data = {
+											refID: -1,
+											rootID: getCookieGlobal("id"),
+											userID: that.data.id,
+											firstName: getCookieGlobal("firstName"),
+											lastName: getCookieGlobal("lastName"),
+											title: "Đồng ý kết bạn"
+										};
+
+										console.log(send_data)
+										return new Promise((resolve, reject) => {
+											const xhr = new XMLHttpRequest();
+											xhr.open("POST", url, true);
+
+											xhr.setRequestHeader("Content-Type", "application/json");
+											xhr.setRequestHeader("Authorization", `${that.getCookieGlobalPlus("token")}`);
+
+											xhr.onreadystatechange = function() {
+												if (xhr.readyState === 4) {
+													if (xhr.status === 200) {
+														try {
+															const data = JSON.parse(xhr.responseText);
+
+															ws.send(JSON.stringify([that.data.id]))
+
+															resolve(data);
+														} catch (error) {
+															console.log("JSON parsing error:", error);
+															reject(error);
+														}
+													} else {
+														console.log("Request failed with status:", xhr.status);
+														reject(new Error(`Error: ${xhr.statusText}`));
+													}
+												}
+											}.bind(this);
+
+											xhr.send(JSON.stringify(send_data));
+										});
+									}
+
+									await handleSendNotificationAccept();
+
 
 									resolve(data);
 								} catch (error) {
@@ -391,12 +501,66 @@ class SearchPageItem {
 							xhr.setRequestHeader("Content-Type", "application/json");
 							xhr.setRequestHeader("Authorization", `${that.getCookieGlobalPlus("token")}`);
 
-							xhr.onreadystatechange = function() {
+							xhr.onreadystatechange = async function() {
 								if (xhr.readyState === 4) {
 									if (xhr.status === 200) {
 										try {
 											const data = JSON.parse(xhr.responseText);
 											that.modeItem = 2;
+
+											var wsUrl;
+											if (window.location.protocol == 'http:') {
+												wsUrl = 'ws://';
+											} else {
+												wsUrl = 'wss://';
+											}
+											var ws = new WebSocket(wsUrl + window.location.host + "/SGU_SOCIAL_NETWORK/notify");
+
+											const handleSendNotification = async () => {
+												const url = "/SGU_SOCIAL_NETWORK/api/notification/send_friend_request";
+												const send_data = {
+													refID: -1,
+													rootID: getCookieGlobal("id"),
+													userID: that.data.id,
+													firstName: getCookieGlobal("firstName"),
+													lastName: getCookieGlobal("lastName"),
+													title: "Yêu cầu kết bạn"
+												};
+
+
+												return new Promise((resolve, reject) => {
+													const xhr = new XMLHttpRequest();
+													xhr.open("POST", url, true);
+
+													xhr.setRequestHeader("Content-Type", "application/json");
+													xhr.setRequestHeader("Authorization", `${that.getCookieGlobalPlus("token")}`);
+
+													xhr.onreadystatechange = function() {
+														if (xhr.readyState === 4) {
+															if (xhr.status === 200) {
+																try {
+																	const data = JSON.parse(xhr.responseText);
+
+																	ws.send(JSON.stringify([that.data.id]))
+
+																	resolve(data);
+																} catch (error) {
+																	console.log("JSON parsing error:", error);
+																	reject(error);
+																}
+															} else {
+																console.log("Request failed with status:", xhr.status);
+																reject(new Error(`Error: ${xhr.statusText}`));
+															}
+														}
+													}.bind(this);
+
+													xhr.send(JSON.stringify(send_data));
+												});
+											}
+
+											await handleSendNotification();
+
 											resolve(data);
 										} catch (error) {
 											console.log("JSON parsing error:", error);

@@ -15,22 +15,30 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet({ "/api/post/search_post_value_search", "/api/post/search_post_value_with_friend", "/api/post/get_one",
-		"/api/post/create_post", "/api/post/search_post_of_user" })
+		"/api/post/create_post", "/api/post/search_post_of_user", "/api/post/list_home", "/api/post/list_follow",
+		"/api/post/list_recommend" })
 public class PostController extends HttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String uri = req.getRequestURI();
-		if (uri.contains("search_post_value_search")) {
+		System.out.println(uri);
+		if (uri.contains("/api/post/search_post_value_search")) {
 			this.doSearch(req, resp);
-		} else if (uri.contains("get_one")) {
+		} else if (uri.contains("/api/post/get_one")) {
 			this.doGetOne(req, resp);
-		} else if (uri.contains("create_post")) {
+		} else if (uri.contains("/api/post/create_post")) {
 			this.doCreate(req, resp);
-		} else if (uri.contains("search_post_of_user")) {
+		} else if (uri.contains("/api/post/search_post_of_user")) {
 			this.doSearchOfUser(req, resp);
-		} else if (uri.contains("search_post_value_with_friend")) {
+		} else if (uri.contains("/api/post/search_post_value_with_friend")) {
 			this.doSearchWithFriend(req, resp);
+		} else if (uri.contains("/api/post/list_home")) {
+			this.doHome(req, resp);
+		} else if (uri.contains("/api/post/list_follow")) {
+			this.doFollow(req, resp);
+		} else if (uri.contains("/api/post/list_recommend")) {
+			this.doRecommend(req, resp);
 		}
 
 	}
@@ -69,6 +77,64 @@ public class PostController extends HttpServlet {
 
 		String jsonResponse = objectMapper.writeValueAsString(
 				posts.searchPost(Integer.parseInt(offsetValue), Integer.parseInt(limitValue), searchValue));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
+	}
+
+	protected void doHome(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String limitValue = jsonNode.get("limitValue").asText();
+		String offsetValue = jsonNode.get("offsetValue").asText();
+		String searchValue = jsonNode.get("searchValue").asText();
+		String userID = jsonNode.get("userID").asText();
+
+		PostDAO posts = new PostDAO();
+		System.out.println(limitValue + " " + userID);
+
+		String jsonResponse = objectMapper.writeValueAsString(posts.searchPostHome(Integer.parseInt(userID),
+				Integer.parseInt(offsetValue), Integer.parseInt(limitValue), searchValue));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
+	}
+
+	protected void doFollow(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String limitValue = jsonNode.get("limitValue").asText();
+		String offsetValue = jsonNode.get("offsetValue").asText();
+		String searchValue = jsonNode.get("searchValue").asText();
+		String userID = jsonNode.get("userID").asText();
+
+		PostDAO posts = new PostDAO();
+
+		String jsonResponse = objectMapper.writeValueAsString(posts.searchPostFollow(Integer.parseInt(userID),
+				Integer.parseInt(offsetValue), Integer.parseInt(limitValue), searchValue));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
+	}
+
+	protected void doRecommend(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String limitValue = jsonNode.get("limitValue").asText();
+		String offsetValue = jsonNode.get("offsetValue").asText();
+		String searchValue = jsonNode.get("searchValue").asText();
+		String userID = jsonNode.get("userID").asText();
+
+		PostDAO posts = new PostDAO();
+
+		String jsonResponse = objectMapper.writeValueAsString(posts.searchPostRecommend(Integer.parseInt(userID),
+				Integer.parseInt(offsetValue), Integer.parseInt(limitValue), searchValue));
 		PrintWriter out = resp.getWriter();
 		out.println(jsonResponse);
 	}
@@ -172,8 +238,8 @@ public class PostController extends HttpServlet {
 		int tempRefID = postDAO.createPost(post);
 
 		if (tempRefID > 0) {
-			String jsonResponse = objectMapper
-					.writeValueAsString("{\"success\": true, \"refID\": \"" + tempRefID + "\", \"message\": \"Tạo bài viết thành công!\"}");
+			String jsonResponse = objectMapper.writeValueAsString(
+					"{\"success\": true, \"refID\": \"" + tempRefID + "\", \"message\": \"Tạo bài viết thành công!\"}");
 			PrintWriter out = resp.getWriter();
 			out.println(jsonResponse);
 

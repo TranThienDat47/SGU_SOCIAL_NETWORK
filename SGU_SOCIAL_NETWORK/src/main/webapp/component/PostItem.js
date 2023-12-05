@@ -188,12 +188,68 @@ class GlobalPostItem {
 					xhr.setRequestHeader("Content-Type", "application/json");
 					xhr.setRequestHeader("Authorization", `${that.getCookieGlobalPlus("token")}`);
 
-					xhr.onreadystatechange = function() {
+					xhr.onreadystatechange = async function() {
 						if (xhr.readyState === 4) {
 							if (xhr.status === 200) {
 								try {
 									const data = JSON.parse(xhr.responseText);
 									that.isLikePost = true;
+
+									if (getCookieGlobal("id") != that.data.authorID) {
+										var wsUrl;
+										if (window.location.protocol == 'http:') {
+											wsUrl = 'ws://';
+										} else {
+											wsUrl = 'wss://';
+										}
+										var ws = new WebSocket(wsUrl + window.location.host + "/SGU_SOCIAL_NETWORK/notify");
+
+										const handleSendNotification = async () => {
+											const url = "/SGU_SOCIAL_NETWORK/api/notification/like_post";
+											const send_data = {
+												refID: that.data.postID,
+												rootID: getCookieGlobal("id"),
+												userID: that.data.authorID,
+												firstName: getCookieGlobal("firstName"),
+												lastName: getCookieGlobal("lastName"),
+												title: "Yêu thích bài viết"
+											};
+
+
+											return new Promise((resolve, reject) => {
+												const xhr = new XMLHttpRequest();
+												xhr.open("POST", url, true);
+
+												xhr.setRequestHeader("Content-Type", "application/json");
+												xhr.setRequestHeader("Authorization", `${that.getCookieGlobalPlus("token")}`);
+
+												xhr.onreadystatechange = function() {
+													if (xhr.readyState === 4) {
+														if (xhr.status === 200) {
+															try {
+																const data = JSON.parse(xhr.responseText);
+
+																ws.send(JSON.stringify([that.data.authorID]))
+
+																resolve(data);
+															} catch (error) {
+																console.log("JSON parsing error:", error);
+																reject(error);
+															}
+														} else {
+															console.log("Request failed with status:", xhr.status);
+															reject(new Error(`Error: ${xhr.statusText}`));
+														}
+													}
+												}.bind(this);
+
+												xhr.send(JSON.stringify(send_data));
+											});
+										}
+
+										await handleSendNotification();
+									}
+
 									resolve(data);
 								} catch (error) {
 									console.log("JSON parsing error:", error);
@@ -254,7 +310,7 @@ class GlobalPostItem {
 							if (that.listLikePost && that.listLikePost.length >= 0) {
 								const countLike = $(`#global_post-total_love-${that.data.postID}`);
 
-								countLike.innerHTML = that.listLikePost.length;
+								if (countLike) countLike.innerHTML = that.listLikePost.length;
 							} else {
 
 							}
@@ -295,7 +351,7 @@ class GlobalPostItem {
 				if (that.listLikePost && that.listLikePost.length > 0) {
 					const countLike = $(`#global_post-total_love-${that.data.postID}`);
 
-					countLike.innerHTML = that.listLikePost.length;
+					if (countLike) countLike.innerHTML = that.listLikePost.length;
 				}
 			});
 		}, that.data.timeDelay * 2.9)

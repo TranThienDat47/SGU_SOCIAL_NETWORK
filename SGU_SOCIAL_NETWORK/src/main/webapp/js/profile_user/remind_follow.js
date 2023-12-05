@@ -136,9 +136,10 @@ class RemindFollow {
 		await that.fetchListFolloeRemind();
 		await that.renderListFollow().then((resultRender) => {
 			const wrapperRenderListFollow = $('#list_follow-list_member');
-			console.log(wrapperRenderListFollow)
-			if (wrapperRenderListFollow) {
+			if (wrapperRenderListFollow && resultRender) {
 				wrapperRenderListFollow.innerHTML = resultRender;
+			} else {
+				wrapperRenderListFollow.innerHTML = `<div style="margin-left: 16px;opacity: 0.6">Danh sách trống</div>`;
 			}
 		});
 

@@ -2,6 +2,7 @@ package com.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Pattern;
 
 import com.dao.NotificationDAO;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,7 +16,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet({ "/api/notification/read", "/api/notification/create_post_notifiation", "/api/notification/delete",
-		"/api/notification/get" })
+		"/api/notification/get", "/api/notification/like_post", "/api/notification/send_friend_request",
+		"/api/notification/accept_friend", "/api/notification/comment", "/api/notification/like_comment",
+		"/api/notification/reply_comment", })
 public class NotificationController extends HttpServlet {
 
 	@Override
@@ -29,7 +32,20 @@ public class NotificationController extends HttpServlet {
 			this.doDeleteNotification(req, resp);
 		} else if (uri.contains("/api/notification/get")) {
 			this.doGetNotification(req, resp);
+		} else if (uri.contains("/api/notification/like_post")) {
+			this.likePost(req, resp);
+		} else if (uri.contains("/api/notification/send_friend_request")) {
+			this.sendFriendRequest(req, resp);
+		} else if (uri.contains("/api/notification/accept_friend")) {
+			this.acceptFriend(req, resp);
+		} else if (uri.contains("/api/notification/comment")) {
+			this.comment(req, resp);
+		} else if (uri.contains("/api/notification/reply_comment")) {
+			this.replyComment(req, resp);
+		} else if (uri.contains("/api/notification/like_comment")) {
+			this.likeComment(req, resp);
 		}
+
 	}
 
 	protected void doRead(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -58,18 +74,191 @@ public class NotificationController extends HttpServlet {
 		String userID = jsonNode.get("userID").asText();
 		String rootID = jsonNode.get("rootID").asText();
 		String title = jsonNode.get("title").asText();
-		String content = jsonNode.get("content").asText();
+		String firstName = jsonNode.get("firstName").asText();
+		String lastName = jsonNode.get("lastName").asText();
 
 		NotificationDAO notification = new NotificationDAO();
 
 		NotificationModel notifyModel = new NotificationModel();
-		notifyModel.setContent(content);
+		notifyModel.setContent(firstName.replaceAll(Pattern.quote("+"), " ") + " "
+				+ lastName.replaceAll(Pattern.quote("+"), " ") + " người mà bạn theo dõi đã thêm bài viết mới");
 		notifyModel.setTitle(title);
 		notifyModel.setRefID(Integer.parseInt(refID));
 		notifyModel.setUserID(Integer.parseInt(userID));
 		notifyModel.setRootID(Integer.parseInt(rootID));
 
 		String jsonResponse = objectMapper.writeValueAsString(notification.createPostNotification(notifyModel));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
+	}
+
+	protected void likePost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String refID = jsonNode.get("refID").asText();
+		String userID = jsonNode.get("userID").asText();
+		String rootID = jsonNode.get("rootID").asText();
+		String title = jsonNode.get("title").asText();
+		String firstName = jsonNode.get("firstName").asText();
+		String lastName = jsonNode.get("lastName").asText();
+
+		NotificationDAO notification = new NotificationDAO();
+
+		NotificationModel notifyModel = new NotificationModel();
+		notifyModel.setContent(firstName.replaceAll(Pattern.quote("+"), " ") + " "
+				+ lastName.replaceAll(Pattern.quote("+"), " ") + " yêu thích bài viết của bạn.");
+		notifyModel.setTitle(title);
+		notifyModel.setRefID(Integer.parseInt(refID));
+		notifyModel.setUserID(Integer.parseInt(userID));
+		notifyModel.setRootID(Integer.parseInt(rootID));
+
+		String jsonResponse = objectMapper.writeValueAsString(notification.createNotification(notifyModel));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
+	}
+
+	protected void sendFriendRequest(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String refID = jsonNode.get("refID").asText();
+		String userID = jsonNode.get("userID").asText();
+		String rootID = jsonNode.get("rootID").asText();
+		String title = jsonNode.get("title").asText();
+		String firstName = jsonNode.get("firstName").asText();
+		String lastName = jsonNode.get("lastName").asText();
+
+		NotificationDAO notification = new NotificationDAO();
+
+		NotificationModel notifyModel = new NotificationModel();
+		notifyModel.setContent(firstName.replaceAll(Pattern.quote("+"), " ") + " "
+				+ lastName.replaceAll(Pattern.quote("+"), " ") + " đã gửi lời mời kết bạn.");
+		notifyModel.setTitle(title);
+		notifyModel.setRefID(Integer.parseInt(refID));
+		notifyModel.setUserID(Integer.parseInt(userID));
+		notifyModel.setRootID(Integer.parseInt(rootID));
+
+		String jsonResponse = objectMapper.writeValueAsString(notification.createNotification(notifyModel));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
+	}
+
+	protected void acceptFriend(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String refID = jsonNode.get("refID").asText();
+		String userID = jsonNode.get("userID").asText();
+		String rootID = jsonNode.get("rootID").asText();
+		String title = jsonNode.get("title").asText();
+		String firstName = jsonNode.get("firstName").asText();
+		String lastName = jsonNode.get("lastName").asText();
+
+		NotificationDAO notification = new NotificationDAO();
+
+		NotificationModel notifyModel = new NotificationModel();
+		notifyModel.setContent(firstName.replaceAll(Pattern.quote("+"), " ") + " "
+				+ lastName.replaceAll(Pattern.quote("+"), " ") + " và bạn đã trở thành bạn bè.");
+		notifyModel.setTitle(title);
+		notifyModel.setRefID(Integer.parseInt(refID));
+		notifyModel.setUserID(Integer.parseInt(userID));
+		notifyModel.setRootID(Integer.parseInt(rootID));
+
+		String jsonResponse = objectMapper.writeValueAsString(notification.createNotification(notifyModel));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
+	}
+
+	protected void comment(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String refID = jsonNode.get("refID").asText();
+		String userID = jsonNode.get("userID").asText();
+		String rootID = jsonNode.get("rootID").asText();
+		String title = jsonNode.get("title").asText();
+		String firstName = jsonNode.get("firstName").asText();
+		String lastName = jsonNode.get("lastName").asText();
+		String content = jsonNode.get("content").asText();
+
+		NotificationDAO notification = new NotificationDAO();
+
+		NotificationModel notifyModel = new NotificationModel();
+		notifyModel.setContent(
+				firstName.replaceAll(Pattern.quote("+"), " ") + " " + lastName.replaceAll(Pattern.quote("+"), " ")
+						+ " đã bình luận về bài viết của bạn: `" + content + "`");
+		notifyModel.setTitle(title);
+		notifyModel.setRefID(Integer.parseInt(refID));
+		notifyModel.setUserID(Integer.parseInt(userID));
+		notifyModel.setRootID(Integer.parseInt(rootID));
+
+		String jsonResponse = objectMapper.writeValueAsString(notification.createNotification(notifyModel));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
+	}
+
+	protected void replyComment(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String refID = jsonNode.get("refID").asText();
+		String userID = jsonNode.get("userID").asText();
+		String rootID = jsonNode.get("rootID").asText();
+		String title = jsonNode.get("title").asText();
+		String firstName = jsonNode.get("firstName").asText();
+		String lastName = jsonNode.get("lastName").asText();
+
+		NotificationDAO notification = new NotificationDAO();
+
+		NotificationModel notifyModel = new NotificationModel();
+		notifyModel.setContent(firstName.replaceAll(Pattern.quote("+"), " ") + " "
+				+ lastName.replaceAll(Pattern.quote("+"), " ") + " đã trả lời bình luận của bạn.");
+		notifyModel.setTitle(title);
+		notifyModel.setRefID(Integer.parseInt(refID));
+		notifyModel.setUserID(Integer.parseInt(userID));
+		notifyModel.setRootID(Integer.parseInt(rootID));
+
+		String jsonResponse = objectMapper.writeValueAsString(notification.createNotification(notifyModel));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
+	}
+
+	protected void likeComment(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String refID = jsonNode.get("refID").asText();
+		String userID = jsonNode.get("userID").asText();
+		String rootID = jsonNode.get("rootID").asText();
+		String title = jsonNode.get("title").asText();
+		String firstName = jsonNode.get("firstName").asText();
+		String lastName = jsonNode.get("lastName").asText();
+
+		NotificationDAO notification = new NotificationDAO();
+
+		NotificationModel notifyModel = new NotificationModel();
+		notifyModel.setContent(firstName.replaceAll(Pattern.quote("+"), " ") + " "
+				+ lastName.replaceAll(Pattern.quote("+"), " ") + " đã thích bình luận của bạn.");
+		notifyModel.setTitle(title);
+		notifyModel.setRefID(Integer.parseInt(refID));
+		notifyModel.setUserID(Integer.parseInt(userID));
+		notifyModel.setRootID(Integer.parseInt(rootID));
+
+		String jsonResponse = objectMapper.writeValueAsString(notification.createNotification(notifyModel));
 		PrintWriter out = resp.getWriter();
 		out.println(jsonResponse);
 	}

@@ -61,17 +61,19 @@ public class PostDAO {
 
 		if (offset != -1 && limit != -1 && userID != -1) {
 			newSQL = "SELECT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
-					+ "INNER JOIN USERS u ON p.authorID = u.id " + "WHERE p.authorID = " + userID + " LIMIT " + limit
-					+ " OFFSET " + offset;
+					+ "INNER JOIN USERS u ON p.authorID = u.id " + "WHERE p.authorID = " + userID
+					+ " ORDER BY p.createAt DESC " + " LIMIT " + limit + " OFFSET " + offset;
 		} else if (offset != -1 && limit != -1 && userID == -1) {
 			newSQL = "SELECT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
-					+ "INNER JOIN USERS u ON p.authorID = u.id " + "LIMIT " + limit + " OFFSET " + offset;
+					+ "INNER JOIN USERS u ON p.authorID = u.id " + " ORDER BY p.createAt DESC " + "LIMIT " + limit
+					+ " OFFSET " + offset;
 		} else if (offset == -1 && limit == -1 && userID != -1) {
 			newSQL = "SELECT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
-					+ "INNER JOIN USERS u ON p.authorID = u.id " + "WHERE p.authorID = " + userID;
+					+ "INNER JOIN USERS u ON p.authorID = u.id " + "WHERE p.authorID = " + userID
+					+ " ORDER BY p.createAt DESC ";
 		} else {
 			newSQL = "SELECT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
-					+ "INNER JOIN USERS u ON p.authorID = u.id";
+					+ "INNER JOIN USERS u ON p.authorID = u.id" + " ORDER BY p.createAt DESC ";
 		}
 
 		List<PostModel> listPost = new ArrayList<PostModel>();
@@ -111,8 +113,8 @@ public class PostDAO {
 				+ "INNER JOIN USERS u ON p.authorID = u.id "
 				+ "INNER JOIN FRIENDS f ON (p.authorID = f.friendID AND f.userID = " + userID
 				+ ") OR (p.authorID = f.userID AND f.friendID = " + userID + ") " + "WHERE '" + keySearch
-				+ "' LIKE CONCAT('%', p.content, '%') OR p.content LIKE '%" + keySearch + "%' " + "LIMIT " + limit
-				+ " OFFSET " + offset;
+				+ "' LIKE CONCAT('%', p.content, '%') OR p.content LIKE '%" + keySearch + "%' "
+				+ " ORDER BY p.createAt DESC " + "LIMIT " + limit + " OFFSET " + offset;
 		List<PostModel> listPost = new ArrayList<PostModel>();
 		try {
 			Statement stmt = conn.getConn().createStatement();
@@ -148,8 +150,128 @@ public class PostDAO {
 
 		newSQL = "SELECT DISTINCT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
 				+ "INNER JOIN USERS u ON p.authorID = u.id " + "WHERE '" + keySearch
-				+ "' LIKE CONCAT('%', p.content, '%') or p.content LIKE '%" + keySearch + "%' " + "LIMIT " + limit
-				+ " OFFSET " + offset;
+				+ "' LIKE CONCAT('%', p.content, '%') or p.content LIKE '%" + keySearch + "%' "
+				+ " ORDER BY p.createAt DESC " + "LIMIT " + limit + " OFFSET " + offset;
+
+		List<PostModel> listPost = new ArrayList<PostModel>();
+		try {
+			Statement stmt = conn.getConn().createStatement();
+			ResultSet rs = stmt.executeQuery(newSQL);
+			while (rs.next()) {
+				PostModel post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
+						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
+						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
+						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
+
+				post.setImage(rs.getString("image"));
+				post.setFirstName(rs.getString("firstName"));
+				post.setLastName(rs.getString("lastName"));
+
+				listPost.add(post);
+			}
+			rs.close();
+			conn.closeDB();
+
+			return listPost;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			conn.closeDB();
+			return null;
+		}
+	}
+
+	public List<PostModel> searchPostHome(int userID, int offset, int limit, String keySearch) {
+		DatabaseGlobal conn = new DatabaseGlobal();
+		conn.getConnection();
+
+		String newSQL = "";
+
+		newSQL = "SELECT DISTINCT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
+				+ "INNER JOIN USERS u ON p.authorID = u.id " + "WHERE (u.id = " + userID + " or (u.id in (SELECT sub.*"
+				+ "FROM (" + "SELECT f.friendID FROM FRIENDS f" + " WHERE f.userID =" + userID + " UNION"
+				+ " SELECT f.userID FROM FRIENDS f" + " WHERE f.friendID = " + userID + " ) AS sub))) and ('"
+				+ keySearch + "' LIKE CONCAT('%', p.content, '%') or p.content LIKE '%" + keySearch + "%') "
+				+ " ORDER BY p.createAt DESC " + "LIMIT " + limit + " OFFSET " + offset;
+
+		List<PostModel> listPost = new ArrayList<PostModel>();
+		try {
+			Statement stmt = conn.getConn().createStatement();
+			ResultSet rs = stmt.executeQuery(newSQL);
+			while (rs.next()) {
+				PostModel post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
+						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
+						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
+						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
+
+				post.setImage(rs.getString("image"));
+				post.setFirstName(rs.getString("firstName"));
+				post.setLastName(rs.getString("lastName"));
+
+				listPost.add(post);
+			}
+			rs.close();
+			conn.closeDB();
+
+			return listPost;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			conn.closeDB();
+			return null;
+		}
+	}
+
+	public List<PostModel> searchPostFollow(int userID, int offset, int limit, String keySearch) {
+		DatabaseGlobal conn = new DatabaseGlobal();
+		conn.getConnection();
+
+		String newSQL = "";
+
+		newSQL = "SELECT DISTINCT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
+				+ "INNER JOIN USERS u ON p.authorID = u.id " + "WHERE (u.id in (" + "SELECT f.followID FROM follows f"
+				+ " WHERE f.userID =" + userID + ")) and ('" + keySearch
+				+ "' LIKE CONCAT('%', p.content, '%') or p.content LIKE '%" + keySearch + "%') "
+				+ " ORDER BY p.createAt DESC " + "LIMIT " + limit + " OFFSET " + offset;
+
+		List<PostModel> listPost = new ArrayList<PostModel>();
+		try {
+			Statement stmt = conn.getConn().createStatement();
+			ResultSet rs = stmt.executeQuery(newSQL);
+			while (rs.next()) {
+				PostModel post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
+						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
+						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
+						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
+
+				post.setImage(rs.getString("image"));
+				post.setFirstName(rs.getString("firstName"));
+				post.setLastName(rs.getString("lastName"));
+
+				listPost.add(post);
+			}
+			rs.close();
+			conn.closeDB();
+
+			return listPost;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			conn.closeDB();
+			return null;
+		}
+	}
+
+	public List<PostModel> searchPostRecommend(int userID, int offset, int limit, String keySearch) {
+		DatabaseGlobal conn = new DatabaseGlobal();
+		conn.getConnection();
+
+		String newSQL = "";
+
+		newSQL = "SELECT DISTINCT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
+				+ "INNER JOIN USERS u ON p.authorID = u.id " + "WHERE (u.id != " + userID + " and u.id not in ("
+				+ " SELECT f.followID FROM follows f" + " WHERE f.userID =" + userID + ") "
+				+ " and u.id not in (SELECT sub.*" + " FROM (" + "SELECT f.friendID FROM FRIENDS f"
+				+ " WHERE f.userID =" + userID + " UNION" + " SELECT f.userID FROM FRIENDS f" + " WHERE f.friendID = "
+				+ userID + " ) AS sub)) and ('" + keySearch + " ' LIKE CONCAT('%', p.content, '%') or p.content LIKE '%"
+				+ keySearch + "%') " + " ORDER BY p.createAt DESC " + "LIMIT " + limit + " OFFSET " + offset;
 
 		List<PostModel> listPost = new ArrayList<PostModel>();
 		try {
@@ -179,11 +301,11 @@ public class PostDAO {
 	}
 
 	public PostModel getOnePost(int id) {
-
 		DatabaseGlobal conn = new DatabaseGlobal();
 		conn.getConnection();
 
-		String newSQL = "SELECT * FROM POSTS where id = " + id;
+		String newSQL = "SELECT DISTINCT p.*, u.image, u.firstName, u.lastName FROM POSTS p "
+				+ "INNER JOIN USERS u ON p.authorID = u.id " + "WHERE p.id = " + id;
 
 		PostModel post = null;
 		try {
@@ -194,7 +316,12 @@ public class PostDAO {
 						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
 						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
 						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
+
+				post.setImage(rs.getString("image"));
+				post.setFirstName(rs.getString("firstName"));
+				post.setLastName(rs.getString("lastName"));
 			}
+
 			rs.close();
 			return post;
 		} catch (Exception ex) {

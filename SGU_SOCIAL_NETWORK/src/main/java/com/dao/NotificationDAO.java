@@ -152,65 +152,65 @@ public class NotificationDAO {
 		}
 	}
 
-	public NotificationModel addFriendNotification(NotificationModel notify) {
-		DatabaseGlobal conn = new DatabaseGlobal();
-		conn.getConnection();
-
-		String sql = "INSERT INTO notifications (refID, userID, title, content, rootID) VALUES (?, ?, ?, ?, ?)";
-		try {
-			PreparedStatement pstmt = conn.getConn().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			pstmt.setInt(1, notify.getRefID());
-			pstmt.setInt(2, notify.getUserID());
-			pstmt.setString(3, notify.getTitle());
-			pstmt.setString(4, notify.getContent());
-			pstmt.setInt(5, notify.getRootID());
-
-			int rowsAffected = pstmt.executeUpdate();
-
-			if (rowsAffected > 0) {
-				ResultSet generatedKeys = pstmt.getGeneratedKeys();
-				if (generatedKeys.next()) {
-					int generatedId = generatedKeys.getInt(1);
-
-					String selectSql = "SELECT DISTINCT n.*, u.image, u.firstName, u.lastName FROM notifications n "
-							+ "inner JOIN USERS u ON n.userID = u.id  WHERE n.id = ?";
-					PreparedStatement selectStmt = conn.getConn().prepareStatement(selectSql);
-					selectStmt.setInt(1, generatedId);
-					ResultSet resultSet = selectStmt.executeQuery();
-
-					if (resultSet.next()) {
-						NotificationModel createdNotification = new NotificationModel();
-						createdNotification.setId(resultSet.getInt("id"));
-						createdNotification.setRefID(resultSet.getInt("refID"));
-						createdNotification.setUserID(resultSet.getInt("userID"));
-						createdNotification.setRootID(resultSet.getInt("rootID"));
-
-						createdNotification.setTitle(resultSet.getString("title"));
-						createdNotification.setContent(resultSet.getString("content"));
-						createdNotification.setCreateAT(resultSet.getString("createAT"));
-						createdNotification.setFirstName(resultSet.getString("firstName"));
-						createdNotification.setLastName(resultSet.getString("lastName"));
-						createdNotification.setImage(resultSet.getString("image"));
-						createdNotification.setRead(resultSet.getBoolean("isRead"));
-
-						resultSet.close();
-						selectStmt.close();
-						pstmt.close();
-
-						return createdNotification;
-					}
-				}
-			}
-
-			pstmt.close();
-			return null;
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-			return null;
-		} finally {
-			conn.closeDB();
-		}
-	}
+//	public NotificationModel addFriendNotification(NotificationModel notify) {
+//		DatabaseGlobal conn = new DatabaseGlobal();
+//		conn.getConnection();
+//
+//		String sql = "INSERT INTO notifications (refID, userID, title, content, rootID) VALUES (?, ?, ?, ?, ?)";
+//		try {
+//			PreparedStatement pstmt = conn.getConn().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+//			pstmt.setInt(1, notify.getRefID());
+//			pstmt.setInt(2, notify.getUserID());
+//			pstmt.setString(3, notify.getTitle());
+//			pstmt.setString(4, notify.getContent());
+//			pstmt.setInt(5, notify.getRootID());
+//
+//			int rowsAffected = pstmt.executeUpdate();
+//
+//			if (rowsAffected > 0) {
+//				ResultSet generatedKeys = pstmt.getGeneratedKeys();
+//				if (generatedKeys.next()) {
+//					int generatedId = generatedKeys.getInt(1);
+//
+//					String selectSql = "SELECT DISTINCT n.*, u.image, u.firstName, u.lastName FROM notifications n "
+//							+ "inner JOIN USERS u ON n.userID = u.id  WHERE n.id = ?";
+//					PreparedStatement selectStmt = conn.getConn().prepareStatement(selectSql);
+//					selectStmt.setInt(1, generatedId);
+//					ResultSet resultSet = selectStmt.executeQuery();
+//
+//					if (resultSet.next()) {
+//						NotificationModel createdNotification = new NotificationModel();
+//						createdNotification.setId(resultSet.getInt("id"));
+//						createdNotification.setRefID(resultSet.getInt("refID"));
+//						createdNotification.setUserID(resultSet.getInt("userID"));
+//						createdNotification.setRootID(resultSet.getInt("rootID"));
+//
+//						createdNotification.setTitle(resultSet.getString("title"));
+//						createdNotification.setContent(resultSet.getString("content"));
+//						createdNotification.setCreateAT(resultSet.getString("createAT"));
+//						createdNotification.setFirstName(resultSet.getString("firstName"));
+//						createdNotification.setLastName(resultSet.getString("lastName"));
+//						createdNotification.setImage(resultSet.getString("image"));
+//						createdNotification.setRead(resultSet.getBoolean("isRead"));
+//
+//						resultSet.close();
+//						selectStmt.close();
+//						pstmt.close();
+//
+//						return createdNotification;
+//					}
+//				}
+//			}
+//
+//			pstmt.close();
+//			return null;
+//		} catch (SQLException ex) {
+//			ex.printStackTrace();
+//			return null;
+//		} finally {
+//			conn.closeDB();
+//		}
+//	}
 
 	public boolean readNotification(int id) {
 		DatabaseGlobal conn = new DatabaseGlobal();

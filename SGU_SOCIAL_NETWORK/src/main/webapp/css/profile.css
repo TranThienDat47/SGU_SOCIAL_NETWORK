@@ -221,20 +221,22 @@
 
 .profile_user-dropdown-menu {
 	border: 1px solid var(--border-color);
-	border-radius: 16px;
+	border-radius: 999px;
 	position: absolute;
 	list-style: none;
 	background-color: #fff;
 	left: -26px;
-	top: 49px;
+	top: 47px;
 	display: none;
 }
 
 .profile_user-dropdown-item {
 	display: flex;
-	justify-content: space-between;
-	padding: 9px 16px;
+	padding: 7px 13px;
 	cursor: pointer;
+	text-align: center;
+	justify-content: center;
+	height: 34px;
 }
 
 .profile_user-dropdown-item:hover {
@@ -256,13 +258,13 @@
 }
 
 .profile_user-dropdown-menu>li:first-child>div {
-	border-top-right-radius: 16px;
-	border-top-left-radius: 16px;
+	border-top-right-radius: 999px;
+	border-top-left-radius: 999px;
 }
 
 .profile_user-dropdown-menu>li:last-child>div {
-	border-bottom-right-radius: 16px;
-	border-bottom-left-radius: 16px;
+	border-bottom-right-radius: 999px;
+	border-bottom-left-radius: 999px;
 }
 
 .profile_user-container {
@@ -406,9 +408,10 @@
 	width: 100%;
 	border-radius: 999px;
 	border: 1px solid var(--border-color);
-	bottom: -36px;
+	bottom: -39px;
 	padding: 7px 6px;
 	left: -13px;
+	font-size: 1.6rem;
 }
 
 

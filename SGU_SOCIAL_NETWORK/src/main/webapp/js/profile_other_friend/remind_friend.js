@@ -83,8 +83,10 @@ class RemindFriend {
 		await that.fetchListFriendRemind();
 		await that.renderListFriend().then((resultRender) => {
 			const wrapperRenderListFriend = $('#list_friend-list_member');
-			if (wrapperRenderListFriend) {
+			if (wrapperRenderListFriend && resultRender) {
 				wrapperRenderListFriend.innerHTML = resultRender;
+			} else {
+				wrapperRenderListFollow.innerHTML = `<div style="margin-left: 0;opacity: 0.6">Không có yêu cầu kết bạn nào.</div>`;
 			}
 		});
 

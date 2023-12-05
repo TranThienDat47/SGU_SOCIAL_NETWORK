@@ -150,3 +150,5 @@ String tab3URL = "/SGU_SOCIAL_NETWORK/index.jsp?page=recommend";
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/notification_global.js"></script>
 
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/component/PostDetailPage.js"></script>

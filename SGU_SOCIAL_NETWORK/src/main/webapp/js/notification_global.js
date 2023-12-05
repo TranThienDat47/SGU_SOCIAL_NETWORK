@@ -48,8 +48,11 @@ class NotificationSocket {
 	}
 
 	notificationItem(data) {
+
 		return `
-					<a href="/SGU_SOCIAL_NETWORK/">
+					<a class="notification_post_${data.title === "Bình luận bài viết" || data.title === "Yêu thích bài viết" ? "ok" : ""}" data-id="${data.refID}" href="${data.title === "Yêu cầu kết bạn" ? '/SGU_SOCIAL_NETWORK/FriendRequest.jsp'
+				: (data.title === 'Đồng ý kết bạn' ? `/SGU_SOCIAL_NETWORK/Profile.jsp?page=recommend&id=${data.rootID}`
+					: (data.title === "Yêu thích bài viết" ? `#` : `#`))}" >
 						<div class="notify_content_child">
 							<img
 								src="${data.image}"
@@ -95,7 +98,13 @@ class NotificationSocket {
 
 			that.countNotification = tempCount;
 
-			wrapperNotification.innerHTML = renderListNotification.join("");
+			if (renderListNotification.join("")) {
+				wrapperNotification.innerHTML = renderListNotification.join("");
+			} else {
+				wrapperNotification.innerHTML = `<div style=" display: flex; justify-content: center; align-items: center; height: 100%; opacity: 0.6;">Bạn chưa có thông báo nào</div>`;
+			}
+
+			console.log(that.countNotification)
 
 			if (that.countNotification > 0) {
 				const countNotify = $("#header_item-action_notify_number");
@@ -160,7 +169,29 @@ class NotificationSocket {
 					$('.notify_content').addEventListener('wheel', scroll);
 					document.body.addEventListener('wheel', preventScroll, { passive: false });
 
-					console.log(that.isSeenNotification)
+					setTimeout(() => {
+						const listNotification_post = document.querySelectorAll(".notification_post_ok")
+
+						for (let temp of listNotification_post) {
+							temp.onclick = () => {
+								const tempRender = new PostDetailPage(temp.getAttribute("data-id"));
+
+								tempRender.fetchPost().then(() => {
+									setTimeout(() => {
+										tempRender.render().then((resultRender) => {
+											$("#showPostDetailGloabal").innerHTML = resultRender;
+											notify.classList.remove("box_notify-show");
+											document.body.removeEventListener('wheel', preventScroll, { passive: false });
+											$('.notify_content').removeEventListener('wheel', scroll, { passive: true });
+										})
+									}, 100)
+								});
+							}
+						}
+
+
+					}, 10)
+
 
 					if (!that.isSeenNotification) {
 						await handleSeenNotification().then(() => {
@@ -172,12 +203,35 @@ class NotificationSocket {
 				}
 			}
 
+			const wrapperSetting = $(".header_item-action-setting");
+			const btnSetting = $("#btnHeaderShowSetting");
+
+			const setting = $(".user_setting-box_setting");
+
+			btnSetting.onclick = () => {
+				if (setting.classList.contains("user_setting-box_setting-show")) {
+					setting.classList.remove("user_setting-box_setting-show");
+					document.body.removeEventListener('wheel', preventScroll, { passive: false });
+				} else {
+					setting.classList.add("user_setting-box_setting-show");
+					document.body.addEventListener('wheel', preventScroll, { passive: false });
+				}
+			}
+
+
 			window.onclick = function(e) {
 				if (notify.classList.contains('box_notify-show')) {
 					if (!checkNode(wrapperNotify, e.target)) {
 						notify.classList.remove("box_notify-show");
 						document.body.removeEventListener('wheel', preventScroll, { passive: false });
 						$('.notify_content').removeEventListener('wheel', scroll, { passive: true });
+					}
+				}
+
+				if (setting.classList.contains("user_setting-box_setting-show")) {
+					if (!checkNode(wrapperSetting, e.target)) {
+						setting.classList.remove("user_setting-box_setting-show");
+						document.body.removeEventListener('wheel', preventScroll, { passive: false });
 					}
 				}
 			};

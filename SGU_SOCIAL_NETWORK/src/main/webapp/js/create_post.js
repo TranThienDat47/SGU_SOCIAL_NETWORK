@@ -215,9 +215,11 @@ class CreatePost {
 					refID,
 					rootID: getCookieGlobal("id"),
 					userID: getCookieGlobal("id"),
-					content: `${getCookieGlobal("firstName")} ${getCookieGlobal("lastName")} người mà bạn theo dõi đã thêm bài viết mới`,
+					firstName: getCookieGlobal("firstName"),
+					lastName: getCookieGlobal("lastName"),
 					title: "Thêm bài viết mới"
 				};
+
 
 				return new Promise((resolve, reject) => {
 					const xhr = new XMLHttpRequest();

@@ -114,8 +114,10 @@ class RecommendFriend {
 
 		await that.renderListRecommend().then((resultRender) => {
 
-			if (wrapperListRender) {
+			if (wrapperListRender && resultRender) {
 				wrapperListRender.innerHTML = resultRender;
+			} else {
+				wrapperListRender.innerHTML = `<div style="margin-left: 0;opacity: 0.6">Không có gợi ý nào.</div>`;
 			}
 		});
 

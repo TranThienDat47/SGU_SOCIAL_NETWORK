@@ -48,7 +48,6 @@ function handleScroll(parentNode, handle = () => { }) {
 
 
 const showMessageGlobal = (text) => {
-	console.log("ok show")
 	const wrapperMessage = $(".toolkit_message-wrapper");
 
 	var tempMessageGlobal = null;
@@ -99,8 +98,6 @@ function setCookieGlobal(name, value, days) {
 		expires = "; expires=" + date.toUTCString();
 	}
 	var encodedValue = encodeURIComponent(value); // Mã hóa giá trị
-
-	console.log(encodedValue)
 
 	document.cookie = name + "=" + encodedValue + expires + "; path=/";
 }

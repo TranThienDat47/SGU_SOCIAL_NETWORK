@@ -118,8 +118,10 @@ class FriendRequest {
 
 		await that.renderListFriendRequest().then((resultRender) => {
 
-			if (wrapperListRender) {
+			if (wrapperListRender && resultRender) {
 				wrapperListRender.innerHTML = resultRender;
+			} else {
+				wrapperListRender.innerHTML = `<div style="margin-left: 0;opacity: 0.6">Không lời mời kết bạn nào được gửi.</div>`;
 			}
 		});
 

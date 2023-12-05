@@ -95,9 +95,18 @@ if (!AuthorizationToken.authorizationToken(token)) {
 			</script>
 		</c:if>
 		<c:if test="<%=currentURL.trim().equals(tab2URL.trim())%>">
-			<div>haha</div>
+			<div id="render_list_post_follow"></div>
 			<script>
 				window.onload = () => {
+					new GloabPost().renderListPostFollow();
+				}
+			</script>
+		</c:if>
+		<c:if test="<%=currentURL.trim().equals(tab3URL.trim())%>">
+			<div id="render_list_post_recommend"></div>
+			<script>
+				window.onload = () => {
+					new GloabPost().renderListPostRecommend();
 				}
 			</script>
 		</c:if>
@@ -146,6 +155,7 @@ if (!AuthorizationToken.authorizationToken(token)) {
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/post.js"></script>
+
 
 
 </html>

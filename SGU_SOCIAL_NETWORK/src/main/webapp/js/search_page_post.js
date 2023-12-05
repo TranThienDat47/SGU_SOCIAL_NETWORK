@@ -73,7 +73,7 @@ class SearchPagePost {
 						try {
 							const data = JSON.parse(xhr.responseText);
 
-							if (data.length > 0) that.listPostSearch = [...that.listPostSearch, ...data]; else that.hasMore = false;
+							if (data && data.length > 0) that.listPostSearch = [...that.listPostSearch, ...data]; else that.hasMore = false;
 							//							if (data) that.listPostSearch = data;
 
 
@@ -117,7 +117,7 @@ class SearchPagePost {
 						try {
 							const data = JSON.parse(xhr.responseText);
 
-							if (data.length > 0) that.listPostSearch = [...that.listPostSearch, ...data]; else that.hasMore = false;
+							if (data && data.length > 0) that.listPostSearch = [...that.listPostSearch, ...data]; else that.hasMore = false;
 							//							if (data) that.listPostSearch = data;
 							resolve(data);
 						} catch (error) {
@@ -176,8 +176,10 @@ class SearchPagePost {
 
 			await that.innerListPostSearch().then((resultRender) => {
 				const wrapperRenderListPostSearch = $('#render_list_post_search');
-				if (wrapperRenderListPostSearch) {
+				if (wrapperRenderListPostSearch && resultRender) {
 					wrapperRenderListPostSearch.innerHTML = resultRender;
+				} else {
+					wrapperRenderListPostSearch.innerHTML = `<div style="margin-top: 16px;opacity: 0.6">Không có bài viết nào.</div>`;
 				}
 			})
 			window.onscroll = async () => {
@@ -202,8 +204,10 @@ class SearchPagePost {
 
 			await that.innerListPostSearch().then((resultRender) => {
 				const wrapperRenderListPostSearch = $('#render_list_post_search');
-				if (wrapperRenderListPostSearch) {
+				if (wrapperRenderListPostSearch && resultRender) {
 					wrapperRenderListPostSearch.innerHTML = resultRender;
+				} else {
+					wrapperRenderListPostSearch.innerHTML = `<div style="margin-top: 16px;opacity: 0.6">Không có bài viết nào.</div>`;
 				}
 			})
 
