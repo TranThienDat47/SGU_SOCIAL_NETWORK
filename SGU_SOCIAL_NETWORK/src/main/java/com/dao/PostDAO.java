@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.model.PostModel;
+import com.util.BlowfishUtil;
 import com.util.DatabaseGlobal;
 
 public class PostDAO {
@@ -25,7 +26,7 @@ public class PostDAO {
 			PreparedStatement pstmt = conn.getConn().prepareStatement(newSQL, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, post.getAuthorID());
 			pstmt.setInt(2, post.getPrivacySettingID());
-			pstmt.setString(3, post.getContent());
+			pstmt.setString(3, BlowfishUtil.encrypt(post.getContent()));
 			pstmt.setString(4, post.getImage1());
 			pstmt.setString(5, post.getImage2());
 			pstmt.setString(6, post.getImage3());
@@ -79,9 +80,9 @@ public class PostDAO {
 			ResultSet rs = stmt.executeQuery(newSQL);
 			while (rs.next()) {
 				PostModel post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
-						rs.getString("title"), rs.getString("content"), rs.getString("image1"), rs.getString("image2"),
-						rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"), rs.getInt("replies"),
-						rs.getString("createAt"), rs.getString("updateAt"));
+						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
+						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
+						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
 
 				post.setImage(rs.getString("image"));
 				post.setFirstName(rs.getString("firstName"));
@@ -118,9 +119,9 @@ public class PostDAO {
 			ResultSet rs = stmt.executeQuery(newSQL);
 			while (rs.next()) {
 				PostModel post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
-						rs.getString("title"), rs.getString("content"), rs.getString("image1"), rs.getString("image2"),
-						rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"), rs.getInt("replies"),
-						rs.getString("createAt"), rs.getString("updateAt"));
+						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
+						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
+						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
 
 				post.setImage(rs.getString("image"));
 				post.setFirstName(rs.getString("firstName"));
@@ -156,9 +157,9 @@ public class PostDAO {
 			ResultSet rs = stmt.executeQuery(newSQL);
 			while (rs.next()) {
 				PostModel post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
-						rs.getString("title"), rs.getString("content"), rs.getString("image1"), rs.getString("image2"),
-						rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"), rs.getInt("replies"),
-						rs.getString("createAt"), rs.getString("updateAt"));
+						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
+						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
+						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
 
 				post.setImage(rs.getString("image"));
 				post.setFirstName(rs.getString("firstName"));
@@ -190,9 +191,9 @@ public class PostDAO {
 			ResultSet rs = stmt.executeQuery(newSQL);
 			while (rs.next()) {
 				post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
-						rs.getString("title"), rs.getString("content"), rs.getString("image1"), rs.getString("image2"),
-						rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"), rs.getInt("replies"),
-						rs.getString("createAt"), rs.getString("updateAt"));
+						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
+						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
+						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
 			}
 			rs.close();
 			return post;

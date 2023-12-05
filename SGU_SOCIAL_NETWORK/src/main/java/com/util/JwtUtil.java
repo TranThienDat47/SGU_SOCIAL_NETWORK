@@ -15,7 +15,6 @@ public class JwtUtil {
 
 	public static boolean verifyToken(String token) {
 		try {
-			System.out.println(Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token));
 			return true;
 		} catch (Exception e) {
 			return false;

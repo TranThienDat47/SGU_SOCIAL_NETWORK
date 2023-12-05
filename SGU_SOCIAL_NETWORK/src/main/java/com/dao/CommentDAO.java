@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.model.CommentModel;
+import com.util.BlowfishUtil;
 import com.util.DatabaseGlobal;
 
 public class CommentDAO {
@@ -28,7 +29,8 @@ public class CommentDAO {
 			List<CommentModel> list = new ArrayList<CommentModel>();
 			while (rs.next()) {
 				CommentModel cmt = new CommentModel(rs.getInt("id"), rs.getInt("parentID"), rs.getInt("userID"),
-						rs.getString("content"), rs.getInt("likes"), rs.getInt("replies"), rs.getString("createAt"));
+						BlowfishUtil.decrypt(rs.getString("content")), rs.getInt("likes"), rs.getInt("replies"),
+						rs.getString("createAt"));
 
 				cmt.setImage(rs.getString("image"));
 				cmt.setFirstName(rs.getString("firstName"));
@@ -36,7 +38,6 @@ public class CommentDAO {
 
 				list.add(cmt);
 			}
-
 			rs.close();
 
 			return list;
@@ -58,7 +59,7 @@ public class CommentDAO {
 			PreparedStatement stmt = conn.getConn().prepareStatement(newSQL, Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, parentID);
 			stmt.setInt(2, userID);
-			stmt.setString(3, content);
+			stmt.setString(3, BlowfishUtil.encrypt(content));
 
 			int rowsAffected = stmt.executeUpdate();
 
@@ -78,7 +79,7 @@ public class CommentDAO {
 
 				if (rs.next()) {
 					newComment = new CommentModel(rs.getInt("id"), rs.getInt("parentID"), rs.getInt("userID"),
-							rs.getString("content"), rs.getInt("likes"), rs.getInt("replies"),
+							BlowfishUtil.decrypt(rs.getString("content")), rs.getInt("likes"), rs.getInt("replies"),
 							rs.getString("createAt"));
 
 					newComment.setFirstName(rs.getString("firstName"));
@@ -119,7 +120,7 @@ public class CommentDAO {
 			PreparedStatement stmt = conn.getConn().prepareStatement(newSQL, Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, parentID);
 			stmt.setInt(2, userID);
-			stmt.setString(3, content);
+			stmt.setString(3, BlowfishUtil.encrypt(content));
 
 			int rowsAffected = stmt.executeUpdate();
 
@@ -139,7 +140,7 @@ public class CommentDAO {
 
 				if (rs.next()) {
 					newComment = new CommentModel(rs.getInt("id"), rs.getInt("parentID"), rs.getInt("userID"),
-							rs.getString("content"), rs.getInt("likes"), rs.getInt("replies"),
+							BlowfishUtil.decrypt(rs.getString("content")), rs.getInt("likes"), rs.getInt("replies"),
 							rs.getString("createAt"));
 
 					// Lấy thông tin từ bảng Users thông qua INNER JOIN và thêm vào CommentModel

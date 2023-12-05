@@ -15,6 +15,7 @@ encoding//src/main/java/com/service/ChatService.java=UTF-8
 encoding//src/main/java/com/service/NotifiSocketService.java=UTF-8
 encoding//src/main/java/com/service/SendMailler.java=UTF-8
 encoding//src/main/java/com/util/AuthorizationToken.java=UTF-8
+encoding//src/main/java/com/util/BlowfishUtil.java=UTF-8
 encoding//src/main/java/com/util/CookieUtils.java=UTF-8
 encoding//src/main/java/com/util/JwtUtil.java=UTF-8
 encoding//src/main/webapp/css/base.css=UTF-8
