@@ -10,6 +10,7 @@ String cookieValueAddress = CookieUtils.get("address", request);
 String cookieValueGender = CookieUtils.get("gender", request);
 String cookieValueBirthDay = CookieUtils.get("dateOfBirth", request);
 String cookieValueCreateAt = CookieUtils.get("createAt", request).replace("_=_", "");
+System.out.println(cookieValueBirthDay);
 %>
 
 <!DOCTYPE html>

@@ -395,7 +395,6 @@
 }
 
 #render_list_post_profile .global_post-header_icon>svg:last-child {
-	display: none !important;
 }
 
 .profile_user-dropdown-menu.profile_user-dropdown-menu_show {

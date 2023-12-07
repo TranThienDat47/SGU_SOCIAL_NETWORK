@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet({ "/api/post/search_post_value_search", "/api/post/search_post_value_with_friend", "/api/post/get_one",
 		"/api/post/create_post", "/api/post/search_post_of_user", "/api/post/list_home", "/api/post/list_follow",
-		"/api/post/list_recommend" })
+		"/api/post/list_recommend", "/api/post/delete_post" })
 public class PostController extends HttpServlet {
 
 	@Override
@@ -39,8 +39,25 @@ public class PostController extends HttpServlet {
 			this.doFollow(req, resp);
 		} else if (uri.contains("/api/post/list_recommend")) {
 			this.doRecommend(req, resp);
+		} else if (uri.contains("/api/post/delete_post")) {
+			this.doDeletePost(req, resp);
 		}
 
+	}
+
+	protected void doDeletePost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("application/json; charset=UTF-8");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(req.getReader());
+
+		String postID = jsonNode.get("postID").asText();
+
+		PostDAO posts = new PostDAO();
+
+		String jsonResponse = objectMapper.writeValueAsString(posts.deletePost(Integer.parseInt(postID)));
+		PrintWriter out = resp.getWriter();
+		out.println(jsonResponse);
 	}
 
 	protected void doSearchWithFriend(HttpServletRequest req, HttpServletResponse resp)

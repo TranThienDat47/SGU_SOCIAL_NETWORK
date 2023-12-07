@@ -174,6 +174,70 @@ class GlobalPostItem {
 			const btnComment = $(`.global_post-btn_comment-${this.data.postID}`);
 			const btnLikePost = $(`#btnLikePost-${that.data.postID}`);
 
+			const btnOptionPost = $(`#btnOptionPost-${that.data.postID}`);
+
+			if (btnOptionPost) {
+
+				const handleDeletePost = async () => {
+					const url = "/SGU_SOCIAL_NETWORK/api/post/delete_post";
+					const send_data = {
+						postID: that.data.postID,
+					};
+
+					return new Promise((resolve, reject) => {
+						const xhr = new XMLHttpRequest();
+						xhr.open("POST", url, true);
+
+						xhr.setRequestHeader("Content-Type", "application/json");
+						xhr.setRequestHeader("Authorization", `${that.getCookieGlobalPlus("token")}`);
+
+						xhr.onreadystatechange = function() {
+							if (xhr.readyState === 4) {
+								if (xhr.status === 200) {
+									try {
+										const data = JSON.parse(xhr.responseText);
+
+										const wrapperPost = $(`#wrapperPostDetail-${that.data.postID}`);
+
+										if (wrapperPost) {
+											wrapperPost.remove();
+
+											showMessageGlobal("Xóa bài viết thành công!")
+										}
+
+										resolve(data);
+									} catch (error) {
+										console.log("JSON parsing error:", error);
+										reject(error);
+									}
+								} else {
+									console.log("Request failed with status:", xhr.status);
+									reject(new Error(`Error: ${xhr.statusText}`));
+								}
+							}
+						}.bind(this);
+
+						xhr.send(JSON.stringify(send_data));
+					});
+				}
+
+				btnOptionPost.onclick = () => {
+					const btnOptionDeletePost = $(`#btnOptionPost_Delete-${that.data.postID}`)
+
+					if (btnOptionDeletePost) {
+						if (btnOptionDeletePost.style.display === "none") {
+							btnOptionDeletePost.style.display = "block"
+
+							btnOptionDeletePost.onclick = async () => {
+								await handleDeletePost();
+							}
+						} else {
+							btnOptionDeletePost.style.display = "none"
+						}
+					}
+				}
+			}
+
 			const handleLikePostRequest = async () => {
 				const url = "/SGU_SOCIAL_NETWORK/api/like_post/like";
 				const send_data = {
@@ -357,7 +421,7 @@ class GlobalPostItem {
 		}, that.data.timeDelay * 2.9)
 
 		return `
-			<div class="wrapper_of_block ">
+			<div id="wrapperPostDetail-${that.data.postID}" class="wrapper_of_block ">
 				<div class="global_post global_post-${that.data.postID}">
 					<div class="global_post-header_post">
 						<div class="global_post-logo_profile">
@@ -376,12 +440,15 @@ class GlobalPostItem {
 							</div>
 						</div>
 						<div class="global_post-header_icon">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-								viewBox="0 0 20 20" fill="none">
-				          		<path fill-rule="evenodd" clip-rule="evenodd"
-									d="M12 10C12 10.5304 11.7893 11.0391 11.4142 11.4142C11.0391 11.7893 10.5304 12 10 12C9.46957 12 8.96086 11.7893 8.58578 11.4142C8.21071 11.0391 8 10.5304 8 10C8 9.46957 8.21071 8.96086 8.58578 8.58578C8.96086 8.21071 9.46957 8 10 8C10.5304 8 11.0391 8.21071 11.4142 8.58578C11.7893 8.96086 12 9.46957 12 10ZM18 10C18 10.5304 17.7893 11.0391 17.4142 11.4142C17.0391 11.7893 16.5304 12 16 12C15.4696 12 14.9609 11.7893 14.5858 11.4142C14.2107 11.0391 14 10.5304 14 10C14 9.46957 14.2107 8.96086 14.5858 8.58578C14.9609 8.21071 15.4696 8 16 8C16.5304 8 17.0391 8.21071 17.4142 8.58578C17.7893 8.96086 18 9.46957 18 10ZM6 10C6 10.5304 5.78929 11.0391 5.41422 11.4142C5.03914 11.7893 4.53043 12 4 12C3.46957 12 2.96086 11.7893 2.58578 11.4142C2.21071 11.0391 2 10.5304 2 10C2 9.46957 2.21071 8.96086 2.58578 8.58578C2.96086 8.21071 3.46957 8 4 8C4.53043 8 5.03914 8.21071 5.41422 8.58578C5.78929 8.96086 6 9.46957 6 10Z"
-									fill="black" />
-				        	</svg>
+							<button style="cursor: pointer;" id="btnOptionPost-${that.data.postID}">
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+									viewBox="0 0 20 20" fill="none">
+					          		<path fill-rule="evenodd" clip-rule="evenodd"
+										d="M12 10C12 10.5304 11.7893 11.0391 11.4142 11.4142C11.0391 11.7893 10.5304 12 10 12C9.46957 12 8.96086 11.7893 8.58578 11.4142C8.21071 11.0391 8 10.5304 8 10C8 9.46957 8.21071 8.96086 8.58578 8.58578C8.96086 8.21071 9.46957 8 10 8C10.5304 8 11.0391 8.21071 11.4142 8.58578C11.7893 8.96086 12 9.46957 12 10ZM18 10C18 10.5304 17.7893 11.0391 17.4142 11.4142C17.0391 11.7893 16.5304 12 16 12C15.4696 12 14.9609 11.7893 14.5858 11.4142C14.2107 11.0391 14 10.5304 14 10C14 9.46957 14.2107 8.96086 14.5858 8.58578C14.9609 8.21071 15.4696 8 16 8C16.5304 8 17.0391 8.21071 17.4142 8.58578C17.7893 8.96086 18 9.46957 18 10ZM6 10C6 10.5304 5.78929 11.0391 5.41422 11.4142C5.03914 11.7893 4.53043 12 4 12C3.46957 12 2.96086 11.7893 2.58578 11.4142C2.21071 11.0391 2 10.5304 2 10C2 9.46957 2.21071 8.96086 2.58578 8.58578C2.96086 8.21071 3.46957 8 4 8C4.53043 8 5.03914 8.21071 5.41422 8.58578C5.78929 8.96086 6 9.46957 6 10Z"
+										fill="black" />
+					        	</svg>
+				        	</button>
+				        	<button id="btnOptionPost_Delete-${that.data.postID}" class="btn" style="display: none; position: absolute; top: 39px; right: -6px;">Xóa bài viết</button>
 							<!--<svg style="margin-left: 16px" xmlns="http://www.w3.org/2000/svg"
 								width="20" height="20" viewBox="0 0 20 20" fill="none">
 					          <path

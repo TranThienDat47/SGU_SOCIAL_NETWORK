@@ -217,7 +217,7 @@ public class UserDAO {
 			pst.setString(1, encrypt(user.getPhoneNumber()));
 			pst.setString(2, (user.getFirstName()));
 			pst.setString(3, (user.getLastName()));
-			pst.setString(4, (user.getDateOfBirth()));
+			pst.setString(4, user.getDateOfBirth());
 			pst.setString(5, encrypt(user.getAddress()));
 			pst.setBoolean(6, user.isGender());
 			pst.setString(7, encrypt(user.getBiography()));

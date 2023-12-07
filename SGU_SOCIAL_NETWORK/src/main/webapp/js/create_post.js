@@ -205,8 +205,6 @@ class CreatePost {
 		}
 		var ws = new WebSocket(wsUrl + window.location.host + "/SGU_SOCIAL_NETWORK/notify");
 
-
-
 		if (btnSubmitCreatePost) {
 
 			const handleSendNotification = async (refID = -1) => {
@@ -278,6 +276,8 @@ class CreatePost {
 
 								await handleSendNotification(data.refID).then((result) => {
 									ws.send(JSON.stringify(result));
+
+									window.location.reload();
 								});
 
 							} catch (error) {
@@ -289,6 +289,7 @@ class CreatePost {
 					}
 				}
 				xhr.send(JSON.stringify(send_data));
+
 			}
 		}
 

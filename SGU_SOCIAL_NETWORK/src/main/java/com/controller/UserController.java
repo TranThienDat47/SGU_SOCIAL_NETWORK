@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet({ "/api/user/search_recommend_friend", "/api/user/update_profile_user", "/get_one_user",
 		"/api/user/update_avata", "/api/user/update_background" })
 public class UserController extends HttpServlet {
+
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String uri = req.getRequestURI();

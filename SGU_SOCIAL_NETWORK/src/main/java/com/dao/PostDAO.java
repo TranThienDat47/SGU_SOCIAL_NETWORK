@@ -2,6 +2,7 @@ package com.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class PostDAO {
 			PreparedStatement pstmt = conn.getConn().prepareStatement(newSQL, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, post.getAuthorID());
 			pstmt.setInt(2, post.getPrivacySettingID());
-			pstmt.setString(3, BlowfishUtil.encrypt(post.getContent()));
+			pstmt.setString(3, (post.getContent()));
 			pstmt.setString(4, post.getImage1());
 			pstmt.setString(5, post.getImage2());
 			pstmt.setString(6, post.getImage3());
@@ -82,7 +83,7 @@ public class PostDAO {
 			ResultSet rs = stmt.executeQuery(newSQL);
 			while (rs.next()) {
 				PostModel post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
-						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
+						rs.getString("title"), (rs.getString("content")), rs.getString("image1"),
 						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
 						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
 
@@ -121,7 +122,7 @@ public class PostDAO {
 			ResultSet rs = stmt.executeQuery(newSQL);
 			while (rs.next()) {
 				PostModel post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
-						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
+						rs.getString("title"), (rs.getString("content")), rs.getString("image1"),
 						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
 						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
 
@@ -159,7 +160,7 @@ public class PostDAO {
 			ResultSet rs = stmt.executeQuery(newSQL);
 			while (rs.next()) {
 				PostModel post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
-						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
+						rs.getString("title"), (rs.getString("content")), rs.getString("image1"),
 						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
 						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
 
@@ -199,7 +200,7 @@ public class PostDAO {
 			ResultSet rs = stmt.executeQuery(newSQL);
 			while (rs.next()) {
 				PostModel post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
-						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
+						rs.getString("title"), (rs.getString("content")), rs.getString("image1"),
 						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
 						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
 
@@ -238,7 +239,7 @@ public class PostDAO {
 			ResultSet rs = stmt.executeQuery(newSQL);
 			while (rs.next()) {
 				PostModel post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
-						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
+						rs.getString("title"), (rs.getString("content")), rs.getString("image1"),
 						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
 						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
 
@@ -279,7 +280,7 @@ public class PostDAO {
 			ResultSet rs = stmt.executeQuery(newSQL);
 			while (rs.next()) {
 				PostModel post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
-						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
+						rs.getString("title"), (rs.getString("content")), rs.getString("image1"),
 						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
 						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
 
@@ -313,7 +314,7 @@ public class PostDAO {
 			ResultSet rs = stmt.executeQuery(newSQL);
 			while (rs.next()) {
 				post = new PostModel(rs.getInt("id"), rs.getInt("authorID"), rs.getInt("privacySettingID"),
-						rs.getString("title"), BlowfishUtil.decrypt(rs.getString("content")), rs.getString("image1"),
+						rs.getString("title"), (rs.getString("content")), rs.getString("image1"),
 						rs.getString("image2"), rs.getString("image3"), rs.getString("image4"), rs.getInt("likes"),
 						rs.getInt("replies"), rs.getString("createAt"), rs.getString("updateAt"));
 
@@ -331,6 +332,26 @@ public class PostDAO {
 			conn.closeDB();
 		}
 
+	}
+
+	public boolean deletePost(int id) {
+		DatabaseGlobal conn = new DatabaseGlobal();
+		conn.getConnection();
+
+		String sql = "DELETE FROM posts WHERE id = ?";
+		try {
+			PreparedStatement pstmt = conn.getConn().prepareStatement(sql);
+			pstmt.setInt(1, id);
+
+			int rowsAffected = pstmt.executeUpdate();
+			pstmt.close();
+			return rowsAffected > 0;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			return false;
+		} finally {
+			conn.closeDB();
+		}
 	}
 
 }

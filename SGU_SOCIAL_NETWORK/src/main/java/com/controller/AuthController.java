@@ -25,7 +25,6 @@ public class AuthController extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		String action = req.getParameter("action");
-
 		if (action.trim().equals("register")) {
 			UserDAO register = new UserDAO();
 			String email = req.getParameter("email");
@@ -45,12 +44,8 @@ public class AuthController extends HttpServlet {
 			String password = req.getParameter("password");
 			String phone = req.getParameter("phone");
 			String address = req.getParameter("address");
-
-			String day = req.getParameter("day");
-			String month = req.getParameter("month");
-			String year = req.getParameter("year");
-			String dateOfBirth = year + "-" + month + "-" + day;
-
+			String dateTemp = req.getParameter("dateOfBirth");
+			String dateOfBirth = dateTemp;
 			UserModel user = new UserModel();
 			user.setEmail(email);
 			user.setFirstName(firstName);
@@ -98,6 +93,7 @@ public class AuthController extends HttpServlet {
 			user = userDAO.login(email, password);
 
 			if (user != null) {
+				System.out.println("huh");
 				if (user.getEmail().equals(email) && passwordEncoder.matches(password, user.getPassword())) {
 
 					String originalDataImage = URLEncoder.encode(user.getImage(), "UTF-8");
@@ -129,6 +125,9 @@ public class AuthController extends HttpServlet {
 					req.getRequestDispatcher("AuthUser.jsp").forward(req, resp);
 
 				}
+			} else {
+				req.setAttribute("message", "Thông tin đăng nhập không chính xác!");
+				req.getRequestDispatcher("AuthUser.jsp").forward(req, resp);
 			}
 		}
 

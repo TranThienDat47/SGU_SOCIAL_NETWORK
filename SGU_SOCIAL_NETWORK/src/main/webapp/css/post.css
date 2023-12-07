@@ -26,6 +26,7 @@ p {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	position: relative;
 }
 
 .global_post-header_post img {
