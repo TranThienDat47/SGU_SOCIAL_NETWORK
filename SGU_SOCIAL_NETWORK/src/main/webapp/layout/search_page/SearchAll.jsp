@@ -17,17 +17,16 @@
 
 				<div class="search_page-friend-list">
 					<div class="search_page-friend-item">
-						<a hreflang="" class="search_page-friend-avatar"> <img
-							src="https://images2.thanhnien.vn/528068263637045248/2023/5/12/3402996281807448214744715725794739163835942n-16838713649061930388403.jpeg"
+						<a hreflang="" class="search_page-friend-avatar"> <img src=""
 							alt="" />
 						</a>
 						<div class="search_page-friend-details">
-							<p>Nam văn</p>
-							<span>2 bạn chung</span>
+							<p></p>
+							<span></span>
 						</div>
 					</div>
 					<button class="search_page-addnew">
-						<p>Thêm bạn bè</p>
+						<p></p>
 					</button>
 				</div>
 				<!-- 				<div class="search_page-friend-list"> -->

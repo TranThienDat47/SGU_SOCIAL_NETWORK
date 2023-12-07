@@ -101,7 +101,7 @@ class SearchHeader {
 	async fetchDataSearch(searchValue = "") {
 		const that = this;
 		const url = "/SGU_SOCIAL_NETWORK/api/friend/search_value_friend";
-		const send_data = { offsetValue: 0, limitValue: 8, searchValue };
+		const send_data = { offsetValue: 0, limitValue: 7, searchValue };
 
 		return new Promise((resolve, reject) => {
 			const xhr = new XMLHttpRequest();
