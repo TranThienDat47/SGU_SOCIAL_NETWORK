@@ -104,8 +104,6 @@ class NotificationSocket {
 				wrapperNotification.innerHTML = `<div style=" display: flex; justify-content: center; align-items: center; height: 100%; opacity: 0.6;">Bạn chưa có thông báo nào</div>`;
 			}
 
-			console.log(that.countNotification)
-
 			if (that.countNotification > 0) {
 				const countNotify = $("#header_item-action_notify_number");
 				countNotify.style.display = "block";
